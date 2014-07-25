@@ -2,6 +2,7 @@
   *Script RGSS3 para RPG Maker VX Ace
   
   *Nome: Sistema de Save e Load
+  *Autor: Resque
   
   *Features: 
     *Exibe o nome do arquivo de Save

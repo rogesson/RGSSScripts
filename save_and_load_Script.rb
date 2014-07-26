@@ -11,7 +11,20 @@
 =end
 
 class Window_SaveFile < Window_Base
-  # Alias para refresh
+  
+  #--------------------------------------------------------------------------
+  # * Override do Initialize
+  #--------------------------------------------------------------------------
+  def initialize(height, index)
+      super(0, index * height, Graphics.width, height)
+      @file_index = index
+      refresh
+      @selected = false
+  end
+  
+  #--------------------------------------------------------------------------
+  # * Alias para refresh
+  #--------------------------------------------------------------------------
   alias resque_refresh refresh
   def refresh
     resque_refresh
@@ -24,9 +37,7 @@ class Window_SaveFile < Window_Base
     draw_text(150, 0, 200, line_height, name)
     
     @name_width = text_size(name).width
-    
-    ##### Escreve o nome do herói
-    #draw_hero_name(0, contents.height - line_height, contents.width - 4, 2)
+  
     draw_hero_name(4, 0, 250, 2)
     
     draw_map_name(4, 0, 394, 2)
@@ -35,9 +46,24 @@ class Window_SaveFile < Window_Base
       puts $game_map.display_name 
     end
   end
+  
+  #--------------------------------------------------------------------------
+  # * Override do update_cursor
+  #--------------------------------------------------------------------------
+  def update_cursor      
+      if @selected
+        #cursor_rect.set(0, 0, @name_width + 8, line_height)
+        cursor_rect.set(0, 0, @name_width + 478, line_height)
+      else
+        cursor_rect.empty
+      end
+  end
 end
 
 
+#--------------------------------------------------------------------------
+# * Salva dados de nome do herói e nome do mapa no arquivo de save
+#--------------------------------------------------------------------------
 module DataManager
   class <<self; alias resque_make_save_header make_save_header end
   def self.make_save_header
@@ -51,20 +77,50 @@ module DataManager
 end
 
 
-#######################
-#Escreve nome do herói
-#######################
+#--------------------------------------------------------------------------
+# * Escreve o nome do herói
+#--------------------------------------------------------------------------
 def draw_hero_name(x, y, width, align)
     header = DataManager.load_header(@file_index)
     return unless header
     draw_text(x, y, width, line_height, "#{header[:hero_name]}/", 2)
 end
 
-#######################
-#Escreve nome do mapa
-#######################
+#--------------------------------------------------------------------------
+# * Escreve o nome do mapa
+#--------------------------------------------------------------------------
 def draw_map_name(x, y, width, align)
     header = DataManager.load_header(@file_index)
     return unless header
     draw_text(x, y, width, line_height, header[:map_name], 2)
 end
+
+#--------------------------------------------------------------------------
+# * Override da classe Scene_File
+#--------------------------------------------------------------------------  
+class Scene_File < Scene_MenuBase
+  
+  #--------------------------------------------------------------------------
+  # * Alias para start
+  #-------------------------------------------------------------------------- 
+  alias resque_start start
+  def start
+    resque_start
+    super
+    create_background
+    create_help_window
+    create_savefile_viewport
+    create_savefile_windows
+    init_selection
+  end
+  
+#--------------------------------------------------------------------------
+# * Criacao do metodo create_background
+#-------------------------------------------------------------------------- 
+  def create_background
+    @background_sprite = Sprite.new
+    @background_sprite.bitmap = Cache.system("ok")
+    # YourImage.png must be exist in Graphics/system
+  end
+end  
+  

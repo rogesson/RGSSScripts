@@ -37,13 +37,13 @@ class Window_SaveFile < Window_Base
     
     @name_width = text_size(name).width
   
-    #draw hero info
-    draw_hero_info(150, 0, 250, 2)
-
-    #draw_map_name(4, 0, 394, 2)
+    #--------------------------------------------------------------------------
+    # * Escreve informações do herói
+    #--------------------------------------------------------------------------
+    draw_save_info(150, 0, 180, 2)
 
     if $game_map.map_id != 0
-      puts $game_map.display_name 
+      #puts $game_map.display_name 
     end
   end
   
@@ -78,9 +78,9 @@ end
 
 
 #--------------------------------------------------------------------------
-# * Escreve o nome do herói
+# * Escreve informações do herói
 #--------------------------------------------------------------------------
-def draw_hero_info(x, y, width, align)
+def draw_save_info(x, y, width, align)
     header = DataManager.load_header(@file_index)
     return unless header
     draw_text(x, y, width, line_height, "#{@file_index + 1} - #{header[:hero_name]}/#{header[:map_name]}", 2)

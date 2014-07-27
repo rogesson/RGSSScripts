@@ -20,6 +20,8 @@ class Window_SaveFile < Window_Base
       @file_index = index
       refresh
       @selected = false
+      #self.back_opacity = 1
+      self.opacity = 1
   end
   
   #--------------------------------------------------------------------------
@@ -31,16 +33,14 @@ class Window_SaveFile < Window_Base
      
     contents.clear
     change_color(normal_color)
-    #name = Vocab::File + " #{@file_index + 1}"
-    name = " #{@file_index + 1} -"
-    #draw_text(4, 0, 200, line_height, name)
-    draw_text(150, 0, 200, line_height, name)
+    name = " #{@file_index + 1}"
     
     @name_width = text_size(name).width
   
-    draw_hero_name(4, 0, 250, 2)
-    
-    draw_map_name(4, 0, 394, 2)
+    #draw hero info
+    draw_hero_info(150, 0, 250, 2)
+
+    #draw_map_name(4, 0, 394, 2)
 
     if $game_map.map_id != 0
       puts $game_map.display_name 
@@ -80,10 +80,10 @@ end
 #--------------------------------------------------------------------------
 # * Escreve o nome do herói
 #--------------------------------------------------------------------------
-def draw_hero_name(x, y, width, align)
+def draw_hero_info(x, y, width, align)
     header = DataManager.load_header(@file_index)
     return unless header
-    draw_text(x, y, width, line_height, "#{header[:hero_name]}/", 2)
+    draw_text(x, y, width, line_height, "#{@file_index + 1} - #{header[:hero_name]}/#{header[:map_name]}", 2)
 end
 
 #--------------------------------------------------------------------------
@@ -114,12 +114,24 @@ class Scene_File < Scene_MenuBase
     init_selection
   end
   
+  #--------------------------------------------------------------------------
+  # * Alias para create_help_window
+  #--------------------------------------------------------------------------
+  alias resque_create_help_window create_help_window
+  def create_help_window
+    resque_create_help_window
+    @help_window = Window_Help.new(1)
+    @help_window.set_text(help_window_text)
+    @help_window.visible = false
+  end
+    
+  
 #--------------------------------------------------------------------------
 # * Criacao do metodo create_background
 #-------------------------------------------------------------------------- 
   def create_background
     @background_sprite = Sprite.new
-    @background_sprite.bitmap = Cache.system("ok")
+    @background_sprite.bitmap = Cache.system("YourImage")
     # YourImage.png must be exist in Graphics/system
   end
 end  

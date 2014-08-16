@@ -20,7 +20,6 @@ class Window_SaveFile < Window_Base
       @file_index = index
       refresh
       @selected = false
-      #self.back_opacity = 1
       self.opacity = 1
   end
   
@@ -37,13 +36,11 @@ class Window_SaveFile < Window_Base
     
     @name_width = text_size(name).width
   
-    #--------------------------------------------------------------------------
-    # * Escreve informações do herói
-    #--------------------------------------------------------------------------
-    draw_save_info(150, 0, 180, 2)
+    #draw hero info
+    draw_hero_info(150, 0, 250, 2)
 
     if $game_map.map_id != 0
-      #puts $game_map.display_name 
+      puts $game_map.display_name 
     end
   end
   
@@ -52,7 +49,6 @@ class Window_SaveFile < Window_Base
   #--------------------------------------------------------------------------
   def update_cursor      
       if @selected
-        #cursor_rect.set(0, 0, @name_width + 8, line_height)
         cursor_rect.set(0, 0, @name_width + 478, line_height)
       else
         cursor_rect.empty
@@ -78,12 +74,16 @@ end
 
 
 #--------------------------------------------------------------------------
-# * Escreve informações do herói
+# * Escreve o nome do herói
 #--------------------------------------------------------------------------
-def draw_save_info(x, y, width, align)
+def draw_hero_info(x, y, width, align)
     header = DataManager.load_header(@file_index)
-    return unless header
-    draw_text(x, y, width, line_height, "#{@file_index + 1} - #{header[:hero_name]}/#{header[:map_name]}", 2)
+    
+    if header
+      draw_text(x, y, width, line_height, "#{@file_index + 1} - #{header[:hero_name]}/#{header[:map_name]}", 2)
+    else
+      draw_text(x, y, width, line_height, "No File", 1)
+    end
 end
 
 #--------------------------------------------------------------------------
@@ -100,9 +100,9 @@ end
 #--------------------------------------------------------------------------  
 class Scene_File < Scene_MenuBase
   
-  #--------------------------------------------------------------------------
-  # * Alias para start
-  #-------------------------------------------------------------------------- 
+#--------------------------------------------------------------------------
+# * Alias para start
+#-------------------------------------------------------------------------- 
   alias resque_start start
   def start
     resque_start
@@ -114,9 +114,9 @@ class Scene_File < Scene_MenuBase
     init_selection
   end
   
-  #--------------------------------------------------------------------------
-  # * Alias para create_help_window
-  #--------------------------------------------------------------------------
+#--------------------------------------------------------------------------
+# * Alias para create_help_window
+#--------------------------------------------------------------------------
   alias resque_create_help_window create_help_window
   def create_help_window
     resque_create_help_window
@@ -131,8 +131,7 @@ class Scene_File < Scene_MenuBase
 #-------------------------------------------------------------------------- 
   def create_background
     @background_sprite = Sprite.new
-    @background_sprite.bitmap = Cache.system("YourImage")
-    # YourImage.png must be exist in Graphics/system
+    @background_sprite.bitmap = Cache.system("ok")
   end
 end  
   

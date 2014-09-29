@@ -8,7 +8,7 @@
   
   * Features: 
     * Clona uma tile a partir de outra tile
-    * Clona várias tiles apartir de outra tile
+    * Clona várias tiles a partir de outra tile
 
   * Importando Script
     * Insira um novo script acima do Main chamado Clone_Tile
@@ -27,11 +27,11 @@ class Clone_Tile
     @tile_to_replace = $game_map.data[to_replace_x, to_replace_y, @layer]
   end
 
-  # Clona 1 (uma) tile várias vezes apartir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes
+  # Clona 1 (uma) tile várias vezes a partir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes
   # em que a tile vai ser clonada
   def random_clone(tile_x, tile_y, times)
     times.times do
-    # Cria cordenada x e y (randomicamente) da tile a ser substituida.
+    # Cria coordenada x e y (randomicamente) da tile a ser substituída.
     next_tile_x  =  rand(@map_x)
     next_tile_y  =  rand(@map_y)
       # Clona a tile se a possicao X e Y passada for válida.
@@ -53,7 +53,7 @@ class Clone_Tile
       $game_map.passable?(x, y, 0)        and # Verifica se Tile 1 é passável
       $game_map.passable?(x, y, 2)        and # Verifica se Tile 3 é passável
       $game_map.data[x, y, @layer] ==         
-      @tile_to_replace                    and # Verifica se tile randomica é a mesma que foi escolhida para ser substituida
+      @tile_to_replace                    and # Verifica se tile randômica é a mesma que foi escolhida para ser substituída
       $game_map.check_event(x, y).class != Fixnum # Verifica se é a tile de um evento
   end
 

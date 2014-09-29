@@ -47,14 +47,14 @@ class Clone_Tile
   end
   # Verifica se a posição X e Y da tile passada é válida.
   def valid_tile(x, y)
-      $game_map.valid?(x, y)              and 
-      not layer_of_character(x, y)        and 
-      $game_map.passable?(x, y, 1)        and 
-      $game_map.passable?(x, y, 0)        and 
-      $game_map.passable?(x, y, 2)        and 
-      $game_map.data[x, y, @layer] == 
-      @tile_to_replace                    and
-      $game_map.check_event(x, y).class != Fixnum
+      $game_map.valid?(x, y)              and # Verifica se a tile é válida
+      not layer_of_character(x, y)        and # Verifica se o jogador está nessa tile
+      $game_map.passable?(x, y, 1)        and # Verifica se Tile 2 é passável
+      $game_map.passable?(x, y, 0)        and # Verifica se Tile 1 é passável
+      $game_map.passable?(x, y, 2)        and # Verifica se Tile 3 é passável
+      $game_map.data[x, y, @layer] ==         
+      @tile_to_replace                    and # Verifica se tile randomica é a mesma que foi escolhida para ser substituida
+      $game_map.check_event(x, y).class != Fixnum # Verifica se é a tile de um evento
   end
 
   # Verifica se a tile é a mesma em que o jogador está.

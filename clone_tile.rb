@@ -60,10 +60,6 @@ class Clone_Tile
   # Verifica se a tile é a mesma em que o jogador está.
   def layer_of_character(x, y) 
     current_possition = [$game_player.x, $game_player.y]
-    if  current_possition[0] == x and current_possition[1] == y
-      true
-    else
-      false
-    end
+    current_possition[0] == x and current_possition[1] == y
   end
 end

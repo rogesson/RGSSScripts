@@ -22,8 +22,8 @@ class Window_Help < Window_Base
 
   def set_item(item)
     dispose_item_attribute
-    return unless item
-    if SceneManager.scene_is?(Scene_Item_New)
+    return if !item
+    #if SceneManager.scene_is?(Scene_Item_New)
       #--------------------------------------------------------------------------
       # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
       # * de item.
@@ -34,9 +34,9 @@ class Window_Help < Window_Base
       # * Exibe atributos do item.
       #--------------------------------------------------------------------------
       show_item_attribute(item)
-    else
-      description = item.description
-    end
+    #else
+    #  description = item.description
+    #end
     
     #--------------------------------------------------------------------------
     # * Exibe descrição do item selecionado.
@@ -49,11 +49,14 @@ class Window_Help < Window_Base
   #--------------------------------------------------------------------------
   def show_item_attribute(item)
       dispose_item_attribute if @spr_item_attribute 
+      
       item_attribute_info = %Q{ATK > 10  DEF > 40}
       bit = Bitmap.new(544, 416)
       bit.draw_text(286, 100, 300, 100, item_attribute_info)
+      
       @spr_item_attribute = Sprite.new
       @spr_item_attribute.bitmap = bit
+      
       @spr_item_attribute.z = 9999
   end
 
@@ -61,11 +64,13 @@ class Window_Help < Window_Base
   # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
   #--------------------------------------------------------------------------
   def dispose_item_attribute
+    return if  !SceneManager.scene_is?(Scene_Item_New)
+    
     @spr_item_attribute.dispose if not @item and @spr_item_attribute
     @spr_item_attribute = nil
     puts 'disposed'
   end
-  
+
   #--------------------------------------------------------------------------
   # * Exibe a descrição do item em várias linhas
   #--------------------------------------------------------------------------
@@ -171,7 +176,7 @@ class Scene_Item_New < Scene_ItemBase
   # * Item [OK]
   #--------------------------------------------------------------------------
   def on_item_ok
-    @help_window.dispose_item_attribute if SceneManager.scene_is?(Scene_Item_New)
+    @help_window.dispose_item_attribute
     $game_party.last_item.object = item
     determine_item
   end

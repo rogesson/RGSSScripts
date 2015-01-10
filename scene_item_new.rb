@@ -21,22 +21,23 @@ class Window_Help < Window_Base
   end
 
   def set_item(item)
+    #--------------------------------------------------------------------------
+    # * Atualiza janela de informações do item.
+    #--------------------------------------------------------------------------
     dispose_item_attribute
-    return if !item
-    #if SceneManager.scene_is?(Scene_Item_New)
-      #--------------------------------------------------------------------------
-      # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
-      # * de item.
-      #--------------------------------------------------------------------------
-      description = short_description(item)
+    
+    return if  !SceneManager.scene_is?(Scene_Item_New) or !item
+    
+    #--------------------------------------------------------------------------
+    # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
+    # * de item.
+    #--------------------------------------------------------------------------
+    description = short_description(item)
 
-      #--------------------------------------------------------------------------
-      # * Exibe atributos do item.
-      #--------------------------------------------------------------------------
-      show_item_attribute(item)
-    #else
-    #  description = item.description
-    #end
+    #--------------------------------------------------------------------------
+    # * Exibe atributos do item.
+    #--------------------------------------------------------------------------
+    show_item_attribute(item)
     
     #--------------------------------------------------------------------------
     # * Exibe descrição do item selecionado.

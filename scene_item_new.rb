@@ -21,33 +21,27 @@ class Window_Help < Window_Base
   end
 
   def set_item(item)
-    if item
-      if SceneManager.scene_is?(Scene_Item_New)
-        #--------------------------------------------------------------------------
-        # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
-        # * de item.
-        #--------------------------------------------------------------------------
-        description = short_description(item)
-      else
-        description = item.description
-      end
-      
+    dispose_item_attribute
+    return unless item
+    if SceneManager.scene_is?(Scene_Item_New)
+      #--------------------------------------------------------------------------
+      # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
+      # * de item.
+      #--------------------------------------------------------------------------
+      description = short_description(item)
 
-      #[TODO] Remover debugger do description.
-      #puts description
-      
-      #--------------------------------------------------------------------------
-      # * Exibe descrição do item selecionado.
-      #--------------------------------------------------------------------------
-      set_text(item ?  description : "")
-      
       #--------------------------------------------------------------------------
       # * Exibe atributos do item.
       #--------------------------------------------------------------------------
       show_item_attribute(item)
     else
-      dispose_item_attribute
+      description = item.description
     end
+    
+    #--------------------------------------------------------------------------
+    # * Exibe descrição do item selecionado.
+    #--------------------------------------------------------------------------
+    set_text(item ?  description : "")
   end
 
   #--------------------------------------------------------------------------

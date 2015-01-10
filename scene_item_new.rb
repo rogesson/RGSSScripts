@@ -38,6 +38,11 @@ class Window_Help < Window_Base
     # * Exibe atributos do item.
     #--------------------------------------------------------------------------
     show_item_attribute(item)
+
+    #--------------------------------------------------------------------------
+    # * Exibe informações do item.
+    #--------------------------------------------------------------------------
+    draw_item_info(item)
     
     #--------------------------------------------------------------------------
     # * Exibe descrição do item selecionado.
@@ -62,14 +67,49 @@ class Window_Help < Window_Base
   end
 
   #--------------------------------------------------------------------------
-  # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
+  # * Exibe Informações do item como: nome, tipo, atributo e imagem do item. 
+  #--------------------------------------------------------------------------
+  def draw_item_info(item)
+      dispose_item_info if @spr_item_info 
+      
+      item_info = %Q{nome e tal}
+      bit = Bitmap.new(544, 416)
+      bit.draw_text(286, 120, 300, 100, item_info)
+      
+      @spr_item_info = Sprite.new
+      @spr_item_info.bitmap = bit
+      
+      @spr_item_info.z = 9999
+  end
+
+  #--------------------------------------------------------------------------
+  # * Remove da memória as informações de atributos do item.
   #--------------------------------------------------------------------------
   def dispose_item_attribute
     return if !SceneManager.scene_is?(Scene_Item_New)
     
     @spr_item_attribute.dispose if not @item and @spr_item_attribute
     @spr_item_attribute = nil
-    puts 'disposed'
+    puts 'disposing item_attribute'
+  end
+
+  #--------------------------------------------------------------------------
+  # * Remove da memória as informações de atributos do item.
+  #--------------------------------------------------------------------------
+  def dispose_item_info
+    return if !SceneManager.scene_is?(Scene_Item_New)
+    
+    @spr_item_info.dispose if not @item and @spr_item_info
+    @spr_item_info = nil
+    puts 'disposing item_info'
+  end
+
+  #--------------------------------------------------------------------------
+  # * Libera da memória todos os bitmaps da janela de item.
+  #--------------------------------------------------------------------------
+  def dispose_bitmap
+    dispose_item_info
+    dispose_item_attribute
   end
 
   #--------------------------------------------------------------------------
@@ -177,7 +217,7 @@ class Scene_Item_New < Scene_ItemBase
   # * Item [OK]
   #--------------------------------------------------------------------------
   def on_item_ok
-    @help_window.dispose_item_attribute
+    @help_window.dispose_bitmap
     $game_party.last_item.object = item
     determine_item
   end
@@ -187,7 +227,7 @@ class Scene_Item_New < Scene_ItemBase
   def on_item_cancel
     @item_window.unselect
     @category_window.activate
-    @help_window.dispose_item_attribute
+    @help_window.dispose_bitmap
   end
   #--------------------------------------------------------------------------
   # * Play SE When Using Item

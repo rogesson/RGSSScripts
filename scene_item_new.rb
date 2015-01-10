@@ -65,6 +65,7 @@ class Window_Help < Window_Base
     @spr_item_attribute = nil
     puts 'disposed'
   end
+  
   #--------------------------------------------------------------------------
   # * Exibe a descrição do item em várias linhas
   #--------------------------------------------------------------------------
@@ -99,10 +100,7 @@ class Window_Help < Window_Base
     end
 
     formated_description.gsub(/\n\s+/, "\n")
-
   end
-
-  
 
 end
 

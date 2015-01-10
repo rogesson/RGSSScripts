@@ -51,7 +51,7 @@ class Window_Help < Window_Base
   def show_item_attribute(item)
       dispose_item_attribute if @spr_item_attribute 
       
-      item_attribute_info = %Q{ATK > 10  DEF > 40}
+      item_attribute_info = %Q{ATK > #{rand(100)}  DEF > #{rand(100)}}
       bit = Bitmap.new(544, 416)
       bit.draw_text(286, 100, 300, 100, item_attribute_info)
       
@@ -65,7 +65,7 @@ class Window_Help < Window_Base
   # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
   #--------------------------------------------------------------------------
   def dispose_item_attribute
-    return if  !SceneManager.scene_is?(Scene_Item_New)
+    return if !SceneManager.scene_is?(Scene_Item_New)
     
     @spr_item_attribute.dispose if not @item and @spr_item_attribute
     @spr_item_attribute = nil

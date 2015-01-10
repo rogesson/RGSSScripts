@@ -45,6 +45,8 @@ class Window_Help < Window_Base
       # * Exibe atributos do item.
       #--------------------------------------------------------------------------
       show_item_attribute(item)
+    else
+      dispose_item_attribute
     end
   end
 
@@ -52,12 +54,22 @@ class Window_Help < Window_Base
   # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
   #--------------------------------------------------------------------------
   def show_item_attribute(item)
+      dispose_item_attribute if @spr 
       item_attribute_info = %Q{ATK > 10  DEF > 40}
       bit = Bitmap.new(544, 416)
       bit.draw_text(286, 100, 300, 100, item_attribute_info)
       @spr = Sprite.new
       @spr.bitmap = bit
       @spr.z = 9999
+  end
+
+  #--------------------------------------------------------------------------
+  # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
+  #--------------------------------------------------------------------------
+  def dispose_item_attribute
+    @spr.dispose if not @item and @spr
+    @spr = nil
+    puts 'disposed'
   end
   #--------------------------------------------------------------------------
   # * Exibe a descrição do item em várias linhas
@@ -165,6 +177,7 @@ class Scene_Item_New < Scene_ItemBase
   # * Item [OK]
   #--------------------------------------------------------------------------
   def on_item_ok
+    @help_window.dispose_item_attribute
     $game_party.last_item.object = item
     determine_item
   end
@@ -174,6 +187,7 @@ class Scene_Item_New < Scene_ItemBase
   def on_item_cancel
     @item_window.unselect
     @category_window.activate
+    @help_window.dispose_item_attribute
   end
   #--------------------------------------------------------------------------
   # * Play SE When Using Item

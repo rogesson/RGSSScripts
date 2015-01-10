@@ -54,21 +54,21 @@ class Window_Help < Window_Base
   # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
   #--------------------------------------------------------------------------
   def show_item_attribute(item)
-      dispose_item_attribute if @spr 
+      dispose_item_attribute if @spr_item_attribute 
       item_attribute_info = %Q{ATK > 10  DEF > 40}
       bit = Bitmap.new(544, 416)
       bit.draw_text(286, 100, 300, 100, item_attribute_info)
-      @spr = Sprite.new
-      @spr.bitmap = bit
-      @spr.z = 9999
+      @spr_item_attribute = Sprite.new
+      @spr_item_attribute.bitmap = bit
+      @spr_item_attribute.z = 9999
   end
 
   #--------------------------------------------------------------------------
   # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
   #--------------------------------------------------------------------------
   def dispose_item_attribute
-    @spr.dispose if not @item and @spr
-    @spr = nil
+    @spr_item_attribute.dispose if not @item and @spr_item_attribute
+    @spr_item_attribute = nil
     puts 'disposed'
   end
   #--------------------------------------------------------------------------

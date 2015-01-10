@@ -102,6 +102,8 @@ class Window_Help < Window_Base
 
   end
 
+  
+
 end
 
 class Scene_Menu < Scene_MenuBase
@@ -171,7 +173,7 @@ class Scene_Item_New < Scene_ItemBase
   # * Item [OK]
   #--------------------------------------------------------------------------
   def on_item_ok
-    @help_window.dispose_item_attribute
+    @help_window.dispose_item_attribute if SceneManager.scene_is?(Scene_Item_New)
     $game_party.last_item.object = item
     determine_item
   end

@@ -32,9 +32,32 @@ class Window_Help < Window_Base
         description = item.description
       end
       
-      puts description
+
+      #[TODO] Remover debugger do description.
+      #puts description
+      
+      #--------------------------------------------------------------------------
+      # * Exibe descrição do item selecionado.
+      #--------------------------------------------------------------------------
       set_text(item ?  description : "")
+      
+      #--------------------------------------------------------------------------
+      # * Exibe atributos do item.
+      #--------------------------------------------------------------------------
+      show_item_attribute(item)
     end
+  end
+
+  #--------------------------------------------------------------------------
+  # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
+  #--------------------------------------------------------------------------
+  def show_item_attribute(item)
+      item_attribute_info = %Q{ATK > 10  DEF > 40}
+      bit = Bitmap.new(544, 416)
+      bit.draw_text(286, 100, 300, 100, item_attribute_info)
+      @spr = Sprite.new
+      @spr.bitmap = bit
+      @spr.z = 9999
   end
   #--------------------------------------------------------------------------
   # * Exibe a descrição do item em várias linhas
@@ -71,10 +94,6 @@ class Window_Help < Window_Base
 
     formated_description.gsub(/\n\s+/, "\n")
 
-#    Bitmap dos atributos do equipamento
-#    self.contents = Bitmap.new(0, 0)
-#    self.contents.draw_text(4, 0, self.width - 40, 32, "nome", 0)
-#
   end
 
 end

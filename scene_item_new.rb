@@ -1,16 +1,18 @@
 #==============================================================================
-# ** Scene_Item
+# ** Scene_Item_new  [TODO] Mudar este nome.
+# 
+# **   
 #------------------------------------------------------------------------------
-#  This class performs the item screen processing.
+#  Script responsável por editar a tela de item.
 #==============================================================================
 
 class Window_Help < Window_Base
 
-  #Diminuindo  a largura do conteudo da help_window
   def initialize(line_number = 2)
     grapics_width = Graphics.width
-
-    # Se a scene atual for a Scene_Item_New
+    #--------------------------------------------------------------------------
+    # * Diminui a largura do conteúdo da help_window se a scene atual for a Scene_Item_New
+    #--------------------------------------------------------------------------
     if SceneManager.scene_is?(Scene_Item_New)
       grapics_width = grapics_width / 2  
     end
@@ -21,8 +23,10 @@ class Window_Help < Window_Base
   def set_item(item)
     if item
       if SceneManager.scene_is?(Scene_Item_New)
-
-        #Transofrma em short description se a scene for a da tela de item.
+        #--------------------------------------------------------------------------
+        # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
+        # * de item.
+        #--------------------------------------------------------------------------
         description = short_description(item)
       else
         description = item.description
@@ -32,16 +36,20 @@ class Window_Help < Window_Base
       set_text(item ?  description : "")
     end
   end
-
-  # Exibe a descrição do item em várias linhas
+  #--------------------------------------------------------------------------
+  # * Exibe a descrição do item em várias linhas
+  #--------------------------------------------------------------------------
   def short_description(item)
     format_item_description(item.description, 23)
   end
 
-  # Formata o texto quebrando as linhas.
+  #--------------------------------------------------------------------------
+  # * Metodo que formata o texto da descrição do item quebrando as linhas.
+  #--------------------------------------------------------------------------
   def format_item_description(item_description, break_at)
-    
-    # Retorna a string formatada se a mesma já estiver formatada para evitar a recursividade.
+    #--------------------------------------------------------------------------
+    # * Retorna a string formatada se a mesma já estiver formatada para evitar a recursividade.
+    #--------------------------------------------------------------------------
     return item_description.gsub(/\n\s+/, "\n") if item_description.include? "\n"
     
     formated_description = String
@@ -53,8 +61,10 @@ class Window_Help < Window_Base
         break_at = break_at + (line_breaker + 1)
         formated_description = item_description
       rescue
-        # Sai do loop quando existir um erro de index nao encontrado,
-        # isso significa que a a quebra de linha percorreu toda a string.
+        #--------------------------------------------------------------------------
+        # * Sai do loop quando existir um erro de index nao encontrado,
+        # * isso significa que a a quebra de linha percorreu toda a string.
+        #--------------------------------------------------------------------------
         break
       end 
     end
@@ -70,14 +80,18 @@ class Window_Help < Window_Base
 end
 
 class Scene_Menu < Scene_MenuBase
-  #Chamando a scene do novo menu.
+  #--------------------------------------------------------------------------
+  # * Chamando a scene do novo menu.
+  #--------------------------------------------------------------------------
   def command_item
     SceneManager.call(Scene_Item_New)
   end
 end
 
 class Window_ItemList < Window_Selectable
-  #Mudando a lista de itens para vertical.
+  #--------------------------------------------------------------------------
+  # * Mudando a lista de itens para vertical.
+  #--------------------------------------------------------------------------
   def col_max
     return 1
   end

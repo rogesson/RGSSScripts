@@ -37,7 +37,7 @@ class Window_Help < Window_Base
     #--------------------------------------------------------------------------
     # * Exibe atributos do item.
     #--------------------------------------------------------------------------
-    show_item_attribute(item)
+    draw_item_attribute(item)
 
     #--------------------------------------------------------------------------
     # * Exibe informações do item.
@@ -53,7 +53,7 @@ class Window_Help < Window_Base
   #--------------------------------------------------------------------------
   # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
   #--------------------------------------------------------------------------
-  def show_item_attribute(item)
+  def draw_item_attribute(item)
       dispose_item_attribute if @spr_item_attribute 
       
       item_attribute_info = %Q{ATK > #{rand(100)}  DEF > #{rand(100)}}
@@ -198,12 +198,15 @@ class Scene_Item_New < Scene_ItemBase
   def create_item_window
     wy = @category_window.y + @category_window.height
     wh = Graphics.height - wy
+
     @item_window_height = wh
     @item_window = Window_ItemList.new(0, wy, (Graphics.width / 2), wh)
     @item_window.viewport = @viewport
     @item_window.help_window = @help_window
+
     @item_window.set_handler(:ok,     method(:on_item_ok))
     @item_window.set_handler(:cancel, method(:on_item_cancel))
+    
     @category_window.item_window = @item_window
   end
   #--------------------------------------------------------------------------

@@ -72,9 +72,10 @@ class Window_Help < Window_Base
   def draw_item_info(item)
       dispose_item_info if @spr_item_info 
       
-      item_info = %Q{nome e tal}
       bit = Bitmap.new(544, 416)
-      bit.draw_text(286, 120, 300, 100, item_info)
+      bit.draw_text(286, 120, 300, 100, "Nome: Foo")
+      bit.draw_text(286, 140, 300, 100, "Tipo: Foo")
+      bit.draw_text(286, 160, 300, 100, "Atributo: Foo")
       
       @spr_item_info = Sprite.new
       @spr_item_info.bitmap = bit
@@ -206,7 +207,7 @@ class Scene_Item_New < Scene_ItemBase
 
     @item_window.set_handler(:ok,     method(:on_item_ok))
     @item_window.set_handler(:cancel, method(:on_item_cancel))
-    
+
     @category_window.item_window = @item_window
   end
   #--------------------------------------------------------------------------

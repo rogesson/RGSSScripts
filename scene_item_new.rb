@@ -272,16 +272,11 @@ class Scene_Item_New < Scene_ItemBase
 =end
 
   def create_item_info_window
-
     x       = @category_window.width / 2
     y       = @category_window.height
     width   =  @category_window.width / 2
     height  = @item_window_height.to_i
 
     @item_info_window = Item_Info_Window.new(x, y, width, height)
-    #@help_window.y      = @category_window.height
-    #@help_window.x      = 
-    #@help_window.height = 
-    #@help_window.width  = 
   end
 end

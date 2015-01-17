@@ -6,6 +6,7 @@
 #  Script responsável por editar a tela de item.
 #==============================================================================
 
+=begin
 class Window_Help < Window_Base
 
   def initialize(line_number = 2)
@@ -150,6 +151,14 @@ class Window_Help < Window_Base
   end
 
 end
+=end
+
+# Classe responsável por exibir as informações do item selecionado.
+class Item_Info_Window < Window_Base
+  def initialize(x, y, width, height)
+    super(x, y, width, height)
+  end
+end
 
 class Scene_Menu < Scene_MenuBase
   #--------------------------------------------------------------------------
@@ -176,10 +185,11 @@ class Scene_Item_New < Scene_ItemBase
   #--------------------------------------------------------------------------
   def start
     super
-    create_help_window
+    #create_help_window
     create_category_window
     create_item_window
-    help_window_right
+    create_item_info_window
+    #help_window_right
   end
   #--------------------------------------------------------------------------
   # * Create Category Window
@@ -187,15 +197,16 @@ class Scene_Item_New < Scene_ItemBase
   def create_category_window
     @category_window = Window_ItemCategory.new
     @category_window.viewport = @viewport
-    @category_window.help_window = @help_window
+    #@category_window.help_window = @help_window
     @category_window.y = 0
     @category_window.set_handler(:ok,     method(:on_category_ok))
     @category_window.set_handler(:cancel, method(:return_scene))
-    help_window_right
+    #help_window_right
   end
   #--------------------------------------------------------------------------
   # * Create Item Window
   #--------------------------------------------------------------------------
+
   def create_item_window
     wy = @category_window.y + @category_window.height
     wh = Graphics.height - wy
@@ -203,13 +214,14 @@ class Scene_Item_New < Scene_ItemBase
     @item_window_height = wh
     @item_window = Window_ItemList.new(0, wy, (Graphics.width / 2), wh)
     @item_window.viewport = @viewport
-    @item_window.help_window = @help_window
+    #@item_window.help_window = @help_window
 
     @item_window.set_handler(:ok,     method(:on_item_ok))
     @item_window.set_handler(:cancel, method(:on_item_cancel))
 
     @category_window.item_window = @item_window
   end
+
   #--------------------------------------------------------------------------
   # * Category [OK]
   #--------------------------------------------------------------------------
@@ -221,7 +233,7 @@ class Scene_Item_New < Scene_ItemBase
   # * Item [OK]
   #--------------------------------------------------------------------------
   def on_item_ok
-    @help_window.dispose_bitmap
+    #@help_window.dispose_bitmap
     $game_party.last_item.object = item
     determine_item
   end
@@ -231,7 +243,7 @@ class Scene_Item_New < Scene_ItemBase
   def on_item_cancel
     @item_window.unselect
     @category_window.activate
-    @help_window.dispose_bitmap
+    #@help_window.dispose_bitmap
   end
   #--------------------------------------------------------------------------
   # * Play SE When Using Item
@@ -250,10 +262,26 @@ class Scene_Item_New < Scene_ItemBase
   #--------------------------------------------------------------------------
   # * Modificando a Help_Window para que a mesma seja dividida em duas partes.
   #--------------------------------------------------------------------------
+=begin
   def help_window_right
     @help_window.y      = @category_window.height
     @help_window.x      = @category_window.width / 2
     @help_window.height = @item_window_height.to_i
     @help_window.width  = @category_window.width / 2
+  end
+=end
+
+  def create_item_info_window
+
+    x       = @category_window.width / 2
+    y       = @category_window.height
+    width   =  @category_window.width / 2
+    height  = @item_window_height.to_i
+
+    @item_info_window = Item_Info_Window.new(x, y, width, height)
+    #@help_window.y      = @category_window.height
+    #@help_window.x      = 
+    #@help_window.height = 
+    #@help_window.width  = 
   end
 end

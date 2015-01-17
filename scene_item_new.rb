@@ -158,6 +158,24 @@ class Item_Info_Window < Window_Base
   def initialize(x, y, width, height)
     super(x, y, width, height)
   end
+
+  #--------------------------------------------------------------------------
+  # * set_text
+  #--------------------------------------------------------------------------
+  def set_text(text)
+    if text != @text
+      @text = text
+      refresh
+    end
+  end
+
+  #--------------------------------------------------------------------------
+  # * Refresh
+  #--------------------------------------------------------------------------
+  def refresh
+    contents.clear
+    draw_text_ex(4, 0, @text)
+  end
 end
 
 class Scene_Menu < Scene_MenuBase
@@ -278,5 +296,6 @@ class Scene_Item_New < Scene_ItemBase
     height  = @item_window_height.to_i
 
     @item_info_window = Item_Info_Window.new(x, y, width, height)
+    @item_info_window.set_text('bla')
   end
 end

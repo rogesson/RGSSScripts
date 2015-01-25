@@ -7,14 +7,6 @@
 #==============================================================================
 
 
-class Window_Selectable < Window_Base
-
-  def help_window=(help_window)
-    @help_window = help_window
-    call_update_help
-  end
-
-end
 =begin
 class Window_Help < Window_Base
 
@@ -187,7 +179,15 @@ class Item_Info_Window < Window_Base
     draw_text_ex(4, 0, @text)
   end
 
+  #--------------------------------------------------------------------------
+  # * Clear
+  #--------------------------------------------------------------------------
+  def clear
+    set_text("")
+  end
+
   def set_item(item)
+    puts "updated #{rand 19}"
     #--------------------------------------------------------------------------
     # * Atualiza janela de informações do item.
     #--------------------------------------------------------------------------
@@ -316,13 +316,13 @@ class Scene_Item_New < Scene_ItemBase
   # * Create Category Window
   #--------------------------------------------------------------------------
   def create_category_window
+    puts "info_window >>>>>>>> #{@item_info_window}"
     @category_window = Window_ItemCategory.new
     @category_window.viewport = @viewport
-    #@category_window.help_window = @help_window
+    #@category_window.help_window = @item_info_window
     @category_window.y = 0
     @category_window.set_handler(:ok,     method(:on_category_ok))
     @category_window.set_handler(:cancel, method(:return_scene))
-    #help_window_right
   end
   #--------------------------------------------------------------------------
   # * Create Item Window
@@ -335,7 +335,7 @@ class Scene_Item_New < Scene_ItemBase
     @item_window_height = wh
     @item_window = Window_ItemList.new(0, wy, (Graphics.width / 2), wh)
     @item_window.viewport = @viewport
-    #@item_window.help_window = @help_window
+    #@item_window.help_window = @item_info_window
 
     @item_window.set_handler(:ok,     method(:on_item_ok))
     @item_window.set_handler(:cancel, method(:on_item_cancel))
@@ -400,5 +400,8 @@ class Scene_Item_New < Scene_ItemBase
     height  = @item_window_height.to_i
 
     @item_info_window = Item_Info_Window.new(x, y, width, height)
+
+    @category_window.help_window = @item_info_window
+    @item_window.help_window = @item_info_window
   end
 end

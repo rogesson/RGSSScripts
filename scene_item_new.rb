@@ -199,7 +199,7 @@ class Item_Info_Window < Window_Base
     # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
     # * de item.
     #--------------------------------------------------------------------------
-    #description = short_description(item)
+    description = short_description(item)
 
     #--------------------------------------------------------------------------
     # * Exibe atributos do item.
@@ -214,7 +214,43 @@ class Item_Info_Window < Window_Base
     #--------------------------------------------------------------------------
     # * Exibe descrição do item selecionado.
     #--------------------------------------------------------------------------
-    #set_text(item ?  description : "")
+    set_text(item ?  description : "")
+  end
+
+  #--------------------------------------------------------------------------
+  # * Exibe a descrição do item em várias linhas
+  #--------------------------------------------------------------------------
+  def short_description(item)
+    format_item_description(item.description, 23)
+  end
+
+   #--------------------------------------------------------------------------
+  # * Metodo que formata o texto da descrição do item quebrando as linhas.
+  #--------------------------------------------------------------------------
+  def format_item_description(item_description, break_at)
+    #--------------------------------------------------------------------------
+    # * Retorna a string formatada se a mesma já estiver formatada para evitar a recursividade.
+    #--------------------------------------------------------------------------
+    return item_description.gsub(/\n\s+/, "\n") if item_description.include? "\n"
+    
+    formated_description = String
+    line_breaker         = break_at
+
+    loop do
+      begin
+        item_description.insert(break_at, "\n")
+        break_at = break_at + (line_breaker + 1)
+        formated_description = item_description
+      rescue
+        #--------------------------------------------------------------------------
+        # * Sai do loop quando existir um erro de index nao encontrado,
+        # * isso significa que a a quebra de linha percorreu toda a string.
+        #--------------------------------------------------------------------------
+        break
+      end 
+    end
+
+    formated_description.gsub(/\n\s+/, "\n")
   end
 
   #--------------------------------------------------------------------------

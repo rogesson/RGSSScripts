@@ -38,6 +38,9 @@ class Item_Info_Window < Window_Base
     set_text("")
   end
 
+  #--------------------------------------------------------------------------
+  # * set_item
+  #--------------------------------------------------------------------------
   def set_item(item)
     puts "updated #{rand 19}"
     #--------------------------------------------------------------------------
@@ -128,9 +131,11 @@ class Item_Info_Window < Window_Base
       dispose_item_info if @spr_item_info 
       
       bit = Bitmap.new(544, 416)
-      bit.draw_text(286, 120, 300, 100, "Nome: Foo")
+      #bit.draw_text(286, 120, 300, 100, "Nome: Foo")
       bit.draw_text(286, 140, 300, 100, "Tipo: Foo")
       bit.draw_text(286, 160, 300, 100, "Atributo: Foo")
+
+      draw_icon(1, 286, 120, enabled = true)
       
       @spr_item_info = Sprite.new
       @spr_item_info.bitmap = bit

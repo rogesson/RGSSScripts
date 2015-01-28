@@ -1,3 +1,12 @@
+=begin 
+  * Script RGSS(XP) para RPG Maker VX ACE
+  
+  * Nome: Menu 
+  * Descrição: Muda Layout e informações do menu de item.
+  * Autor: Resque
+  * Data: 10/12/2014
+=end
+
 #==============================================================================
 # ** Scene_Item_new  [TODO] Mudar este nome.
 # 

@@ -129,14 +129,6 @@ class Item_Info_Window < Window_Base
     
     "#{formated_description.gsub(/\n\s+/, "\n")}"
   end
-
-  #--------------------------------------------------------------------------
-  # * Libera da memória todos os bitmaps da janela de item.
-  #--------------------------------------------------------------------------
-  #[TODO] Verificar se é nessesário
-  def dispose_bitmap
-    contents.clear
-  end
 end
 
 class Scene_Menu < Scene_MenuBase
@@ -208,7 +200,6 @@ class Scene_Item_New < Scene_ItemBase
   # * Item [OK]
   #--------------------------------------------------------------------------
   def on_item_ok
-    @item_info_window.dispose_bitmap
     $game_party.last_item.object = item
     determine_item
   end
@@ -218,7 +209,7 @@ class Scene_Item_New < Scene_ItemBase
   def on_item_cancel
     @item_window.unselect
     @category_window.activate
-    @item_info_window.dispose_bitmap
+    @item_info_window.contents.clear if @item_info_window
   end
   #--------------------------------------------------------------------------
   # * Play SE When Using Item

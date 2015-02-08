@@ -17,8 +17,11 @@
 
 # Classe responsável por exibir as informações do item selecionado.
 class Item_Info_Window < Window_Base
+  attr_accessor :current_item
+
   def initialize(x, y, width, height)
     super(x, y, width, height)
+    @current_item = nil
   end
 
   #--------------------------------------------------------------------------
@@ -38,6 +41,8 @@ class Item_Info_Window < Window_Base
   def refresh
     contents.clear
     draw_text_ex(4, 0, @text)
+    
+    draw_icon(@current_item.icon_index, 0, 0) if SceneManager.scene_is?(Scene_Item_New) and @current_item
   end
 
   #--------------------------------------------------------------------------
@@ -51,6 +56,8 @@ class Item_Info_Window < Window_Base
   # * set_item
   #--------------------------------------------------------------------------
   def set_item(item)
+
+    self.current_item = item
     puts "updated #{rand 19}"
     #--------------------------------------------------------------------------
     # * Atualiza janela de informações do item.
@@ -114,15 +121,19 @@ class Item_Info_Window < Window_Base
       end 
     end
 
-    formated_description.gsub(/\n\s+/, "\n")
+    
+    "#{formated_description.gsub(/\n\s+/, "\n")}"
   end
 
   #--------------------------------------------------------------------------
   # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
   #--------------------------------------------------------------------------
   def draw_item_attribute(item)
+    
+      
       dispose_item_attribute if @spr_item_attribute 
       
+
       item_attribute_info = %Q{ATK > #{rand(100)}  DEF > #{rand(100)}}
       bit = Bitmap.new(544, 416)
       bit.draw_text(286, 100, 300, 100, item_attribute_info)
@@ -140,11 +151,10 @@ class Item_Info_Window < Window_Base
       dispose_item_info if @spr_item_info 
       
       bit = Bitmap.new(544, 416)
-      #bit.draw_text(286, 120, 300, 100, "Nome: Foo")
+      bit.draw_text(286, 120, 300, 100, "Nome: Foo")
       bit.draw_text(286, 140, 300, 100, "Tipo: Foo")
       bit.draw_text(286, 160, 300, 100, "Atributo: Foo")
 
-      draw_icon(1, 286, 120, enabled = true)
       
       @spr_item_info = Sprite.new
       @spr_item_info.bitmap = bit
@@ -171,7 +181,6 @@ class Item_Info_Window < Window_Base
     
     @spr_item_info.dispose if not @item and @spr_item_info
     @spr_item_info = nil
-    puts 'disposing item_info'
   end
 
   #--------------------------------------------------------------------------
@@ -180,6 +189,7 @@ class Item_Info_Window < Window_Base
   def dispose_bitmap
     dispose_item_info
     dispose_item_attribute
+    contents.clear
   end
 end
 
@@ -216,7 +226,6 @@ class Scene_Item_New < Scene_ItemBase
   # * Create Category Window
   #--------------------------------------------------------------------------
   def create_category_window
-    puts "info_window >>>>>>>> #{@item_info_window}"
     @category_window = Window_ItemCategory.new
     @category_window.viewport = @viewport
     @category_window.y = 0

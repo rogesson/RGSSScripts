@@ -44,10 +44,10 @@ class Item_Info_Window < Window_Base
     if SceneManager.scene_is?(Scene_Item_New) and @current_item
 
       # Icone do Item.
-      draw_icon(@current_item.icon_index, 8, 4)
+      draw_icon(@current_item.icon_index, 14, 20)
 
       # Descrição do Item;
-      draw_text_ex(4, 170, @text)
+      draw_text_ex(8, 120, @text)
       
       # Informações do Item.
       draw_text_ex(60, 4,  "Nome:")
@@ -55,7 +55,7 @@ class Item_Info_Window < Window_Base
       draw_text_ex(60, 48, "Atributo: Foo")
 
       # Atributos do Item.
-      draw_text_ex(8, 120, %Q{ATK > #{rand(100)}  DEF > #{rand(100)}})
+      draw_text_ex(8, 80, %Q{ATK > #{rand(100)}  DEF > #{rand(100)}})
     else
       draw_text_ex(4, 0, @text)
     end

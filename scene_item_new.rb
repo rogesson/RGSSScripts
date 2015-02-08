@@ -42,12 +42,20 @@ class Item_Info_Window < Window_Base
     contents.clear
     
     if SceneManager.scene_is?(Scene_Item_New) and @current_item
+
+      # Icone do Item.
+      draw_icon(@current_item.icon_index, 8, 4)
+
+      # Descrição do Item;
       draw_text_ex(4, 170, @text)
+      
+      # Informações do Item.
       draw_text_ex(60, 4,  "Nome:")
       draw_text_ex(60, 24, "Tipo: Foo")
       draw_text_ex(60, 48, "Atributo: Foo")
 
-      draw_icon(@current_item.icon_index, 8, 4)
+      # Atributos do Item.
+      draw_text_ex(8, 120, %Q{ATK > #{rand(100)}  DEF > #{rand(100)}})
     else
       draw_text_ex(4, 0, @text)
     end
@@ -70,7 +78,6 @@ class Item_Info_Window < Window_Base
     #--------------------------------------------------------------------------
     # * Atualiza janela de informações do item.
     #--------------------------------------------------------------------------
-    dispose_item_attribute
     
     return if  !SceneManager.scene_is?(Scene_Item_New) or !item
     
@@ -80,16 +87,6 @@ class Item_Info_Window < Window_Base
     #--------------------------------------------------------------------------
     description = short_description(item)
 
-    #--------------------------------------------------------------------------
-    # * Exibe atributos do item.
-    #--------------------------------------------------------------------------
-    draw_item_attribute(item)
-
-    #--------------------------------------------------------------------------
-    # * Exibe informações do item.
-    #--------------------------------------------------------------------------
-    draw_item_info(item)
-    
     #--------------------------------------------------------------------------
     # * Exibe descrição do item selecionado.
     #--------------------------------------------------------------------------
@@ -134,70 +131,10 @@ class Item_Info_Window < Window_Base
   end
 
   #--------------------------------------------------------------------------
-  # * Exibe bitmap com atributos do item selecionado, Ex: ATK e DEF. 
-  #--------------------------------------------------------------------------
-  def draw_item_attribute(item)
-    
-      
-      dispose_item_attribute if @spr_item_attribute 
-      
-
-      item_attribute_info = %Q{ATK > #{rand(100)}  DEF > #{rand(100)}}
-      bit = Bitmap.new(544, 416)
-      bit.draw_text(286, 100, 300, 100, item_attribute_info)
-      
-      @spr_item_attribute = Sprite.new
-      @spr_item_attribute.bitmap = bit
-      
-      @spr_item_attribute.z = 9999
-  end
-
-  #--------------------------------------------------------------------------
-  # * Exibe Informações do item como: nome, tipo, atributo e imagem do item. 
-  #--------------------------------------------------------------------------
-  #[TODO] Deletar esse metodo
-  def draw_item_info(item)
-      dispose_item_info if @spr_item_info 
-      
-      bit = Bitmap.new(544, 416)
-      bit.draw_text(286, 120, 300, 100, "Nome: Foo")
-      bit.draw_text(286, 140, 300, 100, "Tipo: Foo")
-      bit.draw_text(286, 160, 300, 100, "Atributo: Foo")
-
-      
-      @spr_item_info = Sprite.new
-      @spr_item_info.bitmap = bit
-      
-      @spr_item_info.z = 9999
-  end
-
-  #--------------------------------------------------------------------------
-  # * Remove da memória as informações de atributos do item.
-  #--------------------------------------------------------------------------
-  def dispose_item_attribute
-    return if !SceneManager.scene_is?(Scene_Item_New)
-    
-    @spr_item_attribute.dispose if not @item and @spr_item_attribute
-    @spr_item_attribute = nil
-    puts 'disposing item_attribute'
-  end
-
-  #--------------------------------------------------------------------------
-  # * Remove da memória as informações de atributos do item.
-  #--------------------------------------------------------------------------
-  def dispose_item_info
-    return if !SceneManager.scene_is?(Scene_Item_New)
-    
-    @spr_item_info.dispose if not @item and @spr_item_info
-    @spr_item_info = nil
-  end
-
-  #--------------------------------------------------------------------------
   # * Libera da memória todos os bitmaps da janela de item.
   #--------------------------------------------------------------------------
+  #[TODO] Verificar se é nessesário
   def dispose_bitmap
-    dispose_item_info
-    dispose_item_attribute
     contents.clear
   end
 end

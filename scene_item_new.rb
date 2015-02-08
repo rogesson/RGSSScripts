@@ -40,9 +40,17 @@ class Item_Info_Window < Window_Base
   #--------------------------------------------------------------------------
   def refresh
     contents.clear
-    draw_text_ex(4, 0, @text)
     
-    draw_icon(@current_item.icon_index, 0, 0) if SceneManager.scene_is?(Scene_Item_New) and @current_item
+    if SceneManager.scene_is?(Scene_Item_New) and @current_item
+      draw_text_ex(4, 170, @text)
+      draw_text_ex(60, 4,  "Nome:")
+      draw_text_ex(60, 24, "Tipo: Foo")
+      draw_text_ex(60, 48, "Atributo: Foo")
+
+      draw_icon(@current_item.icon_index, 8, 4)
+    else
+      draw_text_ex(4, 0, @text)
+    end
   end
 
   #--------------------------------------------------------------------------
@@ -147,6 +155,7 @@ class Item_Info_Window < Window_Base
   #--------------------------------------------------------------------------
   # * Exibe Informações do item como: nome, tipo, atributo e imagem do item. 
   #--------------------------------------------------------------------------
+  #[TODO] Deletar esse metodo
   def draw_item_info(item)
       dispose_item_info if @spr_item_info 
       

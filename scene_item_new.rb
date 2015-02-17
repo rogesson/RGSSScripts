@@ -42,20 +42,23 @@ class Item_Info_Window < Window_Base
     contents.clear
     
     if SceneManager.scene_is?(Scene_Item_New) and @current_item
-
+      puts "ITEM = #{@current_item.params}"
       # Icone do Item.
       draw_icon(@current_item.icon_index, 14, 20)
 
       # Descrição do Item;
-      draw_text_ex(8, 120, @text)
+      draw_text_ex(8, 160, @text)
       
       # Informações do Item.
-      draw_text_ex(60, 4,  "Nome:")
+      draw_text_ex(60, 4,  "Nome: #{@current_item.name}")
       draw_text_ex(60, 24, "Tipo: Foo")
       draw_text_ex(60, 48, "Atributo: Foo")
 
       # Atributos do Item.
-      draw_text_ex(8, 80, %Q{ATK > #{rand(100)}  DEF > #{rand(100)}})
+      draw_text_ex(8, 80,  %Q{ATK    > #{@current_item.params[2]}   DEF    > #{@current_item.params[3]}})
+      draw_text_ex(8, 100, %Q{AGI    > #{@current_item.params[6]}   SOR    > #{@current_item.params[7]}})
+      draw_text_ex(8, 120, %Q{MAX HP > #{@current_item.params[0]}   MAX MP > #{@current_item.params[1]}})
+     
     else
       draw_text_ex(4, 0, @text)
     end
@@ -78,7 +81,6 @@ class Item_Info_Window < Window_Base
     #--------------------------------------------------------------------------
     # * Atualiza janela de informações do item.
     #--------------------------------------------------------------------------
-    
     return if  !SceneManager.scene_is?(Scene_Item_New) or !item
     
     #--------------------------------------------------------------------------
@@ -126,7 +128,6 @@ class Item_Info_Window < Window_Base
       end 
     end
 
-    
     "#{formated_description.gsub(/\n\s+/, "\n")}"
   end
 end

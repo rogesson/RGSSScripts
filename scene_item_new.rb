@@ -42,7 +42,8 @@ class Item_Info_Window < Window_Base
     contents.clear
     
     if SceneManager.scene_is?(Scene_Item_New) and @current_item
-      puts "ITEM = #{@current_item.params}"
+      puts "ITEM = #{$data_weapons[@current_item.id].note}"
+      #puts "ITEM = #{@current_item.wtype_id}"
       # Icone do Item.
       draw_icon(@current_item.icon_index, 14, 20)
 
@@ -232,12 +233,12 @@ class Scene_Item_New < Scene_ItemBase
   def create_item_info_window
     x       = @category_window.width / 2
     y       = @category_window.height
-    width   =  @category_window.width / 2
+    width   = @category_window.width / 2
     height  = @item_window_height.to_i
 
     @item_info_window = Item_Info_Window.new(x, y, width, height)
 
-    @category_window.help_window = @item_info_window
-    @item_window.help_window = @item_info_window
+    @category_window.help_window  = @item_info_window
+    @item_window.help_window      = @item_info_window
   end
 end

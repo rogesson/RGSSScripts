@@ -34,7 +34,9 @@ class Item_Info_Window < Window_Base
     end
   end
 
-  
+  def all_features
+      puts $data_states
+  end  
   #--------------------------------------------------------------------------
   # * Refresh
   #--------------------------------------------------------------------------
@@ -42,8 +44,39 @@ class Item_Info_Window < Window_Base
     contents.clear
     
     if SceneManager.scene_is?(Scene_Item_New) and @current_item
-      puts "ITEM = #{$data_weapons[@current_item.id].note}"
-      #puts "ITEM = #{@current_item.wtype_id}"
+      #puts "ITEM = #{$game_variables[1]}"
+      #puts @current_item.features.first.methods
+      
+      #puts @current_item.features.first.code
+      #puts @current_item.features.first.data_id
+      #puts @current_item.features.first.value
+      
+      #puts @current_item.wtype_id
+      puts item_type
+      #puts $data_system.weapon_types[@current_item.wtype_id]
+=begin
+$data_actors        = load_data("Data/Actors.rvdata2")
+    $data_classes       = load_data("Data/Classes.rvdata2")
+    $data_skills        = load_data("Data/Skills.rvdata2")
+    $data_items         = load_data("Data/Items.rvdata2")
+    $data_weapons       = load_data("Data/Weapons.rvdata2")
+    $data_armors        = load_data("Data/Armors.rvdata2")
+    $data_enemies       = load_data("Data/Enemies.rvdata2")
+    $data_troops        = load_data("Data/Troops.rvdata2")
+    $data_states        = load_data("Data/States.rvdata2")
+    $data_animations    = load_data("Data/Animations.rvdata2")
+    $data_tilesets      = load_data("Data/Tilesets.rvdata2")
+    $data_common_events = load_data("Data/CommonEvents.rvdata2")
+    $data_system        = load_data("Data/System.rvdata2")
+    $data_mapinfos      = load_data("Data/MapInfos.rvdata2")
+    def features(code)
+      all_features.select {|ft| ft.code == code }
+    end
+  
+    def all_features
+      feature_objects.inject([]) {|r, obj| r + obj.features }
+    end
+=end
       # Icone do Item.
       draw_icon(@current_item.icon_index, 14, 20)
 
@@ -52,7 +85,7 @@ class Item_Info_Window < Window_Base
       
       # Informações do Item.
       draw_text_ex(60, 4,  "Nome: #{@current_item.name}")
-      draw_text_ex(60, 24, "Tipo: Foo")
+      draw_text_ex(60, 24, "Tipo: #{item_type}")
       draw_text_ex(60, 48, "Atributo: Foo")
 
       # Atributos do Item.
@@ -73,12 +106,17 @@ class Item_Info_Window < Window_Base
   end
 
   #--------------------------------------------------------------------------
+  # * Return type item type.
+  #--------------------------------------------------------------------------
+  def item_type
+    @current_item.is_a?(RPG::Weapon) ? $data_system.weapon_types[@current_item.wtype_id] : $data_system.armor_types[@current_item.atype_id]
+  end
+  #--------------------------------------------------------------------------
   # * set_item
   #--------------------------------------------------------------------------
   def set_item(item)
 
     self.current_item = item
-    puts "updated #{rand 19}"
     #--------------------------------------------------------------------------
     # * Atualiza janela de informações do item.
     #--------------------------------------------------------------------------

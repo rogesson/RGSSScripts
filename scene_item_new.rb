@@ -54,9 +54,13 @@ class Item_Info_Window < Window_Base
       draw_text_ex(60, 48, "Atributo: #{item_element}")
 
       # Atributos do Item.
-      draw_text_ex(8, 80,  %Q{ATK    > #{@current_item.params[2]}   DEF    > #{@current_item.params[3]}})
-      draw_text_ex(8, 100, %Q{AGI    > #{@current_item.params[6]}   SOR    > #{@current_item.params[7]}})
-      draw_text_ex(8, 120, %Q{MAX HP > #{@current_item.params[0]}   MAX MP > #{@current_item.params[1]}})
+      draw_text_ex(8, 80,  %Q{ATK    > #{@current_item.params[2]}})
+      draw_text_ex(8, 100, %Q{AGI    > #{@current_item.params[6]}})
+      draw_text_ex(8, 120, %Q{MAX HP > #{@current_item.params[0]}})
+
+      draw_text_ex(140, 80,  %Q{DEF    > #{@current_item.params[3]}})
+      draw_text_ex(140, 100, %Q{SOR    > #{@current_item.params[7]}})
+      draw_text_ex(140, 120, %Q{MAX MP > #{@current_item.params[1]}})
      
     else
       draw_text_ex(4, 0, @text)
@@ -74,7 +78,7 @@ class Item_Info_Window < Window_Base
   # * Return type item type.
   #--------------------------------------------------------------------------
   def item_type
-    @current_item.is_weapon? ? $data_system.weapon_types[@current_item.wtype_id] : $data_system.armor_types[@current_item.atype_id]
+    @current_item.is_a?(RPG::Weapon) ? $data_system.weapon_types[@current_item.wtype_id] : $data_system.armor_types[@current_item.atype_id]
   end
 
   #--------------------------------------------------------------------------

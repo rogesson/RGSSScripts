@@ -34,9 +34,6 @@ class Item_Info_Window < Window_Base
     end
   end
 
-  def all_features
-      puts $data_states
-  end  
   #--------------------------------------------------------------------------
   # * Refresh
   #--------------------------------------------------------------------------
@@ -77,7 +74,7 @@ class Item_Info_Window < Window_Base
   # * Return type item type.
   #--------------------------------------------------------------------------
   def item_type
-    @current_item.is_a?(RPG::Weapon) ? $data_system.weapon_types[@current_item.wtype_id] : $data_system.armor_types[@current_item.atype_id]
+    @current_item.is_weapon? ? $data_system.weapon_types[@current_item.wtype_id] : $data_system.armor_types[@current_item.atype_id]
   end
 
   #--------------------------------------------------------------------------
@@ -118,7 +115,7 @@ class Item_Info_Window < Window_Base
 
    #--------------------------------------------------------------------------
   # * Metodo que formata o texto da descrição do item quebrando as linhas.
-  #--------------------------------------------------------------------------
+  #---------------------------------------------------------------------------
   def format_item_description(item_description, break_at)
     #--------------------------------------------------------------------------
     # * Retorna a string formatada se a mesma já estiver formatada para evitar a recursividade.
@@ -142,7 +139,7 @@ class Item_Info_Window < Window_Base
       end
     end
 
-    "#{formated_description.gsub(/\n\s+/, "\n")}"
+    formated_description.gsub(/\n\s+/, "\n")
   end
 end
 

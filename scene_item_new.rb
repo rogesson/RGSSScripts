@@ -78,7 +78,11 @@ class Item_Info_Window < Window_Base
   # * Return type item type.
   #--------------------------------------------------------------------------
   def item_type
-    @current_item.is_a?(RPG::Weapon) ? $data_system.weapon_types[@current_item.wtype_id] : $data_system.armor_types[@current_item.atype_id]
+    if @current_item.is_a? RPG::Weapon
+      $data_system.weapon_types[@current_item.wtype_id]
+    else 
+      $data_system.armor_types[@current_item.atype_id]
+    end
   end
 
   #--------------------------------------------------------------------------

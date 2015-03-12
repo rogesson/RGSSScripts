@@ -41,27 +41,7 @@ class Item_Info_Window < Window_Base
     contents.clear
     
     if SceneManager.scene_is?(Scene_Item_New) and @current_item
-     
-      # Icone do Item.
-      draw_icon(@current_item.icon_index, 14, 20)
-
-      # Descrição do Item;
-      draw_text_ex(8, 160, @text)
-      
-      # Informações do Item.
-      draw_text_ex(60, 4,  "Nome: #{@current_item.name}")
-      draw_text_ex(60, 24, "Tipo: #{item_type}")
-      draw_text_ex(60, 48, "Atributo: #{item_element}")
-
-      # Atributos do Item.
-      draw_text_ex(8, 80,  %Q{ATK    > #{@current_item.params[2]}})
-      draw_text_ex(8, 100, %Q{AGI    > #{@current_item.params[6]}})
-      draw_text_ex(8, 120, %Q{MAX HP > #{@current_item.params[0]}})
-
-      draw_text_ex(140, 80,  %Q{DEF    > #{@current_item.params[3]}})
-      draw_text_ex(140, 100, %Q{SOR    > #{@current_item.params[7]}})
-      draw_text_ex(140, 120, %Q{MAX MP > #{@current_item.params[1]}})
-     
+     draw_item_informations
     else
       draw_text_ex(4, 0, @text)
     end
@@ -121,7 +101,7 @@ class Item_Info_Window < Window_Base
     format_item_description(item.description, 23)
   end
 
-   #--------------------------------------------------------------------------
+  #---------------------------------------------------------------------------
   # * Metodo que formata o texto da descrição do item quebrando as linhas.
   #---------------------------------------------------------------------------
   def format_item_description(item_description, break_at)
@@ -148,6 +128,58 @@ class Item_Info_Window < Window_Base
     end
 
     formated_description.gsub(/\n\s+/, "\n")
+  end
+
+  #---------------------------------------------------------------------------
+  # * Exibe icone do item.
+  #---------------------------------------------------------------------------
+  def draw_item_icon
+    draw_icon(@current_item.icon_index, 14, 20)
+  end
+
+  #---------------------------------------------------------------------------
+  # * Exibe informações do item.
+  #---------------------------------------------------------------------------
+  def draw_item_info
+    draw_text_ex(60, 4,  "Nome: #{@current_item.name}")
+    draw_text_ex(60, 24, "Tipo: #{item_type}")
+    draw_text_ex(60, 48, "Atributo: #{item_element}")
+  end
+
+  #---------------------------------------------------------------------------
+  # * Exibe descrição do item.
+  #---------------------------------------------------------------------------
+  def draw_description
+    draw_text_ex(8, 160, @text)
+  end
+
+  #---------------------------------------------------------------------------
+  # * Exibe atributos do item na esquerda da janela.
+  #---------------------------------------------------------------------------
+  def draw_left_attributes
+    draw_text_ex(8, 80,  %Q{ATK    > #{@current_item.params[2]}})
+    draw_text_ex(8, 100, %Q{AGI    > #{@current_item.params[6]}})
+    draw_text_ex(8, 120, %Q{MAX HP > #{@current_item.params[0]}})
+  end
+
+  #---------------------------------------------------------------------------
+  # * Exibe atributos do item na direita da janela.
+  #---------------------------------------------------------------------------
+  def draw_right_attributes
+    draw_text_ex(140, 80,  %Q{DEF    > #{@current_item.params[3]}})
+    draw_text_ex(140, 100, %Q{SOR    > #{@current_item.params[7]}})
+    draw_text_ex(140, 120, %Q{MAX MP > #{@current_item.params[1]}})
+  end
+
+  #---------------------------------------------------------------------------
+  # * Exibe todas as informações do item.
+  #---------------------------------------------------------------------------
+  def draw_item_informations
+    draw_item_icon
+    draw_item_info
+    draw_description
+    draw_left_attributes
+    draw_right_attributes
   end
 end
 

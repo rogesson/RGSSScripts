@@ -199,6 +199,19 @@ class Window_ItemList < Window_Selectable
   def col_max
     return 1
   end
+
+  #--------------------------------------------------------------------------
+  # * Removendo quantidade de item.
+  #--------------------------------------------------------------------------
+  def draw_item(index)
+    item = @data[index]
+    if item
+      rect = item_rect(index)
+      rect.width -= 4
+      draw_item_name(item, rect.x, rect.y, enable?(item))
+     #draw_item_number(rect, item)
+    end
+  end
 end
 
 # Override da Scene_Item_New
@@ -296,12 +309,20 @@ end
 # * Override Window_Base
 #--------------------------------------------------------------------------
 class Window_Base < Window
- #--------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
   # * Override do draw_item_name
   #--------------------------------------------------------------------------
   def draw_item_name(item, x, y, enabled = true, width = 172)
     return unless item
     change_color(normal_color, enabled)
-    draw_text(x, y, width, line_height, item.name)
+    draw_text(x, y, width, line_height, "#{item.name} #{draw_item_quantity}")
+  end
+
+  #--------------------------------------------------------------------------
+  # * Override do draw_item_quantity
+  #--------------------------------------------------------------------------
+  def draw_item_quantity
+    quantity = $game_party.item_number(item)
+    "x#{quantity}" if quantity > 1
   end
 end

@@ -23,7 +23,7 @@ class Item_Info_Window < Window_Base
     super(x, y, width, height)
     @current_item = nil
   end
-
+  
   #--------------------------------------------------------------------------
   # * set_text
   #--------------------------------------------------------------------------
@@ -225,7 +225,6 @@ class Scene_Item_New < Scene_ItemBase
   #--------------------------------------------------------------------------
   # * Create Item Window
   #--------------------------------------------------------------------------
-
   def create_item_window
     wy = @category_window.y + @category_window.height
     wh = Graphics.height - wy
@@ -238,6 +237,21 @@ class Scene_Item_New < Scene_ItemBase
     @item_window.set_handler(:cancel, method(:on_item_cancel))
 
     @category_window.item_window = @item_window
+  end
+
+  #--------------------------------------------------------------------------
+  # * Cria a janela de informações do item selecionado.
+  #--------------------------------------------------------------------------
+  def create_item_info_window
+    x       = @category_window.width / 2
+    y       = @category_window.height
+    width   = @category_window.width / 2
+    height  = @item_window_height.to_i
+
+    @item_info_window = Item_Info_Window.new(x, y, width, height)
+
+    @category_window.help_window  = @item_info_window
+    @item_window.help_window      = @item_info_window
   end
 
   #--------------------------------------------------------------------------
@@ -276,19 +290,18 @@ class Scene_Item_New < Scene_ItemBase
     super
     @item_window.redraw_current_item
   end
+end
 
+#--------------------------------------------------------------------------
+# * Override Window_Base
+#--------------------------------------------------------------------------
+class Window_Base < Window
+ #--------------------------------------------------------------------------
+  # * Override do draw_item_name
   #--------------------------------------------------------------------------
-  # * Criando a janela de informações do item selecionado.
-  #--------------------------------------------------------------------------
-  def create_item_info_window
-    x       = @category_window.width / 2
-    y       = @category_window.height
-    width   = @category_window.width / 2
-    height  = @item_window_height.to_i
-
-    @item_info_window = Item_Info_Window.new(x, y, width, height)
-
-    @category_window.help_window  = @item_info_window
-    @item_window.help_window      = @item_info_window
+  def draw_item_name(item, x, y, enabled = true, width = 172)
+    return unless item
+    change_color(normal_color, enabled)
+    draw_text(x, y, width, line_height, item.name)
   end
 end

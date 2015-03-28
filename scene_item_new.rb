@@ -311,17 +311,3 @@ class Scene_Item_New < Scene_ItemBase
     @item_window.redraw_current_item
   end
 end
-
-#--------------------------------------------------------------------------
-# * Override Window_Base
-#--------------------------------------------------------------------------
-class Window_Base < Window
-  #--------------------------------------------------------------------------
-  # * Override do draw_item_name
-  #--------------------------------------------------------------------------
-  def draw_item_name(item, x, y, enabled = true, width = 172)
-    return unless item
-    change_color(normal_color, enabled)
-    draw_text(x, y, width, line_height, item.name)
-  end
-end

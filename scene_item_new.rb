@@ -9,13 +9,11 @@
 
 #==============================================================================
 # ** Scene_Item_new  [TODO] Mudar este nome.
-# 
-# **   
-#------------------------------------------------------------------------------
-#  Script responsável por editar a tela de item.
 #==============================================================================
 
-# Classe responsável por exibir as informações do item selecionado.
+#--------------------------------------------------------------------------
+# * Classe responsável por exibir as informações do item selecionado.
+#--------------------------------------------------------------------------
 class Item_Info_Window < Window_Base
   attr_accessor :current_item
 

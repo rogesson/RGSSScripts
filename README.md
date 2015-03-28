@@ -1,7 +1,7 @@
 RGSSScripts
 ===========
 
-Repositórido para scripts de criação de jogos na plataforma RPG Maker utilizando a linguagem
+Repositório para scripts de criação de jogos na plataforma RPG Maker utilizando a linguagem
 RGSS (Ruby Game Scripting System)
 
 Scripts criados com base em pedidos da comunidade Mundo RPG MAKER.

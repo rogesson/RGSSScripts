@@ -201,6 +201,13 @@ class Window_ItemList < Window_Selectable
   end
 
   #--------------------------------------------------------------------------
+  # * Override do draw_item_number
+  #--------------------------------------------------------------------------
+  def draw_item_number(rect, item)
+    draw_text(rect, sprintf("%2dx", $game_party.item_number(item)), 2)
+  end
+
+  #--------------------------------------------------------------------------
   # * Removendo quantidade de item.
   #--------------------------------------------------------------------------
   def draw_item(index)
@@ -209,7 +216,7 @@ class Window_ItemList < Window_Selectable
       rect = item_rect(index)
       rect.width -= 4
       draw_item_name(item, rect.x, rect.y, enable?(item))
-     #draw_item_number(rect, item)
+      draw_item_number(rect, item)
     end
   end
 end
@@ -315,14 +322,6 @@ class Window_Base < Window
   def draw_item_name(item, x, y, enabled = true, width = 172)
     return unless item
     change_color(normal_color, enabled)
-    draw_text(x, y, width, line_height, "#{item.name} #{draw_item_quantity}")
-  end
-
-  #--------------------------------------------------------------------------
-  # * Override do draw_item_quantity
-  #--------------------------------------------------------------------------
-  def draw_item_quantity
-    quantity = $game_party.item_number(item)
-    "x#{quantity}" if quantity > 1
+    draw_text(x, y, width, line_height, item.name)
   end
 end

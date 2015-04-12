@@ -37,7 +37,6 @@ class Item_Info_Window < Window_Base
   #--------------------------------------------------------------------------
   def refresh
     contents.clear
-    
     if SceneManager.scene_is?(Scene_Item_New) and @item
       draw_item_informations
     else
@@ -70,6 +69,7 @@ class Item_Info_Window < Window_Base
       element_index = @item.features.first.data_id.to_i
       $data_system.elements[element_index]
   end
+
   #--------------------------------------------------------------------------
   # * set_item
   #--------------------------------------------------------------------------
@@ -204,11 +204,8 @@ class Window_ItemList < Window_Selectable
   # * Override do draw_item_number
   #--------------------------------------------------------------------------
   def draw_item_number(rect, item)
-    if SceneManager.scene_is?(Scene_Item_New)
-      draw_text(rect, sprintf("%2dx", $game_party.item_number(item)), 2)
-    else
-      draw_text(rect, sprintf(":%2d", $game_party.item_number(item)), 2)
-    end
+    amount_symbol = SceneManager.scene_is?(Scene_Item_New) ? "%2dx" : ":%2d"
+    draw_text(rect, sprintf(amount_symbol, $game_party.item_number(item)), 2)
   end
 
   #--------------------------------------------------------------------------

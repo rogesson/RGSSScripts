@@ -77,19 +77,12 @@ class Item_Info_Window < Window_Base
     self.current_item = item
     #--------------------------------------------------------------------------
     # * Atualiza janela de informações do item.
-    #--------------------------------------------------------------------------
-    return if item.nil?
+    #------------------------------------------------------------------------
     if SceneManager.scene_is?(Scene_Item_New)
         description = short_description
       else
         description = item.description
     end
-    
-    #--------------------------------------------------------------------------
-    # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
-    # * de item.
-    #--------------------------------------------------------------------------
-    description = short_description
 
     #--------------------------------------------------------------------------
     # * Exibe descrição do item selecionado.
@@ -291,7 +284,7 @@ class Scene_Item_New < Scene_ItemBase
   def on_category_ok
     @item_window.activate
     @item_window.select_last
-    @item_info_window.set_item(item)
+    @item_info_window.set_item(item) if item
   end
   #--------------------------------------------------------------------------
   # * Item [OK]

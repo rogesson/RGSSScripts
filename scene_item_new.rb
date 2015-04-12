@@ -39,7 +39,7 @@ class Item_Info_Window < Window_Base
     contents.clear
     
     if SceneManager.scene_is?(Scene_Item_New) and @current_item
-     draw_item_informations
+      draw_item_informations
     else
       draw_text_ex(4, 0, @text)
     end
@@ -78,7 +78,12 @@ class Item_Info_Window < Window_Base
     #--------------------------------------------------------------------------
     # * Atualiza janela de informações do item.
     #--------------------------------------------------------------------------
-    return if  !SceneManager.scene_is?(Scene_Item_New) or !item
+    return if item.nil?
+    if SceneManager.scene_is?(Scene_Item_New)
+        description = short_description(item)
+      else
+        description = item.description
+    end
     
     #--------------------------------------------------------------------------
     # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
@@ -202,7 +207,11 @@ class Window_ItemList < Window_Selectable
   # * Override do draw_item_number
   #--------------------------------------------------------------------------
   def draw_item_number(rect, item)
-    draw_text(rect, sprintf("%2dx", $game_party.item_number(item)), 2)
+    if SceneManager.scene_is?(Scene_Item_New)
+      draw_text(rect, sprintf("%2dx", $game_party.item_number(item)), 2)
+    else
+      draw_text(rect, sprintf(":%2d", $game_party.item_number(item)), 2)
+    end
   end
 
   #--------------------------------------------------------------------------
@@ -319,7 +328,13 @@ class Window_Base < Window
   #--------------------------------------------------------------------------
   def draw_item_name(item, x, y, enabled = true, width = 172)
     return unless item
-    change_color(normal_color, enabled)
-    draw_text(x, y, width, line_height, item.name)
+    if SceneManager.scene_is?(Scene_Item_New)
+      change_color(normal_color, enabled)
+      draw_text(x, y, width, line_height, item.name)
+    else
+      draw_icon(item.icon_index, x, y, enabled)
+      change_color(normal_color, enabled)
+      draw_text(x + 24, y, width, line_height, item.name)
+    end
   end
 end

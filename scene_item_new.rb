@@ -15,11 +15,11 @@
 # * Classe responsável por exibir as informações do item selecionado.
 #--------------------------------------------------------------------------
 class Item_Info_Window < Window_Base
-  attr_accessor :current_item
+  attr_accessor :item
 
   def initialize(x, y, width, height)
     super(x, y, width, height)
-    @current_item = nil
+    @item = nil
   end
   
   #--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ class Item_Info_Window < Window_Base
   def refresh
     contents.clear
     
-    if SceneManager.scene_is?(Scene_Item_New) and @current_item
+    if SceneManager.scene_is?(Scene_Item_New) and @item
       draw_item_informations
     else
       draw_text_ex(4, 0, @text)
@@ -56,10 +56,10 @@ class Item_Info_Window < Window_Base
   # * Return type item type.
   #--------------------------------------------------------------------------
   def item_type
-    if @current_item.is_a? RPG::Weapon
-      $data_system.weapon_types[@current_item.wtype_id]
+    if @item.is_a? RPG::Weapon
+      $data_system.weapon_types[@item.wtype_id]
     else 
-      $data_system.armor_types[@current_item.atype_id]
+      $data_system.armor_types[@item.atype_id]
     end
   end
 
@@ -67,14 +67,14 @@ class Item_Info_Window < Window_Base
   # * Return element name.
   #--------------------------------------------------------------------------
   def item_element
-      element_index = @current_item.features.first.data_id.to_i
+      element_index = @item.features.first.data_id.to_i
       $data_system.elements[element_index]
   end
   #--------------------------------------------------------------------------
   # * set_item
   #--------------------------------------------------------------------------
   def set_item(item)
-    self.current_item = item
+    self.item = item
     #--------------------------------------------------------------------------
     # * Atualiza janela de informações do item.
     #------------------------------------------------------------------------
@@ -94,8 +94,8 @@ class Item_Info_Window < Window_Base
   # * Exibe a descrição do item em várias linhas
   #--------------------------------------------------------------------------
   def short_description
-    if @current_item
-      format_item_description(@current_item.description, 23)
+    if @item
+      format_item_description(@item.description, 23)
     else
       ""
     end
@@ -134,14 +134,14 @@ class Item_Info_Window < Window_Base
   # * Exibe icone do item.
   #---------------------------------------------------------------------------
   def draw_item_icon
-    draw_icon(@current_item.icon_index, 14, 20)
+    draw_icon(@item.icon_index, 14, 20)
   end
 
   #---------------------------------------------------------------------------
   # * Exibe informações do item.
   #---------------------------------------------------------------------------
   def draw_item_info
-    draw_text_ex(60, 4,  "Nome: #{@current_item.name}")
+    draw_text_ex(60, 4,  "Nome: #{@item.name}")
     draw_text_ex(60, 24, "Tipo: #{item_type}")
     draw_text_ex(60, 48, "Atributo: #{item_element}")
   end
@@ -157,18 +157,18 @@ class Item_Info_Window < Window_Base
   # * Exibe atributos do item na esquerda da janela.
   #---------------------------------------------------------------------------
   def draw_left_attributes
-    draw_text_ex(8, 80,  %Q{ATK    > #{@current_item.params[2]}})
-    draw_text_ex(8, 100, %Q{AGI    > #{@current_item.params[6]}})
-    draw_text_ex(8, 120, %Q{MAX HP > #{@current_item.params[0]}})
+    draw_text_ex(8, 80,  %Q{ATK    > #{@item.params[2]}})
+    draw_text_ex(8, 100, %Q{AGI    > #{@item.params[6]}})
+    draw_text_ex(8, 120, %Q{MAX HP > #{@item.params[0]}})
   end
 
   #---------------------------------------------------------------------------
   # * Exibe atributos do item na direita da janela.
   #---------------------------------------------------------------------------
   def draw_right_attributes
-    draw_text_ex(140, 80,  %Q{DEF    > #{@current_item.params[3]}})
-    draw_text_ex(140, 100, %Q{SOR    > #{@current_item.params[7]}})
-    draw_text_ex(140, 120, %Q{MAX MP > #{@current_item.params[1]}})
+    draw_text_ex(140, 80,  %Q{DEF    > #{@item.params[3]}})
+    draw_text_ex(140, 100, %Q{SOR    > #{@item.params[7]}})
+    draw_text_ex(140, 120, %Q{MAX MP > #{@item.params[1]}})
   end
 
   #---------------------------------------------------------------------------

@@ -80,7 +80,7 @@ class Item_Info_Window < Window_Base
     #--------------------------------------------------------------------------
     return if item.nil?
     if SceneManager.scene_is?(Scene_Item_New)
-        description = short_description(item)
+        description = short_description
       else
         description = item.description
     end
@@ -89,7 +89,7 @@ class Item_Info_Window < Window_Base
     # * Adiciona quebra de linhas na descrião do item se a scene for a da tela
     # * de item.
     #--------------------------------------------------------------------------
-    description = short_description(item)
+    description = short_description
 
     #--------------------------------------------------------------------------
     # * Exibe descrição do item selecionado.
@@ -100,8 +100,12 @@ class Item_Info_Window < Window_Base
   #--------------------------------------------------------------------------
   # * Exibe a descrição do item em várias linhas
   #--------------------------------------------------------------------------
-  def short_description(item)
-    format_item_description(item.description, 23)
+  def short_description
+    if @current_item
+      format_item_description(@current_item.description, 23)
+    else
+      ""
+    end
   end
 
   #---------------------------------------------------------------------------

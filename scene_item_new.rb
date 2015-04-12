@@ -95,7 +95,7 @@ class Item_Info_Window < Window_Base
   #--------------------------------------------------------------------------
   def short_description
     if @item
-      format_item_description(@item.description, 23)
+      word_wrap(@item.description, 23)
     else
       ""
     end
@@ -104,30 +104,25 @@ class Item_Info_Window < Window_Base
   #---------------------------------------------------------------------------
   # * Metodo que formata o texto da descrição do item quebrando as linhas.
   #---------------------------------------------------------------------------
-  def format_item_description(item_description, break_at)
-    #--------------------------------------------------------------------------
-    # * Retorna a string formatada se a mesma já estiver formatada para evitar a recursividade.
-    #--------------------------------------------------------------------------
-    return item_description.gsub(/\n\s+/, "\n") if item_description.include? "\n"
-    
-    formated_description = String
-    line_breaker         = break_at
+  def word_wrap(text, line_width)
+    words = text.split(" ")
+    line = ''
+    lines = []
+    new_line = true
 
-    loop do
-      begin
-        item_description.insert(break_at, "\n")
-        break_at = break_at + (line_breaker + 1)
-        formated_description = item_description
-      rescue
-        #--------------------------------------------------------------------------
-        # * Sai do loop quando existir um erro de index nao encontrado,
-        # * isso significa que a a quebra de linha percorreu toda a string.
-        #--------------------------------------------------------------------------
-        break
+    for word in words
+      if line.size + word.size < line_width
+        line << "#{word} "
+      else
+        new_line = true
+        line = "\n#{word} "
       end
+
+      lines << line if new_line
+      new_line = false
     end
 
-    formated_description.gsub(/\n\s+/, "\n")
+    lines.join
   end
 
   #---------------------------------------------------------------------------

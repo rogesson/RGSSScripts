@@ -246,7 +246,7 @@ class Scene_Item_New < Scene_ItemBase
     wh = Graphics.height - wy
 
     @item_window_height = wh
-    @item_window = Window_ItemList.new(0, wy, (Graphics.width / 2), wh)
+    @item_window = Window_ItemList.new(0, wy, (Graphics.width / 2.5), wh)
     @item_window.viewport = @viewport
     
     @item_window.set_handler(:ok,     method(:on_item_ok))
@@ -259,9 +259,9 @@ class Scene_Item_New < Scene_ItemBase
   # * Cria a janela de informações do item selecionado.
   #--------------------------------------------------------------------------
   def create_item_info_window
-    x       = @category_window.width / 2
+    x       = @category_window.width / 2.5
     y       = @category_window.height
-    width   = @category_window.width / 2
+    width   = @category_window.width / 1.66
     height  = @item_window_height.to_i
 
     @item_info_window = Item_Info_Window.new(x, y, width, height)

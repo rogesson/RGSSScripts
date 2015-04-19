@@ -129,16 +129,16 @@ class Item_Info_Window < Window_Base
   # * Exibe icone do item.
   #---------------------------------------------------------------------------
   def draw_item_icon
-    draw_icon(@item.icon_index, 14, 20)
+    draw_icon(@item.icon_index, 25, 23)
   end
 
   #---------------------------------------------------------------------------
   # * Exibe informações do item.
   #---------------------------------------------------------------------------
   def draw_item_info
-    draw_text_ex(60, 4,  "Nome: #{@item.name}")
-    draw_text_ex(60, 24, "Tipo: #{item_type}")
-    draw_text_ex(60, 48, "Atributo: #{item_element}")
+    draw_text_ex(75, 4,  "Nome: #{@item.name}")
+    draw_text_ex(75, 24, "Tipo: #{item_type}")
+    draw_text_ex(75, 48, "Atributo: #{item_element}")
   end
 
   #---------------------------------------------------------------------------
@@ -152,18 +152,18 @@ class Item_Info_Window < Window_Base
   # * Exibe atributos do item na esquerda da janela.
   #---------------------------------------------------------------------------
   def draw_left_attributes
-    draw_text_ex(8, 80,  %Q{ATK    > #{@item.params[2]}})
-    draw_text_ex(8, 100, %Q{AGI    > #{@item.params[6]}})
-    draw_text_ex(8, 120, %Q{MAX HP > #{@item.params[0]}})
+    draw_text_ex(25, 80,  %Q{ATK    > #{@item.params[2]}})
+    draw_text_ex(25, 100, %Q{AGI    > #{@item.params[6]}})
+    draw_text_ex(25, 120, %Q{MAX HP > #{@item.params[0]}})
   end
 
   #---------------------------------------------------------------------------
   # * Exibe atributos do item na direita da janela.
   #---------------------------------------------------------------------------
   def draw_right_attributes
-    draw_text_ex(140, 80,  %Q{DEF    > #{@item.params[3]}})
-    draw_text_ex(140, 100, %Q{SOR    > #{@item.params[7]}})
-    draw_text_ex(140, 120, %Q{MAX MP > #{@item.params[1]}})
+    draw_text_ex(180, 80,  %Q{DEF    > #{@item.params[3]}})
+    draw_text_ex(180, 100, %Q{SOR    > #{@item.params[7]}})
+    draw_text_ex(180, 120, %Q{MAX MP > #{@item.params[1]}})
   end
 
   #---------------------------------------------------------------------------

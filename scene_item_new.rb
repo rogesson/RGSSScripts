@@ -95,7 +95,7 @@ class Item_Info_Window < Window_Base
   #--------------------------------------------------------------------------
   def short_description
     if @item
-      word_wrap(@item.description, 23)
+      word_wrap(@item.description, 30)
     else
       ""
     end

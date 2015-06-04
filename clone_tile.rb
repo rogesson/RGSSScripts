@@ -9,6 +9,8 @@
   * Features: 
     * Clona uma tile a partir de outra tile
     * Clona várias tiles a partir de outra tile
+    * -- Fazer Torna tile passável
+    * -- Fazer Todas as tiles passáveis
 
   * Importando Script
     * Insira um novo script acima do Main chamado Clone_Tile
@@ -27,6 +29,7 @@ class Clone_Tile
 
   # Clona 1 (uma) tile várias vezes a partir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes
   # em que a tile vai ser clonada
+=begin TODO Refatorar
   def random_clone(tile_x, tile_y, times)
     times.times do
     # Cria coordenada x e y (randomicamente) da tile a ser substituída.
@@ -38,19 +41,32 @@ class Clone_Tile
       end
     end
   end
+=end
 
   # Copia uma tile para a coordenada x, y.
+  # Terminado.
   def copy_to(x, y)
     $game_map.data[x, y, @layer] = $game_map.data[@x, @x, @layer]
   end
 
-  # Move umatile para a coordenada x, y.
-  def move(x, y)
-    print  $game_map.data[@x, @x, @layer].methods
-    #$game_map.data[x, y, @layer] = $game_map.data[@x, @x, @layer]
+  # Move uma tile para a coordenada x, y.
+  def move_to(x, y)
+    copy_to(x, y)
+    delete_tile
+  end
+
+  # Deleta tile instanciada
+  # Terminado
+  def delete_tile
+    $game_map.data[@x, @x, @layer] = 0
   end
 
   private
+
+  # Retorna tile instanciada
+  def current_tile
+    $game_map.data[@x, @x, @layer]
+  end
 
   # Verifica se a posição X e Y da tile passada é válida.
   def valid_tile(x, y)

@@ -24,7 +24,7 @@ class Clone_Tile
     @layer = layer - 1
     @x = x
     @y = y
-    @tile_to_replace = $game_map.data[y, y, @layer]
+    @current_tile = $game_map.data[x, y, @layer]
   end
 
   # Clona 1 (uma) tile várias vezes a partir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes
@@ -45,7 +45,7 @@ class Clone_Tile
 
   # Copia uma tile para a coordenada x, y.
   def copy_to(tile_x, tile_y)
-    $game_map.data[tile_x, tile_y, @layer] = current_tile
+    $game_map.data[tile_x, tile_y, @layer] = @current_tile
   end
 
   # Move uma tile para a coordenada x, y.
@@ -60,11 +60,6 @@ class Clone_Tile
   end
 
   private
-
-  # Retorna tile instanciada
-  def current_tile
-    $game_map.data[@x, @y, @layer]
-  end
 
   # Verifica se a posição X e Y da tile passada é válida.
   def valid_tile(x, y)

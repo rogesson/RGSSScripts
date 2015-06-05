@@ -19,30 +19,11 @@
 
 class Clone_Tile
   def initialize(x, y, layer)
-    @map_x = $game_map.width
-    @map_y = $game_map.height
     @layer = layer - 1
     @x = x
     @y = y
-    @current_tile = $game_map.data[x, y, @layer]
+    set_position(x, y)
   end
-
-  # Clona 1 (uma) tile várias vezes a partir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes
-  # em que a tile vai ser clonada
-=begin Ajustar
-  def random_clone(tile_x, tile_y, times)
-    times.times do
-    # Cria coordenada x e y (randomicamente) da tile a ser substituída.
-    next_tile_x  =  rand(@map_x)
-    next_tile_y  =  rand(@map_y)
-      # Clona a tile se a possicao X e Y passada for válida.
-      if valid_tile(next_tile_x, next_tile_y)
-        $game_map.data[next_tile_x, next_tile_y, @layer] = $game_map.data[tile_x, tile_y, @layer]
-      end
-    end
-  end
-=end
-
 
   # Copia uma tile para a coordenada x, y.
   def copy_to(x, y)
@@ -72,6 +53,23 @@ class Clone_Tile
     @y = y
   end
 
+  # Clona 1 (uma) tile várias vezes a partir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes
+  # em que a tile vai ser clonada
+=begin Ajustar
+  def random_clone(tile_x, tile_y, times)
+    times.times do
+    # Cria coordenada x e y (randomicamente) da tile a ser substituída.
+    next_tile_x  =  rand(@map_x)
+    next_tile_y  =  rand(@map_y)
+      # Clona a tile se a possicao X e Y passada for válida.
+      if valid_tile(next_tile_x, next_tile_y)
+        $game_map.data[next_tile_x, next_tile_y, @layer] = $game_map.data[tile_x, tile_y, @layer]
+      end
+    end
+  end
+=end
+
+=begin precisa?
   # Verifica se a posição X e Y da tile passada é válida.
   def valid_tile(x, y)
       $game_map.valid?(x, y)              and # Verifica se a tile é válida
@@ -89,4 +87,5 @@ class Clone_Tile
     current_possition = [$game_player.x, $game_player.y]
     current_possition[0] == x and current_possition[1] == y
   end
+=end
 end

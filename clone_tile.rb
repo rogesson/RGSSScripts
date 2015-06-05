@@ -29,7 +29,7 @@ class Clone_Tile
 
   # Clona 1 (uma) tile várias vezes a partir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes
   # em que a tile vai ser clonada
-
+=begin Ajustar
   def random_clone(tile_x, tile_y, times)
     times.times do
     # Cria coordenada x e y (randomicamente) da tile a ser substituída.
@@ -41,36 +41,35 @@ class Clone_Tile
       end
     end
   end
+=end
 
 
   # Copia uma tile para a coordenada x, y.
-  def copy_to(tile_x, tile_y)
-    $game_map.data[tile_x, tile_y, @layer] = @current_tile
+  def copy_to(x, y)
+    $game_map.data[x, y, @layer] = @current_tile
   end
 
   # Move uma tile para a coordenada x, y.
   def move_to(x, y)
-    #new_current_tile = $game_map.data[x, y, @layer]
-    #print "x: #{x} y: #{y}"
     copy_to(x, y)
+    delete
     
-    delete_tile
-    
-    @current_tile = $game_map.data[x, y, @layer]
-    @x = x
-    @y = y
+    set_position(x, y)
   end
 
   # Deleta tile instanciada.
-  def delete_tile
+  def delete
     $game_map.data[@x, @y, @layer] = 0
     @current_tile = 0
   end
 
   private
 
-  def set_current_tile(x, y)
+  # Redefine a posição da tile instanciada.
+  def set_position(x, y)
     @current_tile = $game_map.data[x, y, @layer]
+    @x = x
+    @y = y
   end
 
   # Verifica se a posição X e Y da tile passada é válida.

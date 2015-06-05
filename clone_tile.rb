@@ -49,17 +49,29 @@ class Clone_Tile
   end
 
   # Move uma tile para a coordenada x, y.
-  def move_to(tile_x, tile_y)
-    copy_to(tile_x, tile_y)
+  def move_to(x, y)
+    #new_current_tile = $game_map.data[x, y, @layer]
+    #print "x: #{x} y: #{y}"
+    copy_to(x, y)
+    
     delete_tile
+    
+    @current_tile = $game_map.data[x, y, @layer]
+    @x = x
+    @y = y
   end
 
   # Deleta tile instanciada.
   def delete_tile
     $game_map.data[@x, @y, @layer] = 0
+    @current_tile = 0
   end
 
   private
+
+  def set_current_tile(x, y)
+    @current_tile = $game_map.data[x, y, @layer]
+  end
 
   # Verifica se a posição X e Y da tile passada é válida.
   def valid_tile(x, y)

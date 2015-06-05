@@ -20,8 +20,6 @@
 class Clone_Tile
   def initialize(x, y, layer)
     @layer = layer - 1
-    @x = x
-    @y = y
     set_position(x, y)
   end
 

@@ -1,23 +1,20 @@
 =begin 
   * Script RGSS(XP) para RPG Maker XP
   
-  * Nome: Clone Tile
-  * Descrição: Clona uma Tile
+  * Nome: Tile
+  * Descrição: Classe responsável por mapear e controlar as tiles do logo.
   * Autor: Resque
   * Data: 28/09/2014
   
   * Features: 
     * Clona uma tile a partir de outra tile  (TODO Incluir eventos)
     * Clona várias tiles a partir de outra tile (TODO Incluir eventos)
-    * TODO Torna tile passável
-    * TODO  Todas as tiles passáveis
-
+    * Move tile.
+    
   * Importando Script
     * Insira um novo script acima do Main chamado Clone_Tile
     * Copie e cole o Script abaixo dentro do Clone_Tile
 =end
-
-
 
 class Clone_Tile
   def initialize(x, y, layer)

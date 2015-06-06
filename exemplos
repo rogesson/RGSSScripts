@@ -25,3 +25,7 @@ Clone_Tile.new(1, 6, 3).move_to(19, 6)
 t3 = Clone_Tile.new(1, 6, 3)
 t3.move_to(19, 6)
 t3.move_to(11, 11)
+
+###########################################################################
+# teste de passabilidade de tile.
+Clone_Tile.new(8,8,2).is_passable?(2)

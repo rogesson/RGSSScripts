@@ -7,15 +7,17 @@
   * Data: 28/09/2014
   
   * Features: 
-    * Clona uma tile a partir de outra tile
-    * Clona várias tiles a partir de outra tile
-    * -- Fazer Torna tile passável
-    * -- Fazer Todas as tiles passáveis
+    * Clona uma tile a partir de outra tile  (TODO Incluir eventos)
+    * Clona várias tiles a partir de outra tile (TODO Incluir eventos)
+    * TODO Torna tile passável
+    * TODO  Todas as tiles passáveis
 
   * Importando Script
     * Insira um novo script acima do Main chamado Clone_Tile
     * Copie e cole o Script abaixo dentro do Clone_Tile
 =end
+
+
 
 class Clone_Tile
   def initialize(x, y, layer)
@@ -40,6 +42,14 @@ class Clone_Tile
   def delete
     $game_map.data[@x, @y, @layer] = 0
     @current_tile = 0
+  end
+
+  def force_passable
+    force_passable
+  end
+
+  def remove_passability
+
   end
 
   private

@@ -10,13 +10,13 @@
     * Clona uma tile a partir de outra tile  (TODO Incluir eventos)
     * Clona várias tiles a partir de outra tile (TODO Incluir eventos)
     * Move tile.
-    
+
   * Importando Script
-    * Insira um novo script acima do Main chamado Clone_Tile
-    * Copie e cole o Script abaixo dentro do Clone_Tile
+    * Insira um novo script acima do Main chamado Tile
+    * Copie e cole o Script abaixo dentro do Tile
 =end
 
-class Clone_Tile
+class Tile
   def initialize(x, y, layer)
     @layer = layer - 1
     set_position(x, y)
@@ -41,12 +41,12 @@ class Clone_Tile
     @current_tile = 0
   end
 
-  def force_passable
-    force_passable
+  def make_passable
+    $tile_manager.make_passable(@current_tile)
   end
 
-  def remove_passability
-
+  def make_unpassable
+    $tile_manager.make_unpassable(@current_tile)
   end
 
   private

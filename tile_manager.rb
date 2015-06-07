@@ -14,18 +14,28 @@
     * Copie e cole o Script abaixo dentro do Tile_Manager
 =end
 
-# 
 class Tile_Manager
+  def initialize
+    @passable_tiles = []
+  end
+
   def passable_tiles
-    [396]
+    all_passable_tiles
   end
 
   def make_passable(tile_id)
+    passable_tiles << tile_id
   end
 
-  def make_unpassable(tile_id) 
+  def make_unpassable(tile_id)
+    passable_tiles - [tile_id] 
   end
 
+  private
+
+  def all_passable_tiles
+    @passable_tiles
+  end
 end
 
 class Scene_Title

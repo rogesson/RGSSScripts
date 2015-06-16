@@ -18,7 +18,7 @@ Tile.new(1, 4, 1).move_to(19, 4)
 Tile.new(1, 5, 2).move_to(19, 5)
 
 # Layer 3
-Tile.new(1, 6, 3).move_to(19, 6)
+#Tile.new(1, 6, 3).move_to(19, 6)
 
 ###########################################################################
 # Teste move_to encadeado

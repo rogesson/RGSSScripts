@@ -28,7 +28,7 @@ class Tile_Manager
   end
 
   def make_unpassable(tile_id)
-    passable_tiles - [tile_id] 
+    passable_tiles - [tile_id]
   end
 
   private
@@ -36,6 +36,7 @@ class Tile_Manager
   def all_passable_tiles
     @passable_tiles
   end
+
 end
 
 class Scene_Title

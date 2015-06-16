@@ -31,7 +31,7 @@ class Tile
   def move_to(x, y)
     copy_to(x, y)
     delete
-    
+
     set_position(x, y)
   end
 

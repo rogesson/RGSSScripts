@@ -29,3 +29,6 @@ t3.move_to(11, 11)
 ###########################################################################
 # teste de passabilidade de tile.
 Tile.new(8,8,3).make_passable
+
+# Teste de controle de evento
+Tile.new(1, 7).event.move_left

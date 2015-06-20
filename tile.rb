@@ -7,9 +7,9 @@
   * Data: 28/09/2014
   
   * Features: 
-    * Clona uma tile a partir de outra tile  (TODO Incluir eventos)
-    * Clona várias tiles a partir de outra tile (TODO Incluir eventos)
-    * Move tile.
+    * Clona uma tile a partir de outra tile  (TODO Incluir eventos).
+    * Clona várias tiles a partir de outra tile (TODO Incluir eventos).
+    * Move tile (TODO Incluir eventos).
 
   * Importando Script
     * Insira um novo script acima do Main chamado Tile
@@ -17,9 +17,11 @@
 =end
 
 class Tile
-  def initialize(x, y, layer)
-    @layer = layer - 1
-    set_position(x, y)
+  def initialize(x, y, layer = nil)
+    @x = x
+    @y = y
+    set_tile(x, y, layer)  if layer
+    set_event unless layer
   end
 
   # Copia uma tile para a coordenada x, y.
@@ -32,7 +34,7 @@ class Tile
     copy_to(x, y)
     delete
 
-    set_position(x, y)
+    @current_tile = $game_map.data[x, y, @layer]
   end
 
   # Deleta tile instanciada.
@@ -49,13 +51,24 @@ class Tile
     $tile_manager.make_unpassable(@current_tile)
   end
 
+  def event
+    @event
+  end
+
   private
 
   # Redefine a posição da tile instanciada.
-  def set_position(x, y)
+  def set_tile(x, y, layer)
+    @layer = layer - 1
     @current_tile = $game_map.data[x, y, @layer]
-    @x = x
-    @y = y
+  end
+
+  def events
+    $game_map.events.values
+  end
+
+  def set_event
+    events.each { |evt| @event = evt if evt.x == @x and evt.y == @y }
   end
 
   # Clona 1 (uma) tile várias vezes a partir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes

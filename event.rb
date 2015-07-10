@@ -21,16 +21,19 @@ class Event
     set_event
   end
 
+  # Retorna evento.
   def event
     @event
   end
 
   private 
 
+  # Retorna eventos.
   def events
     $game_map.events.values
   end
   
+  # Busca evento com as coordenadas inicializadas.
   def set_event
     events.each { |evt| @event = evt if evt.x == @x and evt.y == @y }
   end

@@ -30,7 +30,5 @@ t3.move_to(11, 11)
 # Teste de passabilidade de tile.
 Tile.new(8,8,3).make_passable
 
-# Teste de controle de evento
-# Event.new(1, 7).event.move_left
-
+# Teste de clonagem randomica
 Tile.new(1, 8, 2).randon_clone

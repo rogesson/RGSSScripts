@@ -19,26 +19,32 @@ class Tile_Manager
     @passable_tiles = []
   end
 
+  # Lista de tiles passáveis.
   def passable_tiles
     all_passable_tiles
   end
 
+  # Torna tile passável.
   def make_passable(tile_id)
     passable_tiles << tile_id
   end
 
+  # Bloqueia passabilidade.
   def make_unpassable(tile_id)
     passable_tiles - [tile_id]
   end
 
   private
 
+  # Lista todas as tiles passáveis
   def all_passable_tiles
     @passable_tiles
   end
 end
 
 class Scene_Title
+
+  # Cria variável global $tile_manager quando o jogo é inicializado.
   def command_new_game
     # Reproduzir SE de OK
     $game_system.se_play($data_system.decision_se)
@@ -117,7 +123,7 @@ class Game_Map
       if tile_id == nil
         # Impassável
         return false
-      # Se foi mapeada como passado pelo Tile_Manager
+      # Se for definida como passável pelo Tile_Manager.
       elsif $tile_manager.passable_tiles.include? tile_id
         return true
       elsif @passages[tile_id] & bit != 0

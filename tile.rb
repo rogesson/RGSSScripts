@@ -41,14 +41,17 @@ class Tile
     @current_tile = 0
   end
 
+  # Torna tile passável
   def make_passable
     $tile_manager.make_passable(@current_tile)
   end
 
+  # Bloqueia passabilidade da tile
   def make_unpassable
     $tile_manager.make_unpassable(@current_tile)
   end
 
+  # Clona tile para uma possição randomica. 
   def randon_clone(amount = 1)
     amount.times do
       # Cria coordenada x e y (randomicamente) da tile a ser substituída.
@@ -71,26 +74,29 @@ class Tile
     @y = y
   end
 
+  # Verifica se a tile é a mesma que o herói está.
   def layer_of_character(x, y) 
     current_possition = [$game_player.x, $game_player.y]
     current_possition[0] == x and current_possition[1] == y
   end
 
+  # Verifica se a tile randomica é a tile instanciada.
   def random_tile_is_current_tile?(x, y)
     $game_map.data[x, y, @layer] ==  @current_tile
   end
 
+  # Verifica se é uma tile de evento.
   def event_tile?(x, y)
      $game_map.check_event(x, y).class != Fixnum
   end
 
   # Verifica se a coordenada randomica é válida.
   def valid_random_tile(x, y)
-      $game_map.valid?(x, y)              and # Verifica se a tile é válida.
-      not layer_of_character(x, y)        and # Verifica se o jogador está nessa tile.
-      $game_map.passable?(x, y, 1)        and # Verifica se Tile 2 é passável.
-      $game_map.passable?(x, y, 0)        and # Verifica se Tile 1 é passável.
-      $game_map.passable?(x, y, 2)        and # Verifica se Tile 3 é passável.
+      $game_map.valid?(x, y)                  and # Verifica se a tile é válida.
+      not layer_of_character(x, y)            and # Verifica se o jogador está nessa tile.
+      $game_map.passable?(x, y, 1)            and # Verifica se Tile 2 é passável.
+      $game_map.passable?(x, y, 0)            and # Verifica se Tile 1 é passável.
+      $game_map.passable?(x, y, 2)            and # Verifica se Tile 3 é passável.
       not random_tile_is_current_tile?(x, y)  and # Verifica se tile randômica é a mesma que foi 
                                               # escolhida para ser substituída.
       event_tile?(x, y)                       # Verifica se é a tile de um evento

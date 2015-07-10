@@ -31,4 +31,6 @@ t3.move_to(11, 11)
 Tile.new(8,8,3).make_passable
 
 # Teste de controle de evento
-Event.new(1, 7).event.move_left
+# Event.new(1, 7).event.move_left
+
+Tile.new(1, 8, 2).randon_clone

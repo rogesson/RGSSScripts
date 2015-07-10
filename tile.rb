@@ -1,5 +1,5 @@
 =begin 
-  * Script RGSS(XP) para RPG Maker XP
+  * Script RGSS(XP) para RPG Maker XP.
   
   * Nome: Tile
   * Descrição: Classe responsável por mapear e controlar as tiles do jogo.
@@ -8,12 +8,12 @@
   
   * Features: 
     * Clona uma tile a partir de outra tile.
-    * Clona várias tiles a partir de outra tile.
-    * Move tile.
+    * Move uma tile tile para uma coordenada especifica.
+    * Clona uma tile para coordenadas randomicas.
 
   * Importando Script
-    * Insira um novo script acima do Main chamado Tile
-    * Copie e cole o Script abaixo dentro do Tile
+    * Insira um novo script acima do Main chamado Tile.
+    * Copie e cole o Script abaixo dentro do Tile.
 =end
 
 class Tile
@@ -49,6 +49,19 @@ class Tile
     $tile_manager.make_unpassable(@current_tile)
   end
 
+  def randon_clone(amount = 1)
+    amount.times do
+      # Cria coordenada x e y (randomicamente) da tile a ser substituída.
+      next_tile_x = rand($game_map.width)
+      next_tile_y = rand($game_map.height)
+
+      # Clona a tile se a posição randomica for válida.
+      if valid_random_tile(next_tile_x, next_tile_y)
+        $game_map.data[next_tile_x, next_tile_y, @layer] = @current_tile
+      end
+    end
+  end
+
   private
 
   # Redefine a posição da tile instanciada.
@@ -58,39 +71,28 @@ class Tile
     @y = y
   end
 
-  # Clona 1 (uma) tile várias vezes a partir do X e Y de outra tile, o parâmetro (times) recebe o número de vezes
-  # em que a tile vai ser clonada
-=begin Ajustar
-  def random_clone(tile_x, tile_y, times)
-    times.times do
-    # Cria coordenada x e y (randomicamente) da tile a ser substituída.
-    next_tile_x  =  rand(@map_x)
-    next_tile_y  =  rand(@map_y)
-      # Clona a tile se a possicao X e Y passada for válida.
-      if valid_tile(next_tile_x, next_tile_y)
-        $game_map.data[next_tile_x, next_tile_y, @layer] = $game_map.data[tile_x, tile_y, @layer]
-      end
-    end
-  end
-=end
-
-=begin precisa?
-  # Verifica se a posição X e Y da tile passada é válida.
-  def valid_tile(x, y)
-      $game_map.valid?(x, y)              and # Verifica se a tile é válida
-      not layer_of_character(x, y)        and # Verifica se o jogador está nessa tile
-      $game_map.passable?(x, y, 1)        and # Verifica se Tile 2 é passável
-      $game_map.passable?(x, y, 0)        and # Verifica se Tile 1 é passável
-      $game_map.passable?(x, y, 2)        and # Verifica se Tile 3 é passável
-      $game_map.data[x, y, @layer] ==         
-      @tile_to_replace                    and # Verifica se tile randômica é a mesma que foi escolhida para ser substituída
-      $game_map.check_event(x, y).class != Fixnum # Verifica se é a tile de um evento
-  end
-
-  # Verifica se a tile é a mesma em que o jogador está.
   def layer_of_character(x, y) 
     current_possition = [$game_player.x, $game_player.y]
     current_possition[0] == x and current_possition[1] == y
   end
-=end
+
+  def random_tile_is_current_tile?(x, y)
+    $game_map.data[x, y, @layer] ==  @current_tile
+  end
+
+  def event_tile?(x, y)
+     $game_map.check_event(x, y).class != Fixnum
+  end
+
+  # Verifica se a coordenada randomica é válida.
+  def valid_random_tile(x, y)
+      $game_map.valid?(x, y)              and # Verifica se a tile é válida.
+      not layer_of_character(x, y)        and # Verifica se o jogador está nessa tile.
+      $game_map.passable?(x, y, 1)        and # Verifica se Tile 2 é passável.
+      $game_map.passable?(x, y, 0)        and # Verifica se Tile 1 é passável.
+      $game_map.passable?(x, y, 2)        and # Verifica se Tile 3 é passável.
+      not random_tile_is_current_tile?(x, y)  and # Verifica se tile randômica é a mesma que foi 
+                                              # escolhida para ser substituída.
+      event_tile?(x, y)                       # Verifica se é a tile de um evento
+  end
 end

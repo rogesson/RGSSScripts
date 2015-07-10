@@ -36,7 +36,6 @@ class Tile_Manager
   def all_passable_tiles
     @passable_tiles
   end
-
 end
 
 class Scene_Title
@@ -78,7 +77,6 @@ class Scene_Title
   end
 
 end
-
 
 class Game_Map
   def passable?(x, y, d, self_event = nil)
@@ -122,7 +120,6 @@ class Game_Map
       # Se foi mapeada como passado pelo Tile_Manager
       elsif $tile_manager.passable_tiles.include? tile_id
         return true
-      # Se for 
       elsif @passages[tile_id] & bit != 0
         return false
       # Se for bloqueado em todas as direções
@@ -138,5 +135,4 @@ class Game_Map
     # Passável
     return true
   end
-
 end

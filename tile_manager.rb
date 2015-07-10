@@ -1,35 +1,35 @@
-=begin 
-  * Script RGSS(XP) para RPG Maker XP
-  
-  * Nome: Tile Manager
-  * Descrição: Classe responsável pelo gerenciamento das tiles do jogo.
-  * Autor: Resque
-  * Data: 06/06/2014
-  
-  * Features: 
-    * Torna uma tile passável/bloqueada
-
-  * Importando Script
-    * Insira um novo script acima do Main chamado Tile_Manager
-    * Copie e cole o Script abaixo dentro do Tile_Manager
-=end
+################################################################################
+# * Script RGSS(XP) para RPG Maker XP
+# 
+# * Nome: Tile Manager
+# * Descrição: Classe responsável pelo gerenciamento das tiles do jogo.
+# * Autor: Resque
+# * Data: 06/06/2014
+# 
+# * Features: 
+#   * Torna uma tile passável/bloqueada.
+#
+#  * Importando Script
+#    * Insira um novo script acima do Main chamado Tile_Manager.
+#    * Copie e cole o script abaixo dentro do Tile_Manager.
+###############################################################################
 
 class Tile_Manager
   def initialize
     @passable_tiles = []
   end
 
-  # Lista de tiles passáveis.
+  # Lista as tiles passáveis.
   def passable_tiles
     all_passable_tiles
   end
 
-  # Torna tile passável.
+  # Torna uma tile passável tile passável.
   def make_passable(tile_id)
     passable_tiles << tile_id
   end
 
-  # Bloqueia passabilidade.
+  # Bloqueia passabilidade da tile.
   def make_unpassable(tile_id)
     passable_tiles - [tile_id]
   end

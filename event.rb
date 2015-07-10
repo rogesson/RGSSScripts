@@ -1,18 +1,18 @@
-=begin 
-  * Script RGSS(XP) para RPG Maker XP
-  
-  * Nome: Event
-  * Descrição: Classe responsável por mapear e controlar os eventos do jogo.
-  * Autor: Resque
-  * Data: 20/06/2015
-  
-  * Features: 
-    * Mapeia evento
-
-  * Importando Script
-    * Insira um novo script acima do Main chamado Evento
-    * Copie e cole o Script abaixo dentro do Evento
-=end
+##################################################################################
+#  * Script RGSS(XP) para RPG Maker XP
+#  
+#  * Nome: Event
+#  * Descrição: Classe responsável por mapear e controlar os eventos do jogo.
+#  * Autor: Resque
+#  * Data: 20/06/2015
+#  
+#  * Features: 
+#    * Mapeia evento
+#
+#  * Importando Script
+#    * Insira um novo script acima do Main chamado Evento
+#    * Copie e cole o Script abaixo dentro do Evento
+##################################################################################
 
 class Event
   def initialize(x, y)

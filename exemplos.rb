@@ -44,8 +44,9 @@ t3.move_to(11, 11)
 # Torna a tile da posição 8, 8 do layer 3 passável
 Tile.new(8, 8, 3).make_passable
 
+
 # Bloqueia a tile passável da posição 5,8 do layer 3
-Tile.new(8, 8, 3).block
+#Tile.new(8, 8, 3).block
 
 # Clona a tile 1,7 do layer 2 randômicamente
 Tile.new(1, 7, 2).random_clone

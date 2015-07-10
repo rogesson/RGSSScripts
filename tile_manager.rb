@@ -15,30 +15,21 @@
 ###############################################################################
 
 class Tile_Manager
+
+  attr_reader :passable_tiles
   def initialize
     @passable_tiles = []
   end
 
-  # Lista as tiles passáveis.
-  def passable_tiles
-    all_passable_tiles
-  end
 
   # Torna uma tile passável tile passável.
   def make_passable(tile_id)
-    passable_tiles << tile_id
+    @passable_tiles << tile_id
   end
 
   # Bloqueia passabilidade da tile.
   def make_unpassable(tile_id)
-    passable_tiles - [tile_id]
-  end
-
-  private
-
-  # Lista todas as tiles passáveis
-  def all_passable_tiles
-    @passable_tiles
+    @passable_tiles -= [tile_id]
   end
 end
 

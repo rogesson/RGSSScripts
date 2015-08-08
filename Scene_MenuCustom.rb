@@ -39,7 +39,7 @@ class Scene_MenuCustom
                     command_save_quit
                   ]
 
-    @command_window = Window_CommandCustom.new(160, command_list)
+    @command_window = Window_CommandCustom.new(640, command_list)
 
     @command_window.index = @menu_index
     

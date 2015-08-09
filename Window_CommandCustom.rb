@@ -43,11 +43,8 @@ class Window_CommandCustom < Window_Base
   end
 
   def draw_item(index, x, color)
-    self.contents.font.color = color
-    rect = Rect.new(x, 300,  self.contents.width - 8, 32)
-    #rect = Rect.new(4, 32 * index, self.contents.width - 8, 32)
-    self.contents.fill_rect(rect, Color.new(0, 0, 0, 0))
-    self.contents.draw_text(rect, @commands[index])
+    bitmap = RPG::Cache.picture("menu_equip")
+    self.contents.blt(x, 300, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
   end
 
   def disable_item(index)
@@ -58,16 +55,4 @@ class Window_CommandCustom < Window_Base
     @background_sprite = Sprite.new
     @background_sprite.bitmap = RPG::Cache.picture("menu_background")
   end
-
-  def font_grey_color
-    return Color.new(192, 192, 192, 255)
-  end
 end
-
-
-class Window_Base < Window
-  def normal_color
-    $scene.is_a?(Scene_MenuCustom) ? Color.new(192, 192, 192, 255) : Color.new(255, 255, 255, 255)
-  end
-end
-

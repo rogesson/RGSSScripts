@@ -11,7 +11,7 @@ module SCENE_MENU_CONFIGURATION
   EQUIP       = 'Equipamento'
   STATUS      = 'Status'
   GUIDE       = 'Guia'
-  SAVE_QUIT   = 'Salvar e Sair'
+  SAVE_QUIT   = 'Salvar/Sair'
 end
 
 # Classe respnsável por exibir o menu.

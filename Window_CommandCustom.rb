@@ -20,6 +20,13 @@ class Window_CommandCustom < Window_Base
     @commands = commands
     @commands_y = [0, 70 , 180, 329, 420, 500]
     self.contents = Bitmap.new(width - 32, 350)
+    self.contents.font.color = Color.new(192, 192, 192, 255)
+    self.contents.font.name = "Snap ITC"
+    self.contents.font.size = 21
+    
+    
+    #Font.name = "Neverwinter"
+    #self.bitmap.font.size = 32
     #self.contents = Bitmap.new(width - 32, @item_max * 32)
     refresh
     @index = 0
@@ -50,6 +57,17 @@ class Window_CommandCustom < Window_Base
   def create_background
     @background_sprite = Sprite.new
     @background_sprite.bitmap = RPG::Cache.picture("menu_background")
+  end
+
+  def font_grey_color
+    return Color.new(192, 192, 192, 255)
+  end
+end
+
+
+class Window_Base < Window
+  def normal_color
+    $scene.is_a?(Scene_MenuCustom) ? Color.new(192, 192, 192, 255) : Color.new(255, 255, 255, 255)
   end
 end
 

@@ -9,7 +9,7 @@
     *Exibe nome do mapa que o jogador se encontra
     *Exibe imagem de fundo
 =end
-
+=begin
 class Window_SaveFile < Window_Base
   
   #--------------------------------------------------------------------------
@@ -134,4 +134,4 @@ class Scene_File < Scene_MenuBase
     @background_sprite.bitmap = Cache.system("ok")
   end
 end  
-  
+=end

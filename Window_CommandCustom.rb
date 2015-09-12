@@ -19,32 +19,37 @@ class Window_CommandCustom < Window_Base
     @item_max = commands.size
     @commands = commands
     @commands_y = [0, 70 , 180, 329, 420, 500]
+
+    #self.contents = Bitmap.new(width - 32, 350)
     self.contents = Bitmap.new(width - 32, 350)
-    self.contents.font.color = Color.new(192, 192, 192, 255)
     self.contents.font.name = "Snap ITC"
-    self.contents.font.size = 21
+    self.contents.font.size = 24
     
-    
-    #Font.name = "Neverwinter"
-    #self.bitmap.font.size = 32
-    #self.contents = Bitmap.new(width - 32, @item_max * 32)
     refresh
     @index = 0
-    self.opacity = 1
-    create_background
-  end
+    self.opacity = 0
 
+    create_background
+    create_window_option
+  end
+=begin
   def refresh
     self.contents.clear
-    
     @item_max.times do |i|
+      #Color.new(192, 192, 192, 255)
       draw_item(i, @commands_y[i], normal_color)
     end
   end
+=end
+  def refresh
+    self.contents.clear
+  end
 
   def draw_item(index, x, color)
-    bitmap = RPG::Cache.picture("menu_equip")
-    self.contents.blt(x, 300, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
+    self.contents.font.color = color
+    rect = Rect.new(x, 300,  self.contents.width - 8, 32)
+    self.contents.fill_rect(rect, Color.new(0, 0, 0, 0))
+    self.contents.draw_text(rect, @commands[index])
   end
 
   def disable_item(index)
@@ -54,5 +59,24 @@ class Window_CommandCustom < Window_Base
   def create_background
     @background_sprite = Sprite.new
     @background_sprite.bitmap = RPG::Cache.picture("menu_background")
+    @background_sprite.opacity = 100
+  end
+
+  def create_window_option
+    window_option = Window_Base.new(0, 300, 640, 100)
+    window_option.opacity = 75
+    
+    update_menu
+  end
+
+  def font_grey_color
+    return Color.new(192, 192, 192, 255)
+  end
+
+  def update_menu
+    @item_max.times do |i|
+      draw_item(i, @commands_y[i], normal_color)
+    end
   end
 end
+

@@ -10,7 +10,6 @@ module SCENE_MENU_CONFIGURATION
   SKILL       = 'Habilidade'
   EQUIP       = 'Equipamento'
   STATUS      = 'Status'
-  GUIDE       = 'Guia'
   SAVE_QUIT   = 'Salvar/Sair'
 end
 
@@ -27,7 +26,6 @@ class Scene_MenuCustom
     command_skill     = SCENE_MENU_CONFIGURATION::SKILL
     command_equip     = SCENE_MENU_CONFIGURATION::EQUIP
     command_status    = SCENE_MENU_CONFIGURATION::STATUS
-    comand_guide      = SCENE_MENU_CONFIGURATION::GUIDE
     command_save_quit = SCENE_MENU_CONFIGURATION::SAVE_QUIT
 
     command_list = [
@@ -35,7 +33,6 @@ class Scene_MenuCustom
                     command_skill,
                     command_equip,
                     command_status,
-                    comand_guide,
                     command_save_quit
                   ]
 

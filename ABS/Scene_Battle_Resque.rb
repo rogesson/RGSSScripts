@@ -1,4 +1,4 @@
-class Scene_Battle_Resque 
+class Scene_Battle_Resque < Scene_Base
   def initialize
     @active = true
     initialize_battle
@@ -29,10 +29,10 @@ class Scene_Battle_Resque
   end
 
   def create_message_window
-    
   end
 
   def create_menu_window
     @menu_window = Window_Menu_Battle_Resque.new
+    @menu_window.active = true
   end
 end

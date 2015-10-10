@@ -1,4 +1,4 @@
-class Scene_Battle_Resque
+class Scene_Battle_Resque 
   def initialize
     @active = true
     initialize_battle
@@ -6,6 +6,10 @@ class Scene_Battle_Resque
 
   def battle_started?
     @active == true
+  end
+
+  def update
+    @menu_window.update
   end
 
   private
@@ -29,6 +33,6 @@ class Scene_Battle_Resque
   end
 
   def create_menu_window
-    @menu_window = Window_Menu_Battle_Resque.new(0,0, 100, 100)
+    @menu_window = Window_Menu_Battle_Resque.new
   end
 end

@@ -1,38 +1,29 @@
-class Scene_Battle_Resque < Scene_Base
-  def initialize
-    @active = true
-    initialize_battle
-  end
-
-  def battle_started?
-    @active == true
-  end
-
-  def update
-    @menu_window.update
-  end
-
-  private
-
-  def initialize_battle
-    print 'Battle Started'
-    create_all_windows
-  end
-
-  def finish_battle
-    @active = false
-  end
-
-  def create_all_windows
-    create_message_window
+class Scene_Battle_Resque < Scene_MenuBase
+  def start
+    super
+    create_background
     create_menu_window
   end
 
-  def create_message_window
+  def create_menu_window
+    @menu_battle_resque = Window_Menu_Battle_Resque.new
+    @menu_battle_resque.set_handler(:item, method(:item))
+    @menu_battle_resque.set_handler(:skill, method(:skill))
+    @menu_battle_resque.set_handler(:status, method(:status))
   end
 
-  def create_menu_window
-    @menu_window = Window_Menu_Battle_Resque.new
-    @menu_window.active = true
+  def item
+    p 'item selected'
+    @menu_battle_resque.active = true
+  end
+
+  def skill
+    p 'skill selected'
+    @menu_battle_resque.active = true
+  end
+
+  def status
+    p 'status selected'
+    @menu_battle_resque.active = true
   end
 end

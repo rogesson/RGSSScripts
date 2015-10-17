@@ -13,15 +13,14 @@ module WINDOW_STATUS_CONFIG
 
     # Tamanho do ícone 22x25.
     ICON_WIDTH  = 25
-    ICON_HEIGHT = 25
 end
  
 class Window_Status < Window_Selectable
   
   def custom_param_list_1
     [
-      { "ATK" => @actor.param(2),  "icon_name" => "fire_icon"},
-      { "DEF" => @actor.param(3),  "icon_name" => "fire_icon" },
+      { "ATK" => @actor.param(2),  "icon_index" => 96 },
+      { "DEF" => @actor.param(3),  "icon_index" => 97 },
       { "MAT" => @actor.param(4) },
       { "MDF" => @actor.param(5) },
       { "AGI" => @actor.param(6) },
@@ -35,8 +34,8 @@ class Window_Status < Window_Selectable
  
   def custom_param_list_2
     [
-      { "Prec"  => (@actor.xparam(0)*100).to_s.split(".").first,  "icon_name" => "fire_icon" },
-      { "Evas"  => (@actor.xparam(1)*100).to_s.split(".").first,  "icon_name" => "fire_icon" },
+      { "Prec"  => (@actor.xparam(0)*100).to_s.split(".").first,  "icon_index" => 96 },
+      { "Evas"  => (@actor.xparam(1)*100).to_s.split(".").first,  "icon_index" => 97 },
       { "Crít"  => (@actor.xparam(2)*100).to_s.split(".").first },
       { "CAtq" => (@actor.xparam(6)*100).to_s.split(".").first },
       { "Refl"  => (@actor.xparam(5)*100).to_s.split(".").first },
@@ -49,8 +48,8 @@ class Window_Status < Window_Selectable
  
   def custom_param_list_3
     [
-      { "Fogo"    => (@actor.element_rate(3)*100).to_s.split(".").first,  "icon_name" => "fire_icon" },
-      { "Água"    => (@actor.element_rate(6)*100).to_s.split(".").first,  "icon_name" => "fire_icon" },
+      { "Fogo"    => (@actor.element_rate(3)*100).to_s.split(".").first,  "icon_index" => 96 },
+      { "Água"    => (@actor.element_rate(6)*100).to_s.split(".").first,  "icon_index" => 97 },
       { "Terra"   => (@actor.element_rate(7)*100).to_s.split(".").first,  "font_color" => (Color.new(120,85,70))},
       { "Vento"   => (@actor.element_rate(8)*100).to_s.split(".").first,  "font_color" => (Color.new(0,200,0))},
       { "Luz"     => (@actor.element_rate(9)*100).to_s.split(".").first,  "font_color" => (Color.new(200,200,0))},
@@ -64,8 +63,8 @@ class Window_Status < Window_Selectable
  
   def custom_param_list_4
     [
-      { "Veneno"    => (@actor.state_rate(2)*100).to_s.split(".").first,  "icon_name" => "fire_icon" },
-      { "Ceguei"    => (@actor.state_rate(3)*100).to_s.split(".").first,  "icon_name" => "fire_icon" },
+      { "Veneno"    => (@actor.state_rate(2)*100).to_s.split(".").first,  "icon_index" => 96 },
+      { "Ceguei"    => (@actor.state_rate(3)*100).to_s.split(".").first,  "icon_index" => 97 },
       { "Mudez"    => (@actor.state_rate(4)*100).to_s.split(".").first },
       { "Confu"    => (@actor.state_rate(5)*100).to_s.split(".").first },
       { "Sono"    => (@actor.state_rate(6)*100).to_s.split(".").first },
@@ -116,10 +115,8 @@ class Window_Status < Window_Selectable
       draw_text(x + line_width_base, y + line_height * index, WINDOW_STATUS_CONFIG::PARAM_SPACE, line_height, param.values.first, 2)
       
       # Imagem do ícone.
-     if param["icon_name"] 
-        bitmap = Cache.system(param["icon_name"])
-        rect = Rect.new(0, 0, WINDOW_STATUS_CONFIG::ICON_WIDTH, WINDOW_STATUS_CONFIG::ICON_HEIGHT)
-        contents.blt(x, y + line_height * index, bitmap, rect, true ? 255 : 160)
+     if param["icon_index"]
+        draw_icon(param["icon_index"], x, y + line_height * index) 
       end
     end
   end

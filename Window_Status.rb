@@ -11,7 +11,7 @@ module WINDOW_STATUS_CONFIG
     PARAM_WIDTH = 55
     PARAM_SPACE = 60
 
-    # Tamanho do ícone 22x25.
+    # Largura do ícone
     ICON_WIDTH  = 25
 end
  
@@ -48,7 +48,7 @@ class Window_Status < Window_Selectable
  
   def custom_param_list_3
     [
-      { name: "Fogo",   value: (@actor.element_rate(3)*100).to_s.split(".").first,  icon_index: 96                                        },
+      { name: "Fogo",   value: (@actor.element_rate(3)*100).to_s.split(".").first,  font_color: Color.new(215, 32, 32),icon_index: 96                                        },
       { name: "Água",   value: (@actor.element_rate(6)*100).to_s.split(".").first,  icon_index: 99                                        },
       { name: "Terra",  value: (@actor.element_rate(7)*100).to_s.split(".").first,  font_color: Color.new(120, 85, 70),   icon_index: 100 },
       { name: "Vento",  value: (@actor.element_rate(8)*100).to_s.split(".").first,  font_color: Color.new(0, 200, 0),     icon_index: 101 },
@@ -87,7 +87,6 @@ class Window_Status < Window_Selectable
   end
  
   def draw_block3(y)
-    print Graphics.width
     x = 0
     custom_param = [custom_param_list_1, custom_param_list_2, custom_param_list_3, custom_param_list_4]
  

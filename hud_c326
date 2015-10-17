@@ -1,0 +1,103 @@
+module HUD_Config
+  BASE  = "Base" 
+  HPBAR = "HPBAR"
+  MPBAR = "MPBAR"
+  TPBAR = "TPBar"
+end
+
+class Window_HUD < Window_Base
+
+  include HUD_Config #isso é só pra não ficar HUD_Config::alguma_coisa
+
+  attr_accessor :need_refresh
+
+  def initialize
+    super(0, 0, 300, 300)
+
+    self.opacity = 0
+    @actor = $game_party.members[0]
+    @gold  = $game_party.gold
+
+    force_refresh
+  end
+
+  def update
+    super
+  end
+
+  def refresh
+    update_graphics if @need_refresh
+  end
+
+  def update_graphics
+    self.contents.clear
+    draw_hp(x, y)
+    draw_mp(x, y)
+
+    @need_refresh = false
+  end
+
+  def force_refresh
+    @need_refresh = true
+  end
+
+  def draw_hp(x, y)
+    img = Cache.system(HPBAR)
+    
+    @hp = Sprite.new
+    @hp.bitmap = Bitmap.new(img.width,img.height)
+    @hp.x = 0
+    @hp.y = 12
+
+    hpw = @hp.width * @actor.hp / @actor.mhp
+    hph = @hp.height
+
+    rect = Rect.new(0,0,hpw, hph)
+    @hp.bitmap.blt(0,0, img,rect)
+    @hp.z = 9999
+  end
+
+  def draw_mp(x, y)
+    img = Cache.system(MPBAR)
+    
+    @mp = Sprite.new
+    @mp.bitmap = Bitmap.new(img.width,img.height)
+    @mp.x = 18
+    @mp.y = 25
+
+    mpw = @mp.width * @actor.mp / @actor.mmp
+    mph = @mp.height
+
+    rect = Rect.new(0,0,mpw, mph)
+    @mp.bitmap.blt(0,0, img,rect)
+    @mp.z = 9999
+  end
+
+  def dispose_sprs
+    @hp.dispose
+    @mp.dispose
+  end
+end
+
+class Scene_Map < Scene_Base
+  alias :hud_start :start 
+  alias :hud_update :update
+  alias :hud_terminate :terminate
+
+  def start
+    @hud = Window_HUD.new
+    hud_start
+  end
+
+  def update
+    @hud.refresh
+
+    hud_update
+  end
+
+  def terminate
+    @hud.dispose
+    @hud.dispose_sprs
+    hud_terminate
+  end
+end

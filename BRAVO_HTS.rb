@@ -7,7 +7,10 @@
 # Version History:
 #   v1.0 = Initial Release
 #   v1.1 = New Features and Bug Fixes
-#   v1.2 = Prevent negative value and no need add effect (By Resque) 
+#   v1.2 = Prevent negative value and no need add effect (By Resque)
+#   v1.3 = Prevent overflow values when HTS is MAX or MIN.
+#          Alert message when status percentage is reached.
+#          Show HTS bar when using HTS item. 
 #==============================================================================
 # Notes
 #   All of the stat decreases stack.
@@ -115,6 +118,17 @@ module BRAVO_HTS
   HTS_HUD_BACK = ""
   # The opacity of the HUD window.
   HTS_HUD_OPACITY = 255
+
+  # Define message alert when percentage is rechead.
+  # Percentage definition example: 
+  #  use 0.20 to 20%
+  #  use 0.90 to 90%
+  #  use 0.78 to 78%
+  NOTIFICATION = {
+    hunger: { message: "_actor_name is hunger", percentage: 0.40 },
+    sleep:  { message: "_actor_name is thirst", percentage: 0.70 },
+    thirst: { message: "_actor_name is sleepy", percentage: 0.90 }
+  }
 #==============================================================================
 # End of Configuration
 #==============================================================================
@@ -743,6 +757,12 @@ class Scene_Map < Scene_Base
       @hts_hud.y = BRAVO_HTS::HTS_HUD_Y
       @hts_hud.visible = false
     end
+
+    create_hunger_window_notification
+  end
+
+  def create_hunger_window_notification
+    @hts_notification = Window_HTS_Notification.new
   end
 end
 
@@ -812,5 +832,63 @@ class Scene_ItemBase < Scene_MenuBase
     window.item = item
     window.refresh
     window.show.activate
+  end
+end
+
+class Window_HTS_Notification < Window_Base
+  def initialize
+    super(Graphics.width / 2 - 150, Graphics.height / 2 - 100, 300, 50)
+    
+    self.hide
+    @actor = $game_party.leader
+    @time_to_die = 180
+    @life_time = 0
+  end
+
+  def update
+    increment_lifetime
+    check_status
+    hide_window
+  end
+  
+  private
+
+  def draw_content
+    contents.clear
+    alert_message
+  end
+
+  def alert_message(status)
+    contents.clear
+
+    message = BRAVO_HTS::NOTIFICATION[:hunger][:message]  if status == :hunger
+    message = BRAVO_HTS::NOTIFICATION[:sleep][:message]   if status == :thirst
+    message = BRAVO_HTS::NOTIFICATION[:thirst][:message]  if status == :sleep
+    
+    message.sub!("_actor_name", @actor.name)
+
+    self.show
+    draw_text_ex(4, 0, message)
+  end
+
+  def increment_lifetime
+    @life_time += 1 if self.visible
+  end
+
+  def hide_window
+    if @life_time > @time_to_die
+      self.hide
+      @life_time = 0
+    end
+  end
+
+  def check_status
+    if @actor.hunger_rate == BRAVO_HTS::NOTIFICATION[:hunger][:percentage]
+      alert_message(:hunger)
+    elsif @actor.sleep_rate == BRAVO_HTS::NOTIFICATION[:sleep][:percentage]
+      alert_message(:sleep)
+    elsif @actor.thirst_rate == BRAVO_HTS::NOTIFICATION[:thirst][:percentage]
+      alert_message(:thirst)
+    end
   end
 end

@@ -9,7 +9,7 @@
 #   v1.1 = New Features and Bug Fixes
 #   v1.2 = Prevent negative value and no need add effect (By Resque)
 #   v1.3 = Prevent overflow values when HTS is MAX or MIN.
-#          Alert message when status percentage is reached.
+#          Alert message when status value is reached.
 #          Show HTS bar when using HTS item. 
 #==============================================================================
 # Notes
@@ -125,9 +125,9 @@ module BRAVO_HTS
   #  use 0.90 to 90%
   #  use 0.78 to 78%
   NOTIFICATION = {
-    hunger: { message: "_actor_name is hunger", percentage: 0.40 },
-    sleep:  { message: "_actor_name is thirst", percentage: 0.70 },
-    thirst: { message: "_actor_name is sleepy", percentage: 0.90 }
+    hunger: { message: "_actor_name is hunger", value: 0.40 },
+    sleep:  { message: "_actor_name is thirst", value: 0.70 },
+    thirst: { message: "_actor_name is sleepy", vaue: 0.90 }
   }
 #==============================================================================
 # End of Configuration
@@ -330,10 +330,6 @@ class Game_Actor < Game_Battler
     @hunger = 0 if @hunger < 0
     @thirst = 0 if @thirst < 0
     @sleep  = 0 if @sleep  < 0
-
-    @hunger = 100 if @hunger > 100
-    @thirst = 100 if @thirst > 100
-    @sleep = 100 if @sleep > 100
   end
 
   #--------------------------------------------------------------------------
@@ -883,11 +879,11 @@ class Window_HTS_Notification < Window_Base
   end
 
   def check_status
-    if @actor.hunger_rate == BRAVO_HTS::NOTIFICATION[:hunger][:percentage]
+    if @actor.hunger_rate == BRAVO_HTS::NOTIFICATION[:hunger][:value]
       alert_message(:hunger)
-    elsif @actor.sleep_rate == BRAVO_HTS::NOTIFICATION[:sleep][:percentage]
+    elsif @actor.sleep_rate == BRAVO_HTS::NOTIFICATION[:sleep][:value]
       alert_message(:sleep)
-    elsif @actor.thirst_rate == BRAVO_HTS::NOTIFICATION[:thirst][:percentage]
+    elsif @actor.thirst_rate == BRAVO_HTS::NOTIFICATION[:thirst][:value]
       alert_message(:thirst)
     end
   end

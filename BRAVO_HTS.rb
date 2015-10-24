@@ -295,7 +295,7 @@ class Game_Actor < Game_Battler
     @thirst += item.user_thirst if BRAVO_HTS::HTS_USE[1] == true
     @sleep += item.user_sleep if BRAVO_HTS::HTS_USE[2] == true
 
-    prevent_negarive_value(item)
+    prevent_overflow(item)
   end
   #--------------------------------------------------------------------------
   # * Apply Effect of Skill/Item
@@ -306,16 +306,20 @@ class Game_Actor < Game_Battler
     @thirst += item.thirst if BRAVO_HTS::HTS_USE[1] == true
     @sleep += item.sleep if BRAVO_HTS::HTS_USE[2] == true
     
-    prevent_negarive_value(item)
+    prevent_overflow(item)
   end
 
   #--------------------------------------------------------------------------
   # * Prevent negative value.
   #--------------------------------------------------------------------------
-  def prevent_negarive_value(item)
+  def prevent_overflow(item)
     @hunger = 0 if @hunger < 0
     @thirst = 0 if @thirst < 0
     @sleep  = 0 if @sleep  < 0
+
+    @hunger = 100 if @hunger > 100
+    @thirst = 100 if @thirst > 100
+    @sleep = 100 if @sleep > 100
   end
 
   #--------------------------------------------------------------------------

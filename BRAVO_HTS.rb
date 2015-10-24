@@ -582,6 +582,8 @@ class Window_Base < Window
     draw_actor_name(actor, x, y)
     draw_actor_level(actor, x, y + line_height * 1)
     draw_actor_icons(actor, x, y + line_height * 2)
+    draw_actor_class(actor, x, y + line_height * 2)
+
     draw_actor_hunger(actor, x + 120, y)
     draw_actor_thirst(actor, x + 120, y + line_height * 1)
     draw_actor_sleep(actor, x + 120, y + line_height * 2)

@@ -224,6 +224,10 @@ class RPG::UsableItem < RPG::BaseItem
       return 0
     end
   end
+
+  def is_hunger?
+    hunger != 0 || thirst != 0 || sleep != 0
+  end
 end
  
 #==============================================================================
@@ -324,7 +328,7 @@ class Game_Actor < Game_Battler
     return true if item.for_opponent?
     return true if item.damage.recover? && item.damage.to_hp? && hp < mhp
     return true if item.damage.recover? && item.damage.to_mp? && mp < mmp
-    return true if is_hunger_type?(item)
+    return true if item.is_hunger?
     return true if item_has_any_valid_effects?(user, item)
     return false
   end
@@ -332,9 +336,9 @@ class Game_Actor < Game_Battler
   #--------------------------------------------------------------------------
   # * Verify if is hunger type item
   #--------------------------------------------------------------------------
-  def is_hunger_type?(item)
-    item.hunger != 0 || item.thirst != 0 || item.sleep != 0
-  end
+  #def is_hunger_type?(item)
+  #  item.hunger != 0 || item.thirst != 0 || item.sleep != 0
+  #end
   #--------------------------------------------------------------------------
   # * Get Parameter
   #--------------------------------------------------------------------------
@@ -569,6 +573,15 @@ class Window_Base < Window
     draw_current_and_max_values(x, y, width, actor.sleep, actor.sleep_max,
     normal_color, normal_color)
   end
+
+  def draw_actor_simple_status_hunger(actor, x, y)
+    draw_actor_name(actor, x, y)
+    draw_actor_level(actor, x, y + line_height * 1)
+    draw_actor_icons(actor, x, y + line_height * 2)
+    draw_actor_hunger(actor, x + 120, y)
+    draw_actor_thirst(actor, x + 120, y + line_height * 1)
+    draw_actor_sleep(actor, x + 120, y + line_height * 2)
+  end
 end
  
 #==============================================================================
@@ -726,7 +739,7 @@ class Scene_Map < Scene_Base
     end
   end
 end
- 
+
 #==============================================================================
 # ** Scene_Status
 #==============================================================================
@@ -762,5 +775,36 @@ class Scene_Battle < Scene_Base
       @subject.check_death
     end
     bravo_hts_process_action_end
+  end
+end
+
+
+class Window_MenuStatus < Window_Selectable
+  attr_accessor :item
+
+  def draw_item(index)
+    actor = $game_party.members[index]
+    enabled = $game_party.battle_members.include?(actor)
+    rect = item_rect(index)
+    draw_item_background(index)
+    draw_actor_face(actor, rect.x + 1, rect.y + 1, enabled)
+
+    if item && item.is_hunger?
+      draw_actor_simple_status_hunger(actor, rect.x + 108, rect.y + line_height / 2)
+    else
+      draw_actor_simple_status(actor, rect.x + 108, rect.y + line_height / 2)
+    end
+  end
+end
+
+class Scene_ItemBase < Scene_MenuBase 
+  def show_sub_window(window)
+    width_remain = Graphics.width - window.width
+    window.x = cursor_left? ? width_remain : 0
+    @viewport.rect.x = @viewport.ox = cursor_left? ? 0 : window.width
+    @viewport.rect.width = width_remain
+    window.item = item
+    window.refresh
+    window.show.activate
   end
 end

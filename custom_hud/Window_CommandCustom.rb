@@ -18,17 +18,20 @@ class Window_CommandCustom < Window_Base
     self.opacity = 0
 
     create_background
+    create_cursor
+    #create_logo
     
     @index = 0
     @options = []
     option_x = 0
 
-    4.times do
-      @options << new_option(option_x, 300)
-      option_x += 150
-    end
+    @options << new_option(20, 300, "item")
+    @options << new_option(130, 300, "habilidade")
+    @options << new_option(350, 300, "equipamento")
+    @options << new_option(480, 300, "salvar")
   
     select_option
+    update_cursor_position
   end
 
   def create_background
@@ -36,12 +39,13 @@ class Window_CommandCustom < Window_Base
     @background_sprite.bitmap = RPG::Cache.picture("menu_background_3")
   end
 
-  def new_option(x, y)
+  def new_option(x, y, picture_name)
     option_sprite = Sprite.new
-    option_sprite.bitmap = Bitmap.new("Graphics/Pictures/start")
+    option_sprite.bitmap = Bitmap.new("Graphics/Pictures/#{picture_name}")
 
     option_sprite.x = x
     option_sprite.y = y
+    option_sprite.opacity = 170
 
     option_sprite
   end
@@ -50,6 +54,7 @@ class Window_CommandCustom < Window_Base
     unselect_option
     option == :next ? increment_index : decrement_index
     select_option
+    update_cursor_position
   end
 
   def increment_index
@@ -70,11 +75,28 @@ class Window_CommandCustom < Window_Base
 
   def select_option
     current_option = @options[@index]
-    current_option.y = 280
+    current_option.opacity = 250
   end
 
   def unselect_option
     current_option = @options[@index]
-    current_option.y = 300
+    current_option.opacity = 170
+  end
+
+  def create_cursor
+    @cursor = Sprite.new
+    @cursor.bitmap = Bitmap.new("Graphics/Pictures/cursor")
+    @cursor.opacity = 180
+  end
+
+  def update_cursor_position
+    current_option = @options[@index]
+    @cursor.x = current_option.x + (current_option.bitmap.width / 2 - 22)
+    @cursor.y = current_option.y + 70
+  end
+
+  def create_logo
+    @logo = Sprite.new
+    @logo.bitmap = Bitmap.new("Graphics/Pictures/logo")
   end
 end

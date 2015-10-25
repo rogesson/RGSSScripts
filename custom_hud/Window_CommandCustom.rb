@@ -12,71 +12,69 @@ class Window_CommandCustom < Window_Base
   #     width    : largura da janela
   #     commands : ordem dos comandos
   #--------------------------------------------------------------------------
-  attr_accessor :index
 
   def initialize(width, commands)
     super(0, 0, width, 480)
-    @item_max = commands.size
-    @commands = commands
-    @commands_y = [0, 70 , 180, 329, 420, 500]
-
-    #self.contents = Bitmap.new(width - 32, 350)
-    self.contents = Bitmap.new(width - 32, 350)
-    self.contents.font.name = "Snap ITC"
-    self.contents.font.size = 24
-    
-    refresh
-    @index = 0
     self.opacity = 0
 
     create_background
-    create_window_option
-  end
-=begin
-  def refresh
-    self.contents.clear
-    @item_max.times do |i|
-      #Color.new(192, 192, 192, 255)
-      draw_item(i, @commands_y[i], normal_color)
+    
+    @index = 0
+    @options = []
+    option_x = 0
+
+    4.times do
+      @options << new_option(option_x, 300)
+      option_x += 150
     end
-  end
-=end
-  def refresh
-    self.contents.clear
-  end
-
-  def draw_item(index, x, color)
-    self.contents.font.color = color
-    rect = Rect.new(x, 300,  self.contents.width - 8, 32)
-    self.contents.fill_rect(rect, Color.new(0, 0, 0, 0))
-    self.contents.draw_text(rect, @commands[index])
-  end
-
-  def disable_item(index)
-    draw_item(index, disabled_color)
+  
+    select_option
   end
 
   def create_background
     @background_sprite = Sprite.new
-    @background_sprite.bitmap = RPG::Cache.picture("menu_background")
-    @background_sprite.opacity = 100
+    @background_sprite.bitmap = RPG::Cache.picture("menu_background_3")
   end
 
-  def create_window_option
-    window_option = Window_Base.new(0, 300, 640, 100)
-    window_option.opacity = 75
-    
-    update_menu
+  def new_option(x, y)
+    option_sprite = Sprite.new
+    option_sprite.bitmap = Bitmap.new("Graphics/Pictures/start")
+
+    option_sprite.x = x
+    option_sprite.y = y
+
+    option_sprite
   end
 
-  def font_grey_color
-    return Color.new(192, 192, 192, 255)
+  def update_command(option)
+    unselect_option
+    option == :next ? increment_index : decrement_index
+    select_option
   end
 
-  def update_menu
-    @item_max.times do |i|
-      draw_item(i, @commands_y[i], normal_color)
+  def increment_index
+    if @index < @options.length - 1
+      @index += 1
+    else 
+      @index = 0
     end
   end
-end
 
+   def decrement_index
+    if @index < 1
+      @index = @options.length - 1
+    else
+      @index -= 1
+    end
+  end
+
+  def select_option
+    current_option = @options[@index]
+    current_option.y = 280
+  end
+
+  def unselect_option
+    current_option = @options[@index]
+    current_option.y = 300
+  end
+end

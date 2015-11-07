@@ -5,40 +5,6 @@
 #  * Autor: Resque
 #  * Data: 08/08/2015
 
-
-module OPTIONS_CONFIG
-  FACTION = {
-      :sprite_name => 'faccao',
-      :x => 10,  
-      :y => 300,
-  }
-
-  ITEM    = {
-    :sprite_name => 'item',
-    :x => 166,  
-    :y => 300,
-  }
-
-
-  SKILL   = {
-    :sprite_name => 'habilidade',
-    :x => 276,  
-    :y => 300,
-  }
-
-  EQUIP   = {
-    :sprite_name => 'equipamento',
-    :x => 370,  
-    :y => 300,
-  }
-
-  SAVE    = {
-    :sprite_name => 'salvar',
-    :x => 490,  
-    :y => 300,
-  }
-end
-
 module IMAGES_CONFIG
   BACKGROUND = {
     :background_sprite_name => 'menu_background_3'
@@ -62,10 +28,12 @@ class Window_CommandCustom < Window_Base
   #     commands : ordem dos comandos
   #--------------------------------------------------------------------------
 
-  def initialize(width)
+  def initialize(width, commands)
     super(0, 0, width, 480)
     @index        = 0
     self.opacity  = 0
+
+    @commands = commands
     
     create_background
     create_cursor
@@ -84,12 +52,7 @@ class Window_CommandCustom < Window_Base
 
   def create_options
     @options = []
-    commands =  [ OPTIONS_CONFIG::FACTION,
-                  OPTIONS_CONFIG::ITEM,
-                  OPTIONS_CONFIG::SKILL,
-                  OPTIONS_CONFIG::EQUIP,
-                  OPTIONS_CONFIG::SAVE
-                ]
+    commands =  @commands
 
     commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name]) }
 

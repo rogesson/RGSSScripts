@@ -15,18 +15,29 @@ class Window_CommandCustom < Window_Base
 
   def initialize(width, commands)
     super(0, 0, width, 480)
-    self.opacity = 0
-
+    @commands     = commands
+    @index        = 0
+    self.opacity  = 0
+    
     create_background
     create_cursor
     create_logo
-    
-    @index = 0
+    create_options
+  end
+
+  def update_command(option)
+    unselect_option
+    option == :next ? increment_index : decrement_index
+    select_option
+    update_cursor_position
+  end
+
+  private
+
+  def create_options
     @options = []
+    @commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name]) }
 
-    commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name]) }
-
-    
     select_option
     update_cursor_position
   end
@@ -47,13 +58,6 @@ class Window_CommandCustom < Window_Base
     option_sprite
   end
 
-  def update_command(option)
-    unselect_option
-    option == :next ? increment_index : decrement_index
-    select_option
-    update_cursor_position
-  end
-
   def increment_index
     if @index < @options.length - 1
       @index += 1
@@ -62,7 +66,7 @@ class Window_CommandCustom < Window_Base
     end
   end
 
-   def decrement_index
+  def decrement_index
     if @index < 1
       @index = @options.length - 1
     else

@@ -5,63 +5,13 @@
 #  * Autor: Resque
 #  * Data: 08/08/2015
 
-module GLOBAL_CONFIG
-
-  module OPTIONS_CONFIG
-    FACTION = {
-        :sprite_name => 'faccao',
-        :x => 10,  
-        :y => 300,
-    }
-
-    ITEM    = {
-      :sprite_name => 'item',
-      :x => 166,  
-      :y => 300,
-    }
-
-
-    SKILL   = {
-      :sprite_name => 'habilidade',
-      :x => 276,  
-      :y => 300,
-    }
-
-    EQUIP   = {
-      :sprite_name => 'equipamento',
-      :x => 370,  
-      :y => 300,
-    }
-
-    SAVE    = {
-      :sprite_name => 'salvar',
-      :x => 490,  
-      :y => 300,
-    }
-  end
-end
-
 class Scene_MenuCustom
   def initialize(menu_index = 0)
     @menu_index = menu_index
   end
 
   def main
-    command_item      = GLOBAL_CONFIG::OPTIONS_CONFIG::FACTION
-    command_skill     = GLOBAL_CONFIG::OPTIONS_CONFIG::ITEM
-    command_equip     = GLOBAL_CONFIG::OPTIONS_CONFIG::SKILL
-    command_status    = GLOBAL_CONFIG::OPTIONS_CONFIG::EQUIP
-    command_save_quit = GLOBAL_CONFIG::OPTIONS_CONFIG::SAVE
-
-    commands = [
-                command_item, 
-                command_skill,
-                command_equip,
-                command_status,
-                command_save_quit
-              ]
-
-    @command_window = Window_CommandCustom.new(640, commands)
+    @command_window = Window_CommandCustom.new(640)
 
     Graphics.transition
 

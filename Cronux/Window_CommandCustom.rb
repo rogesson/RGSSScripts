@@ -5,6 +5,55 @@
 #  * Autor: Resque
 #  * Data: 08/08/2015
 
+
+module OPTIONS_CONFIG
+  FACTION = {
+      :sprite_name => 'faccao',
+      :x => 10,  
+      :y => 300,
+  }
+
+  ITEM    = {
+    :sprite_name => 'item',
+    :x => 166,  
+    :y => 300,
+  }
+
+
+  SKILL   = {
+    :sprite_name => 'habilidade',
+    :x => 276,  
+    :y => 300,
+  }
+
+  EQUIP   = {
+    :sprite_name => 'equipamento',
+    :x => 370,  
+    :y => 300,
+  }
+
+  SAVE    = {
+    :sprite_name => 'salvar',
+    :x => 490,  
+    :y => 300,
+  }
+end
+
+module IMAGES_CONFIG
+  BACKGROUND = {
+    :background_sprite_name => 'menu_background_3'
+  }
+
+  LOGO = {
+    :sprite_name => 'logo',
+    :x => 120
+  }
+
+  CURSOR = {
+    :sprite_name => 'cursor'
+  }
+end
+
 class Window_CommandCustom < Window_Base
   #--------------------------------------------------------------------------
   # Inicialização dos Objetos
@@ -13,9 +62,8 @@ class Window_CommandCustom < Window_Base
   #     commands : ordem dos comandos
   #--------------------------------------------------------------------------
 
-  def initialize(width, commands)
+  def initialize(width)
     super(0, 0, width, 480)
-    @commands     = commands
     @index        = 0
     self.opacity  = 0
     
@@ -36,7 +84,14 @@ class Window_CommandCustom < Window_Base
 
   def create_options
     @options = []
-    @commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name]) }
+    commands =  [ OPTIONS_CONFIG::FACTION,
+                  OPTIONS_CONFIG::ITEM,
+                  OPTIONS_CONFIG::SKILL,
+                  OPTIONS_CONFIG::EQUIP,
+                  OPTIONS_CONFIG::SAVE
+                ]
+
+    commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name]) }
 
     select_option
     update_cursor_position
@@ -44,7 +99,7 @@ class Window_CommandCustom < Window_Base
 
   def create_background
     @background_sprite = Sprite.new
-    @background_sprite.bitmap = RPG::Cache.picture("menu_background_3")
+    @background_sprite.bitmap = RPG::Cache.picture(IMAGES_CONFIG::BACKGROUND[:background_sprite_name])
   end
 
   def add_option(x, y, picture_name)
@@ -86,7 +141,7 @@ class Window_CommandCustom < Window_Base
 
   def create_cursor
     @cursor = Sprite.new
-    @cursor.bitmap = Bitmap.new("Graphics/Pictures/cursor")
+    @cursor.bitmap = Bitmap.new("Graphics/Pictures/#{IMAGES_CONFIG::CURSOR[:sprite_name]}")
     @cursor.opacity = 180
   end
 
@@ -98,7 +153,7 @@ class Window_CommandCustom < Window_Base
 
   def create_logo
     @logo = Sprite.new
-    @logo.bitmap = Bitmap.new("Graphics/Pictures/logo")
-    @logo.x = 120
+    @logo.bitmap = Bitmap.new("Graphics/Pictures/#{IMAGES_CONFIG::LOGO[:sprite_name]}")
+    @logo.x = IMAGES_CONFIG::LOGO[:x]
   end
 end

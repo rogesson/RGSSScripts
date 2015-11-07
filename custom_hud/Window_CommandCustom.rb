@@ -19,16 +19,17 @@ class Window_CommandCustom < Window_Base
 
     create_background
     create_cursor
-    #create_logo
+    create_logo
     
     @index = 0
     @options = []
     option_x = 0
 
-    @options << new_option(20, 300, "item")
-    @options << new_option(130, 300, "habilidade")
-    @options << new_option(350, 300, "equipamento")
-    @options << new_option(480, 300, "salvar")
+    @options << new_option(10, 300, "faccao")
+    @options << new_option(166, 300, "item")
+    @options << new_option(276, 300, "habilidade")
+    @options << new_option(370, 300, "equipamento")
+    @options << new_option(490, 300, "salvar")
   
     select_option
     update_cursor_position
@@ -98,5 +99,6 @@ class Window_CommandCustom < Window_Base
   def create_logo
     @logo = Sprite.new
     @logo.bitmap = Bitmap.new("Graphics/Pictures/logo")
+    @logo.x = 120
   end
 end

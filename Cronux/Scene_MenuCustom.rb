@@ -5,27 +5,53 @@
 #  * Autor: Resque
 #  * Data: 08/08/2015
 
-module SCENE_MENU_CONFIGURATION
-  ITEM        = 'Item'
-  SKILL       = 'Habilidade'
-  EQUIP       = 'Equipamento'
-  STATUS      = 'Status'
-  SAVE_QUIT   = 'Salvar/Sair'
+module GLOBAL_CONFIG
+
+  module OPTIONS_CONFIG
+    FACTION = {
+        :sprite_name => 'faccao',
+        :x => 10,  
+        :y => 300,
+    }
+
+    ITEM    = {
+      :sprite_name => 'item',
+      :x => 166,  
+      :y => 300,
+    }
+
+
+    SKILL   = {
+      :sprite_name => 'habilidade',
+      :x => 276,  
+      :y => 300,
+    }
+
+    EQUIP   = {
+      :sprite_name => 'equipamento',
+      :x => 370,  
+      :y => 300,
+    }
+
+    SAVE    = {
+      :sprite_name => 'salvar',
+      :x => 490,  
+      :y => 300,
+    }
+  end
 end
 
-# Classe respnsável por exibir o menu.
 class Scene_MenuCustom
   def initialize(menu_index = 0)
     @menu_index = menu_index
   end
 
   def main
-    # Criar janela de comando
-    command_item      = SCENE_MENU_CONFIGURATION::ITEM
-    command_skill     = SCENE_MENU_CONFIGURATION::SKILL
-    command_equip     = SCENE_MENU_CONFIGURATION::EQUIP
-    command_status    = SCENE_MENU_CONFIGURATION::STATUS
-    command_save_quit = SCENE_MENU_CONFIGURATION::SAVE_QUIT
+    command_item      = GLOBAL_CONFIG::OPTIONS_CONFIG::FACTION
+    command_skill     = GLOBAL_CONFIG::OPTIONS_CONFIG::ITEM
+    command_equip     = GLOBAL_CONFIG::OPTIONS_CONFIG::SKILL
+    command_status    = GLOBAL_CONFIG::OPTIONS_CONFIG::EQUIP
+    command_save_quit = GLOBAL_CONFIG::OPTIONS_CONFIG::SAVE
 
     command_list = [
                     command_item, 
@@ -40,13 +66,10 @@ class Scene_MenuCustom
     Graphics.transition
 
     loop do
-      # Atualizar a tela de jogo
       Graphics.update
-      # Atualizar a entrada de informações
       Input.update
-      # Atualizar Frame
       update
-      # Abortar loop se a tela for alterada
+
       if $scene != self
         break
       end
@@ -60,7 +83,6 @@ class Scene_MenuCustom
   #--------------------------------------------------------------------------
   # Atualização do Frame
   #--------------------------------------------------------------------------
-  
   def update
     if @command_window.active
       update_command

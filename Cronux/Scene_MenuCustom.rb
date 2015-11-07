@@ -53,15 +53,15 @@ class Scene_MenuCustom
     command_status    = GLOBAL_CONFIG::OPTIONS_CONFIG::EQUIP
     command_save_quit = GLOBAL_CONFIG::OPTIONS_CONFIG::SAVE
 
-    command_list = [
-                    command_item, 
-                    command_skill,
-                    command_equip,
-                    command_status,
-                    command_save_quit
-                  ]
+    commands = [
+                command_item, 
+                command_skill,
+                command_equip,
+                command_status,
+                command_save_quit
+              ]
 
-    @command_window = Window_CommandCustom.new(640, command_list)
+    @command_window = Window_CommandCustom.new(640, commands)
 
     Graphics.transition
 

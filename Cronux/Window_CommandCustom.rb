@@ -23,14 +23,10 @@ class Window_CommandCustom < Window_Base
     
     @index = 0
     @options = []
-    option_x = 0
 
-    @options << new_option(10, 300, "faccao")
-    @options << new_option(166, 300, "item")
-    @options << new_option(276, 300, "habilidade")
-    @options << new_option(370, 300, "equipamento")
-    @options << new_option(490, 300, "salvar")
-  
+    commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name]) }
+
+    
     select_option
     update_cursor_position
   end
@@ -40,7 +36,7 @@ class Window_CommandCustom < Window_Base
     @background_sprite.bitmap = RPG::Cache.picture("menu_background_3")
   end
 
-  def new_option(x, y, picture_name)
+  def add_option(x, y, picture_name)
     option_sprite = Sprite.new
     option_sprite.bitmap = Bitmap.new("Graphics/Pictures/#{picture_name}")
 

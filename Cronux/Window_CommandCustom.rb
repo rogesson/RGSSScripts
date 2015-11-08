@@ -28,6 +28,8 @@ class Window_CommandCustom < Window_Base
   #     commands : ordem dos comandos
   #--------------------------------------------------------------------------
 
+  attr_accessor :option_name
+
   def initialize(width, commands)
     super(0, 0, width, 480)
     @index        = 0
@@ -39,6 +41,8 @@ class Window_CommandCustom < Window_Base
     create_cursor
     create_logo
     create_options
+
+    @cursor_max_opacity = true
   end
 
   def update_command(option)
@@ -48,13 +52,29 @@ class Window_CommandCustom < Window_Base
     update_cursor_position
   end
 
+  def option_name
+    @option_name[@index]
+  end
+
+  def update
+    super
+    #@cursor.opacity < 254 ?  @cursor.opacity += 6 :  @cursor.opacity -= 70
+    if @cursor_max_opacity
+      @cursor.opacity -= 5
+      @cursor_max_opacity = false if @cursor.opacity == 70
+    else
+      @cursor.opacity += 5
+      @cursor_max_opacity = true if @cursor.opacity == 255
+    end
+  end
+
   private
 
   def create_options
     @options = []
     commands =  @commands
 
-    commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name]) }
+    commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name], c[:name]) }
 
     select_option
     update_cursor_position
@@ -65,7 +85,10 @@ class Window_CommandCustom < Window_Base
     @background_sprite.bitmap = RPG::Cache.picture(IMAGES_CONFIG::BACKGROUND[:background_sprite_name])
   end
 
-  def add_option(x, y, picture_name)
+  def add_option(x, y, picture_name, name)
+    @option_name = @option_name || []
+    @option_name << name
+
     option_sprite = Sprite.new
     option_sprite.bitmap = Bitmap.new("Graphics/Pictures/#{picture_name}")
 
@@ -93,13 +116,15 @@ class Window_CommandCustom < Window_Base
   end
 
   def select_option
-    current_option = @options[@index]
     current_option.opacity = 250
   end
 
   def unselect_option
-    current_option = @options[@index]
     current_option.opacity = 170
+  end
+
+  def current_option
+    current_option = @options[@index]
   end
 
   def create_cursor
@@ -109,7 +134,6 @@ class Window_CommandCustom < Window_Base
   end
 
   def update_cursor_position
-    current_option = @options[@index]
     @cursor.x = current_option.x + (current_option.bitmap.width / 2 - 22)
     @cursor.y = current_option.y + 70
   end

@@ -8,30 +8,35 @@
 
 module OPTIONS_CONFIG
   FACTION = {
+      :name => :faction, 
       :sprite_name => 'faccao',
       :x => 10,  
       :y => 300,
   }
 
   ITEM    = {
+    :name => :item,
     :sprite_name => 'item',
     :x => 166,  
     :y => 300,
   }
 
   SKILL   = {
+    :name => :skill,
     :sprite_name => 'habilidade',
     :x => 276,  
     :y => 300,
   }
 
   EQUIP   = {
+    :name => :equip,
     :sprite_name => 'equipamento',
     :x => 370,  
     :y => 300,
   }
 
   SAVE    = {
+    :name => :save,
     :sprite_name => 'salvar',
     :x => 490,  
     :y => 300,
@@ -76,6 +81,7 @@ class Scene_MenuCustom
   # Atualização do Frame
   #--------------------------------------------------------------------------
   def update
+    @command_window.update
     if @command_window.active
       update_command
       return
@@ -95,16 +101,39 @@ class Scene_MenuCustom
       @command_window.update_command(:next)
     end
 
+    if Input.trigger?(Input::C)
+     
+      case @command_window.option_name
+      when :faction
+        play_se_ok
+      when :item
+        play_se_ok
+      when :skill
+        play_se_ok
+        #$scene = Scene_Skill.new(@status_window.index)
+      when :equip
+        play_se_ok
+        #$scene = Scene_Equip.new(@status_window.index)
+      when :save
+        play_se_ok
+        #$scene = Scene_Status.new(@status_window.index)
+      end
+      return
+    end
+
     if Input.trigger?(Input::B)
-      $scene = nil
+      play_cancel_se
+      $scene = Scene_Map.new
+      return
     end
   end
-  
-  #--------------------------------------------------------------------------
-  # Atualização do Frame (Quando o status da Janela estiver Ativo)
-  #--------------------------------------------------------------------------
-  
-  def update_status
+
+  def play_se_ok
+    $game_system.se_play($data_system.decision_se)
+  end
+
+  def play_cancel_se
+    $game_system.se_play($data_system.cancel_se)
   end
 end
 

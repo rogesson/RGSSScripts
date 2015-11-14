@@ -36,7 +36,7 @@ class Window_CommandCustom < Window_Selectable
   end
 
   def draw_item_image(y, sprite_name)
-    bitmap = RPG::Cache.icon(sprite_name)
+    bitmap = RPG::Cache.picture(sprite_name)
     self.contents.blt(5, y + 18, bitmap, Rect.new(0, 0, 24, 24))
   end
 

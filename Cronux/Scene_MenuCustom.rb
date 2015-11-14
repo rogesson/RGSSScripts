@@ -10,7 +10,7 @@ module OPTIONS_CONFIG
   ITEM = {
     :name => :item, 
     :text => 'Item',
-    :sprite_name => '021-Potion01'
+    :sprite_name => 'item_1'
   }
 
   SKILL    = {

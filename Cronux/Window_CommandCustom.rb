@@ -6,6 +6,7 @@ class Window_CommandCustom < Window_Selectable
     self.contents = Bitmap.new(width - 32, @item_max * 80)
     refresh
     self.index = 0
+    draw_title
   end
 
   def refresh
@@ -34,12 +35,12 @@ class Window_CommandCustom < Window_Selectable
 
   def draw_item_image(y, sprite_name)
     bitmap = RPG::Cache.icon(sprite_name)
-    self.contents.blt(5, y + 10, bitmap, Rect.new(0, 0, 24, 24))
+    self.contents.blt(5, y + 18, bitmap, Rect.new(0, 0, 24, 24))
   end
-end
 
-class Window_Selectable < Window_Base
   def update_cursor_rect
+    super
+
     if @index < 0
       self.cursor_rect.empty
       return
@@ -60,5 +61,9 @@ class Window_Selectable < Window_Base
     y += 74
 
     self.cursor_rect.set(x, y, cursor_width, 32)
+  end
+
+  def draw_title
+     self.contents.draw_text(34, -10, 100, 100, "♦  Menu  ♦")
   end
 end

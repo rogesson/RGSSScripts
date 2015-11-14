@@ -5,8 +5,10 @@ class Window_CommandCustom < Window_Selectable
     @commands = commands
     self.contents = Bitmap.new(width - 32, @item_max * 80)
     refresh
+    self.opacity = 150
     self.index = 0
     draw_title
+    create_background
   end
 
   def refresh
@@ -63,7 +65,14 @@ class Window_CommandCustom < Window_Selectable
     self.cursor_rect.set(x, y, cursor_width, 32)
   end
 
+  private
+
   def draw_title
      self.contents.draw_text(34, -10, 100, 100, "♦  Menu  ♦")
+  end
+
+  def create_background
+    @background_sprite = Sprite.new
+    @background_sprite.bitmap = RPG::Cache.picture("background")
   end
 end

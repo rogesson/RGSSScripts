@@ -1,146 +1,64 @@
-#  * Script RGSS para RPG Maker XP
-#  
-#  * Nome: Custom SceneMenu
-#  * Descrição: Script responsável por exibir as opções do menu.
-#  * Autor: Resque
-#  * Data: 08/08/2015
+class Window_CommandCustom < Window_Selectable
+  def initialize(commands)
+    super(20, -4, 190, 641)
+    @item_max = commands.size
+    @commands = commands
+    self.contents = Bitmap.new(width - 32, @item_max * 80)
+    refresh
+    self.index = 0
+  end
 
-module IMAGES_CONFIG
-  BACKGROUND = {
-    :background_sprite_name => 'menu_background_3'
-  }
+  def refresh
+    self.contents.clear
+    for i in 0...@item_max
+      draw_item(i, normal_color)
+    end
+  end
 
-  LOGO = {
-    :sprite_name => 'logo',
-    :x => 120
-  }
+  def draw_item(index, color)
+    y = 60 * index + 60
 
-  CURSOR = {
-    :sprite_name => 'cursor'
-  }
+    command = @commands[index]
+    
+    self.contents.font.color = color
+    rect = Rect.new(40, y, self.contents.width - 8, 60)
+    draw_item_image(y, command[:sprite_name])
+
+    self.contents.fill_rect(rect, Color.new(0, 0, 0, 0))
+    self.contents.draw_text(rect, command[:text])
+  end
+
+  def disable_item(index)
+    draw_item(index, disabled_color)
+  end
+
+  def draw_item_image(y, sprite_name)
+    bitmap = RPG::Cache.icon(sprite_name)
+    self.contents.blt(5, y + 10, bitmap, Rect.new(0, 0, 24, 24))
+  end
 end
 
-class Window_CommandCustom < Window_Base
-  #--------------------------------------------------------------------------
-  # Inicialização dos Objetos
-  #
-  #     width    : largura da janela
-  #     commands : ordem dos comandos
-  #--------------------------------------------------------------------------
-
-  attr_accessor :option_name
-
-  def initialize(width, commands)
-    super(0, 0, width, 480)
-    @index        = 0
-    self.opacity  = 0
-
-    @commands = commands
-    
-    create_background
-    create_cursor
-    create_logo
-    create_options
-
-    @cursor_max_opacity = true
-  end
-
-  def update_command(option)
-    unselect_option
-    option == :next ? increment_index : decrement_index
-    select_option
-    update_cursor_position
-  end
-
-  def option_name
-    @option_name[@index]
-  end
-
-  def update
-    super
-    #@cursor.opacity < 254 ?  @cursor.opacity += 6 :  @cursor.opacity -= 70
-    if @cursor_max_opacity
-      @cursor.opacity -= 5
-      @cursor_max_opacity = false if @cursor.opacity == 70
-    else
-      @cursor.opacity += 5
-      @cursor_max_opacity = true if @cursor.opacity == 255
+class Window_Selectable < Window_Base
+  def update_cursor_rect
+    if @index < 0
+      self.cursor_rect.empty
+      return
     end
-  end
 
-  private
-
-  def create_options
-    @options = []
-    commands =  @commands
-
-    commands.each{|c| @options << add_option(c[:x], c[:y], c[:sprite_name], c[:name]) }
-
-    select_option
-    update_cursor_position
-  end
-
-  def create_background
-    @background_sprite = Sprite.new
-    @background_sprite.bitmap = RPG::Cache.picture(IMAGES_CONFIG::BACKGROUND[:background_sprite_name])
-  end
-
-  def add_option(x, y, picture_name, name)
-    @option_name = @option_name || []
-    @option_name << name
-
-    option_sprite = Sprite.new
-    option_sprite.bitmap = Bitmap.new("Graphics/Pictures/#{picture_name}")
-
-    option_sprite.x = x
-    option_sprite.y = y
-    option_sprite.opacity = 170
-
-    option_sprite
-  end
-
-  def increment_index
-    if @index < @options.length - 1
-      @index += 1
-    else 
-      @index = 0
+    row = @index / @column_max
+    if row < self.top_row
+      self.top_row = row
     end
-  end
 
-  def decrement_index
-    if @index < 1
-      @index = @options.length - 1
-    else
-      @index -= 1
+    if row > self.top_row + (self.page_row_max - 1)
+      self.top_row = row - (self.page_row_max - 1)
     end
-  end
 
-  def select_option
-    current_option.opacity = 250
-  end
+    cursor_width = self.width / @column_max - 32
+    x = @index % @column_max * (cursor_width + 32)
+    y = @index / @column_max * 60 - self.oy
+    y += 74
 
-  def unselect_option
-    current_option.opacity = 170
-  end
-
-  def current_option
-    current_option = @options[@index]
-  end
-
-  def create_cursor
-    @cursor = Sprite.new
-    @cursor.bitmap = Bitmap.new("Graphics/Pictures/#{IMAGES_CONFIG::CURSOR[:sprite_name]}")
-    @cursor.opacity = 180
-  end
-
-  def update_cursor_position
-    @cursor.x = current_option.x + (current_option.bitmap.width / 2 - 22)
-    @cursor.y = current_option.y + 70
-  end
-
-  def create_logo
-    @logo = Sprite.new
-    @logo.bitmap = Bitmap.new("Graphics/Pictures/#{IMAGES_CONFIG::LOGO[:sprite_name]}")
-    @logo.x = IMAGES_CONFIG::LOGO[:x]
+    self.cursor_rect.set(x, y, cursor_width, 32)
   end
 end

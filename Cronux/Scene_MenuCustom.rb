@@ -7,40 +7,41 @@
 
 
 module OPTIONS_CONFIG
-  FACTION = {
-      :name => :faction, 
-      :sprite_name => 'faccao',
-      :x => 10,  
-      :y => 300,
+  ITEM = {
+    :name => :item, 
+    :text => 'Item',
+    :sprite_name => '021-Potion01'
   }
 
-  ITEM    = {
-    :name => :item,
-    :sprite_name => 'item',
-    :x => 166,  
-    :y => 300,
-  }
-
-  SKILL   = {
+  SKILL    = {
     :name => :skill,
-    :sprite_name => 'habilidade',
-    :x => 276,  
-    :y => 300,
+    :text => 'Habilidade',
+    :sprite_name => '044-Skill01'
   }
 
   EQUIP   = {
     :name => :equip,
-    :sprite_name => 'equipamento',
-    :x => 370,  
-    :y => 300,
+    :text => 'Equipamento',
+    :sprite_name => '001-Weapon01'
+  }
+
+  STATUS   = {
+    :name => :status,
+    :text => 'Status',
+    :sprite_name => '038-Item07'
   }
 
   SAVE    = {
     :name => :save,
-    :sprite_name => 'salvar',
-    :x => 490,  
-    :y => 300,
+    :text => 'Salvar',
+    :sprite_name => '037-Item06'
   }
+
+  QUIT    = {
+    :name => :quit,
+    :text => 'Sair',
+    :sprite_name => '049-Skill06'
+  } 
 end
 
 class Scene_MenuCustom
@@ -49,16 +50,23 @@ class Scene_MenuCustom
   end
 
   def main
-
     commands = [ 
-      OPTIONS_CONFIG::FACTION,
       OPTIONS_CONFIG::ITEM,
       OPTIONS_CONFIG::SKILL,
       OPTIONS_CONFIG::EQUIP,
-      OPTIONS_CONFIG::SAVE
+      OPTIONS_CONFIG::STATUS,
+      OPTIONS_CONFIG::SAVE,
+      OPTIONS_CONFIG::QUIT
     ]
+    
+  
+    @command_window = Window_CommandCustom.new(commands)
 
-    @command_window = Window_CommandCustom.new(640, commands)
+    #@status_window = Window_MenuStatus.new
+    
+    #@status_window.x = 160
+    #@status_window.y = 0
+
 
     Graphics.transition
 
@@ -81,9 +89,9 @@ class Scene_MenuCustom
   # Atualização do Frame
   #--------------------------------------------------------------------------
   def update
-    @command_window.update
     if @command_window.active
-      update_command
+      @command_window.update
+      #update_command
       return
     end
   end
@@ -108,6 +116,7 @@ class Scene_MenuCustom
         play_se_ok
       when :item
         play_se_ok
+        @command_window.disable
       when :skill
         play_se_ok
         #$scene = Scene_Skill.new(@status_window.index)
@@ -134,6 +143,9 @@ class Scene_MenuCustom
 
   def play_cancel_se
     $game_system.se_play($data_system.cancel_se)
+  end
+
+  def create_all_windows
   end
 end
 

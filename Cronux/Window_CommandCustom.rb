@@ -1,14 +1,17 @@
 class Window_CommandCustom < Window_Selectable
   def initialize(commands)
     super(20, -4, 190, 641)
+
+    Font.default_name = "Corbel"
     @item_max = commands.size
     @commands = commands
     self.contents = Bitmap.new(width - 32, @item_max * 80)
     refresh
     self.opacity = 150
     self.index = 0
-    draw_title
-    create_background
+
+    create_images
+    
   end
 
   def refresh
@@ -67,12 +70,23 @@ class Window_CommandCustom < Window_Selectable
 
   private
 
-  def draw_title
-     self.contents.draw_text(34, -10, 100, 100, "♦  Menu  ♦")
+  def create_images
+    create_eagle_icon
+    create_background
   end
 
   def create_background
     @background_sprite = Sprite.new
     @background_sprite.bitmap = RPG::Cache.picture("background")
+  end
+
+  def create_eagle_icon
+    eagle_icon_sprite = Sprite.new
+    eagle_icon_sprite.bitmap = RPG::Cache.picture("Icon_silver_eagle")
+
+    eagle_icon_sprite.x = 55
+    eagle_icon_sprite.y = -7
+    eagle_icon_sprite.z = 200
+    eagle_icon_sprite.opacity = 150
   end
 end

@@ -16,31 +16,31 @@ module OPTIONS_CONFIG
   SKILL    = {
     :name => :skill,
     :text => 'Habilidade',
-    :sprite_name => '044-Skill01'
+    :sprite_name => 'skill_1'
   }
 
   EQUIP   = {
     :name => :equip,
     :text => 'Equipamento',
-    :sprite_name => '001-Weapon01'
+    :sprite_name => 'equip_1'
   }
 
   STATUS   = {
     :name => :status,
     :text => 'Status',
-    :sprite_name => '038-Item07'
+    :sprite_name => 'status_1'
   }
 
   SAVE    = {
     :name => :save,
     :text => 'Salvar',
-    :sprite_name => '037-Item06'
+    :sprite_name => 'save_1'
   }
 
   QUIT    = {
     :name => :quit,
     :text => 'Sair',
-    :sprite_name => '049-Skill06'
+    :sprite_name => 'exit_1'
   } 
 end
 
@@ -62,12 +62,8 @@ class Scene_MenuCustom
   
     @command_window = Window_CommandCustom.new(commands)
 
-    #@status_window = Window_MenuStatus.new
+    @status_window = Window_MenuStatusCustom.new
     
-    #@status_window.x = 160
-    #@status_window.y = 0
-
-
     Graphics.transition
 
     loop do

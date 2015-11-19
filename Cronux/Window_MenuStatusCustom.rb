@@ -1,8 +1,9 @@
+
+
 class Window_MenuStatusCustom < Window_Selectable
   def initialize
-    super(250, 0, 428, 460)
+    super(250, 0, 428, 480)
     self.contents = Bitmap.new(width - 32, height - 32)
-    self.contents.font.name = $fontface
     self.contents.font.size = $fontsize
     self.opacity = 230
 
@@ -18,8 +19,24 @@ class Window_MenuStatusCustom < Window_Selectable
   def refresh
     self.contents.clear
     @item_max = $game_party.actors.size
+
+      i = 3
+      x = 0
+      y = i * 116
+      actor = $game_party.actors[i]
+      #draw_actor_graphic(actor, x - 40, y + 80)
+      draw_actor_name(actor, x, y)
+      draw_actor_class(actor, x + 144, y)
+      draw_actor_level(actor, x, y + 32)
+      draw_actor_state(actor, x + 90, y + 32)
+      draw_actor_exp(actor, x, y + 64)
+      draw_actor_hp(actor, x + 236, y + 32)
+      draw_actor_sp(actor, x + 236, y + 64)
+   
+
+
     for i in 0...$game_party.actors.size
-      return
+      return 
       x = 64
       y = i * 116
       actor = $game_party.actors[i]
@@ -47,7 +64,7 @@ class Window_MenuStatusCustom < Window_Selectable
     @arrow_left.y = 125
     @arrow_left.z = 101
 
-    @arrow_left.opacity = 90
+    @arrow_left.opacity = 50
   end
   
   def create_arrow_right
@@ -62,7 +79,7 @@ class Window_MenuStatusCustom < Window_Selectable
   end
 
   def create_character_box
-    x = 397
+    x = 393
     1.times do
       Character_InfoWindow.new(x)
       x += 135
@@ -101,7 +118,6 @@ class Character_InfoWindow < Window_Base
     background_sprite = Sprite.new
     background_sprite.bitmap = Bitmap.new("Graphics/Pictures/overlay")
     background_sprite.opacity = 200
-    #background_sprite.opacity = 50
     
     background_sprite.x = @x
     background_sprite.y = @y
@@ -117,3 +133,4 @@ class Character_InfoWindow < Window_Base
     background_sprite.z = 101
   end
 end
+

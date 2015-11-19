@@ -2,7 +2,6 @@ class Window_CommandCustom < Window_Selectable
   def initialize(commands)
     super(20, -4, 190, 641)
 
-    Font.default_name = "Corbel"
     @item_max = commands.size
     @commands = commands
     self.contents = Bitmap.new(width - 32, @item_max * 80)
@@ -88,5 +87,20 @@ class Window_CommandCustom < Window_Selectable
     eagle_icon_sprite.y = -7
     eagle_icon_sprite.z = 200
     eagle_icon_sprite.opacity = 150
+  end
+end
+
+class Window_Base < Window
+  def initialize(x, y, width, height)
+    super()
+    @windowskin_name = $game_system.windowskin_name
+    
+    self.windowskin = RPG::Cache.windowskin(@windowskin_name)
+    self.x = x
+    self.y = y
+    self.width = width
+    self.height = height
+    self.z = 100
+    Font.default_name = "Prototype"
   end
 end

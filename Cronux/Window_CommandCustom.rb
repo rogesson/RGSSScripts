@@ -10,7 +10,6 @@ class Window_CommandCustom < Window_Selectable
     self.index = 0
 
     create_images
-    
   end
 
   def refresh
@@ -18,6 +17,17 @@ class Window_CommandCustom < Window_Selectable
     for i in 0...@item_max
       draw_item(i, normal_color)
     end
+  end
+
+  def dispose
+    super
+
+    @background_sprite.dispose
+    @eagle_icon_sprite.dispose
+  end
+
+  def option_name
+    @commands[self.index][:name]
   end
 
   def draw_item(index, color)
@@ -80,13 +90,13 @@ class Window_CommandCustom < Window_Selectable
   end
 
   def create_eagle_icon
-    eagle_icon_sprite = Sprite.new
-    eagle_icon_sprite.bitmap = RPG::Cache.picture("Icon_silver_eagle")
+    @eagle_icon_sprite = Sprite.new
+    @eagle_icon_sprite.bitmap = RPG::Cache.picture("Icon_silver_eagle")
 
-    eagle_icon_sprite.x = 55
-    eagle_icon_sprite.y = -7
-    eagle_icon_sprite.z = 200
-    eagle_icon_sprite.opacity = 150
+    @eagle_icon_sprite.x = 55
+    @eagle_icon_sprite.y = -7
+    @eagle_icon_sprite.z = 101
+    @eagle_icon_sprite.opacity = 150
   end
 end
 

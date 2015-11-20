@@ -62,7 +62,7 @@ class Scene_MenuCustom
   
     @command_window = Window_CommandCustom.new(commands)
 
-    @status_window = Window_MenuStatusCustom.new
+    #@status_window = Window_MenuStatusCustom.new
     
     Graphics.transition
 
@@ -87,7 +87,12 @@ class Scene_MenuCustom
   def update
     if @command_window.active
       @command_window.update
-      #update_command
+      update_command
+      return
+    end
+
+    if @status_window.active
+      update_status
       return
     end
   end
@@ -106,18 +111,19 @@ class Scene_MenuCustom
     end
 
     if Input.trigger?(Input::C)
-     
       case @command_window.option_name
       when :faction
         play_se_ok
       when :item
         play_se_ok
-        @command_window.disable
+       # @command_window.disable
       when :skill
         play_se_ok
         #$scene = Scene_Skill.new(@status_window.index)
       when :equip
         play_se_ok
+        @command_window.active = false
+        @status_window = Window_MenuStatusCustom.new
         #$scene = Scene_Equip.new(@status_window.index)
       when :save
         play_se_ok
@@ -133,15 +139,53 @@ class Scene_MenuCustom
     end
   end
 
+  def update_status
+    # Se o botão B for pressionado
+    if Input.trigger?(Input::B)
+      # Reproduzir SE de cancelamento
+      $game_system.se_play($data_system.cancel_se)
+      # Torna a janela de comandos ativa
+      @command_window.active = true
+      @status_window.active = false
+      @status_window.index = -1
+      return
+    end
+    # Se o botão C for pressionado
+    if Input.trigger?(Input::C)
+      # Ramificação por posição do cursor na janela de comandos
+      case @command_window.index
+      when 1  # Habilidades
+        # Se o limite de ação deste Herói for de 2 ou mais
+        if $game_party.actors[@status_window.index].restriction >= 2
+          # Reproduzir SE de erro
+          $game_system.se_play($data_system.buzzer_se)
+          return
+        end
+        # Reproduzir SE de OK
+        $game_system.se_play($data_system.decision_se)
+        # Alternar para a tela de Habilidades
+        $scene = Scene_Skill.new(@status_window.index)
+      when 2  # Equipamento
+        # Reproduzir SE de OK
+        $game_system.se_play($data_system.decision_se)
+        # Alternar para a tela de Equipamento
+        $scene = Scene_Equip.new(@status_window.index)
+      when 3  # Status
+        # Reproduzir SE de OK
+        $game_system.se_play($data_system.decision_se)
+        # Alternar para a tela de Status
+        $scene = Scene_Status.new(@status_window.index)
+      end
+      return
+    end
+  end
+
   def play_se_ok
     $game_system.se_play($data_system.decision_se)
   end
 
   def play_cancel_se
     $game_system.se_play($data_system.cancel_se)
-  end
-
-  def create_all_windows
   end
 end
 

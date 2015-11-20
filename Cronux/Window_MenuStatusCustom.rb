@@ -1,5 +1,3 @@
-
-
 class Window_MenuStatusCustom < Window_Selectable
   def initialize
     super(250, 0, 428, 480)
@@ -12,43 +10,31 @@ class Window_MenuStatusCustom < Window_Selectable
     create_face_list
 
     refresh
-    self.active = false
-    self.index = -1
+    self.active = true
+    self.index  = -1
   end
 
   def refresh
     self.contents.clear
+
+    draw_actor_status
+  end
+
+  def draw_actor_status
     @item_max = $game_party.actors.size
 
-      i = 3
-      x = 0
-      y = i * 116
-      actor = $game_party.actors[i]
-      #draw_actor_graphic(actor, x - 40, y + 80)
-      draw_actor_name(actor, x, y)
-      draw_actor_class(actor, x + 144, y)
-      draw_actor_level(actor, x, y + 32)
-      draw_actor_state(actor, x + 90, y + 32)
-      draw_actor_exp(actor, x, y + 64)
-      draw_actor_hp(actor, x + 236, y + 32)
-      draw_actor_sp(actor, x + 236, y + 64)
-   
-
-
-    for i in 0...$game_party.actors.size
-      return 
-      x = 64
-      y = i * 116
-      actor = $game_party.actors[i]
-      draw_actor_graphic(actor, x - 40, y + 80)
-      draw_actor_name(actor, x, y)
-      draw_actor_class(actor, x + 144, y)
-      draw_actor_level(actor, x, y + 32)
-      draw_actor_state(actor, x + 90, y + 32)
-      draw_actor_exp(actor, x, y + 64)
-      draw_actor_hp(actor, x + 236, y + 32)
-      draw_actor_sp(actor, x + 236, y + 64)
-    end
+    i = 3
+    x = 0
+    y = i * 116
+    actor = $game_party.actors[i]
+    #draw_actor_graphic(actor, x - 40, y + 80)
+    draw_actor_name(actor, x, y)
+    draw_actor_class(actor, x + 144, y)
+    draw_actor_level(actor, x, y + 32)
+    draw_actor_state(actor, x + 90, y + 32)
+    draw_actor_exp(actor, x, y + 64)
+    draw_actor_hp(actor, x + 236, y + 32)
+    draw_actor_sp(actor, x + 236, y + 64)
   end
 
   def create_arrows

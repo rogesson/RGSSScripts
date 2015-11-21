@@ -1,9 +1,8 @@
 class Window_SelectableArrow < Window_Base
-  attr_reader   :index                    # Posição do Cursor
+  attr_reader   :index
 
   def initialize(x, y, width, height, arrow_right, arrow_left, options)
     super(x, y, width, height)
-
 
     @arrow_right = arrow_right
     @arrow_left  = arrow_left
@@ -11,7 +10,6 @@ class Window_SelectableArrow < Window_Base
     @index       = 0
 
     @arrow_max_opacity = true
-    #self.active = false
   end
 
   def index=(index)
@@ -24,6 +22,11 @@ class Window_SelectableArrow < Window_Base
 
     return unless self.active
     refresh_arrow
+    update_arrow
+  end
+
+  def arrow_index
+    @index
   end
 
   def refresh_arrow
@@ -42,19 +45,17 @@ class Window_SelectableArrow < Window_Base
   end
 
   def update_arrow
-    return unless self.active
-
     select_arrow(:right) if Input.trigger?(Input::RIGHT)
     select_arrow(:left)  if Input.trigger?(Input::LEFT)
+
   end
 
   def select_arrow(side)
     side == :right ? increment_index : decrement_index
-    print @index
   end
 
   def increment_index
-    if @increment_index < @options.length - 1
+    if @index < @options.length - 1
       @index += 1
     else 
       @index = 0

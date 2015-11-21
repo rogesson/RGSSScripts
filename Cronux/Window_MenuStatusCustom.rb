@@ -3,7 +3,9 @@ class Window_MenuStatusCustom < Window_SelectableArrow
 
     create_arrows
 
-    super(250, 0, 428, 480, @arrow_left, @arrow_right, {})
+    @actors = $game_party.actors
+    
+    super(250, 0, 428, 480, @arrow_left, @arrow_right, @actors)
     self.contents = Bitmap.new(width - 32, height - 32)
     self.contents.font.size = $fontsize
     @need_refresh = true
@@ -19,13 +21,15 @@ class Window_MenuStatusCustom < Window_SelectableArrow
 
   def update
     super
+
+    refresh
   end
 
   def refresh
-    return unless @need_refresh
+    #return unless @need_refresh
     self.contents.clear   
     draw_actor_status
-    @need_refresh = false
+    #@need_refresh = false
   end
 
   def close
@@ -45,13 +49,13 @@ class Window_MenuStatusCustom < Window_SelectableArrow
   end
 
   def draw_actor_status
-    @item_max = $game_party.actors.size
+    @item_max = @actors.size
 
     i = 3
     x = 0
     y = i * 116
     
-    actor = $game_party.actors[i]
+    actor = @actors[arrow_index]
 
     draw_actor_name(actor, x, y)
     draw_actor_class(actor, x + 144, y)

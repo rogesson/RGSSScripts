@@ -145,6 +145,7 @@ class Scene_MenuCustom
       # Torna a janela de comandos ativa
       @command_window.active = true
       @status_window.close
+      @status_window.index = -1
       return
     end
     # Se o botão C for pressionado

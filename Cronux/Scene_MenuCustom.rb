@@ -111,15 +111,15 @@ class Scene_MenuCustom
       when :skill
         play_se_ok
         @command_window.active = false
-        @status_window = Window_MenuStatusCustom.new
+        @status_window = Window_MenuStatusCustom.new(:skill)
       when :equip
         play_se_ok
         @command_window.active = false
-        @status_window = Window_MenuStatusCustom.new
+        @status_window = Window_MenuStatusCustom.new(:equip)
       when :status
         play_se_ok
         @command_window.active = false
-        @status_window = Window_MenuStatusCustom.new
+        @status_window = Window_MenuStatusCustom.new(:status)
       when :save
         play_se_ok
         $scene = Scene_Save.new
@@ -151,8 +151,10 @@ class Scene_MenuCustom
     # Se o botão C for pressionado
     if Input.trigger?(Input::C)
       # Ramificação por posição do cursor na janela de comandos
-      case @command_window.index
-      when 1  # Habilidades
+      @status_window.close
+
+      case @status_window.option_name
+      when :skill  # Habilidades
         # Se o limite de ação deste Herói for de 2 ou mais
         if $game_party.actors[@status_window.index].restriction >= 2
           # Reproduzir SE de erro
@@ -163,12 +165,12 @@ class Scene_MenuCustom
         $game_system.se_play($data_system.decision_se)
         # Alternar para a tela de Habilidades
         $scene = Scene_Skill.new(@status_window.index)
-      when 2  # Equipamento
+      when :equip  # Equipamento
         # Reproduzir SE de OK
         $game_system.se_play($data_system.decision_se)
         # Alternar para a tela de Equipamento
         $scene = Scene_Equip.new(@status_window.index)
-      when 3  # Status
+      when :status  # Status
         # Reproduzir SE de OK
         $game_system.se_play($data_system.decision_se)
         # Alternar para a tela de Status

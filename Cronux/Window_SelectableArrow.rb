@@ -47,7 +47,6 @@ class Window_SelectableArrow < Window_Base
   def update_arrow
     select_arrow(:right) if Input.trigger?(Input::RIGHT)
     select_arrow(:left)  if Input.trigger?(Input::LEFT)
-
   end
 
   def select_arrow(side)

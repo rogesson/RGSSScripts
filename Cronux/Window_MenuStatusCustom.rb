@@ -1,8 +1,11 @@
 class Window_MenuStatusCustom < Window_SelectableArrow
-  def initialize
+  
+  attr_reader :option_name
+  
+  def initialize(option_name)
 
     create_arrows
-
+    @option_name = option_name
     @actors = $game_party.actors
     
     super(250, 0, 428, 480, @arrow_left, @arrow_right, @actors)
@@ -23,7 +26,7 @@ class Window_MenuStatusCustom < Window_SelectableArrow
     super
 
     refresh
-  end
+  end 
 
   def refresh
     #return unless @need_refresh

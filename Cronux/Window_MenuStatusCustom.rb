@@ -1,17 +1,24 @@
-class Window_MenuStatusCustom < Window_Selectable
+class Window_MenuStatusCustom < Window_SelectableArrow
   def initialize
-    super(250, 0, 428, 480)
+
+    create_arrows
+
+    super(250, 0, 428, 480, @arrow_left, @arrow_right, {})
     self.contents = Bitmap.new(width - 32, height - 32)
     self.contents.font.size = $fontsize
     @need_refresh = true
 
-    create_arrows
+    
     create_character_box
     create_face_list
 
     refresh
     self.active = true
     self.index  = -1
+  end
+
+  def update
+    super
   end
 
   def refresh
@@ -23,7 +30,7 @@ class Window_MenuStatusCustom < Window_Selectable
 
   def close
     self.active = false
-    self.dispose
+    dispose
   end
 
   def dispose
@@ -68,7 +75,7 @@ class Window_MenuStatusCustom < Window_Selectable
     @arrow_left.y = 125
     @arrow_left.z = 101
 
-    @arrow_left.opacity = 60
+    @arrow_left.opacity = 190
   end
   
   def create_arrow_right
@@ -79,7 +86,7 @@ class Window_MenuStatusCustom < Window_Selectable
     @arrow_right.y = 125
     @arrow_right.z = 101
 
-    @arrow_right.opacity = 180
+    @arrow_right.opacity = 190
   end
 
   def create_character_box

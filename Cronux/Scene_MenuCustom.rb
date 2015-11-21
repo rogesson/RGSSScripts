@@ -92,6 +92,7 @@ class Scene_MenuCustom
     end
 
     if @status_window.active
+      @status_window.update
       update_status
       return
     end

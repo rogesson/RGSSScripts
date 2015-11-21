@@ -102,32 +102,29 @@ class Scene_MenuCustom
   #--------------------------------------------------------------------------
   
   def update_command
-    if Input.trigger?(Input::LEFT)
-      @command_window.update_command(:previous)
-    end
-    
-    if Input.trigger?(Input::RIGHT)
-      @command_window.update_command(:next)
-    end
-
     if Input.trigger?(Input::C)
       case @command_window.option_name
-      when :faction
-        play_se_ok
       when :item
         play_se_ok
-       # @command_window.disable
+        $scene = Scene_Item.new
       when :skill
         play_se_ok
-        #$scene = Scene_Skill.new(@status_window.index)
+        @command_window.active = false
+        @status_window = Window_MenuStatusCustom.new
       when :equip
         play_se_ok
         @command_window.active = false
         @status_window = Window_MenuStatusCustom.new
-        #$scene = Scene_Equip.new(@status_window.index)
+      when :status
+        play_se_ok
+        @command_window.active = false
+        @status_window = Window_MenuStatusCustom.new
       when :save
         play_se_ok
-        #$scene = Scene_Status.new(@status_window.index)
+        $scene = Scene_Save.new
+      when :quit
+        $game_system.se_play($data_system.decision_se)
+        $scene = Scene_End.new
       end
       return
     end
@@ -146,8 +143,7 @@ class Scene_MenuCustom
       $game_system.se_play($data_system.cancel_se)
       # Torna a janela de comandos ativa
       @command_window.active = true
-      @status_window.active = false
-      @status_window.index = -1
+      @status_window.close
       return
     end
     # Se o botão C for pressionado

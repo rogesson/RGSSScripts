@@ -3,7 +3,7 @@ class Window_MenuStatusCustom < Window_Selectable
     super(250, 0, 428, 480)
     self.contents = Bitmap.new(width - 32, height - 32)
     self.contents.font.size = $fontsize
-    self.opacity = 230
+    @need_refresh = true
 
     create_arrows
     create_character_box
@@ -15,9 +15,26 @@ class Window_MenuStatusCustom < Window_Selectable
   end
 
   def refresh
-    self.contents.clear
-
+    return unless @need_refresh
+    self.contents.clear   
     draw_actor_status
+    @need_refresh = false
+  end
+
+  def close
+    self.active = false
+    self.dispose
+  end
+
+  def dispose
+    super
+
+    @arrow_left.dispose
+    @arrow_right.dispose
+    @face.dispose
+    @face2.dispose
+    @border_image.dispose
+    @character_image.dispose
   end
 
   def draw_actor_status
@@ -26,8 +43,9 @@ class Window_MenuStatusCustom < Window_Selectable
     i = 3
     x = 0
     y = i * 116
+    
     actor = $game_party.actors[i]
-    #draw_actor_graphic(actor, x - 40, y + 80)
+
     draw_actor_name(actor, x, y)
     draw_actor_class(actor, x + 144, y)
     draw_actor_level(actor, x, y + 32)
@@ -50,73 +68,66 @@ class Window_MenuStatusCustom < Window_Selectable
     @arrow_left.y = 125
     @arrow_left.z = 101
 
-    @arrow_left.opacity = 50
+    @arrow_left.opacity = 60
   end
   
   def create_arrow_right
-    @arrow_left = Sprite.new
-    @arrow_left.bitmap = Bitmap.new("Graphics/Pictures/arrow_right")
+    @arrow_right = Sprite.new
+    @arrow_right.bitmap = Bitmap.new("Graphics/Pictures/arrow_right")
 
-    @arrow_left.x = 525
-    @arrow_left.y = 125
-    @arrow_left.z = 101
+    @arrow_right.x = 525
+    @arrow_right.y = 125
+    @arrow_right.z = 101
 
-    @arrow_left.opacity = 150
+    @arrow_right.opacity = 180
   end
 
   def create_character_box
     x = 393
     1.times do
-      Character_InfoWindow.new(x)
+      character_box(x)
       x += 135
     end
   end
 
   def create_face_list
-    face = Sprite.new
-    face.bitmap = Bitmap.new("Graphics/Pictures/face_character1")
+    @face = Sprite.new
+    @face.bitmap = Bitmap.new("Graphics/Pictures/face_character1")
 
-    face.x = 525
-    face.y = 20
-    face.z = 101
+    @face.x = 525
+    @face.y = 20
+    @face.z = 101
 
-    face2 = Sprite.new
-    face2.bitmap = Bitmap.new("Graphics/Pictures/male_head")
+    @face2 = Sprite.new
+    @face2.bitmap = Bitmap.new("Graphics/Pictures/male_head")
 
-    face2.x = 564
-    face2.y = 20
-    face2.z = 101
-  end
-end
-
-class Character_InfoWindow < Window_Base
-  def initialize(x)
-    super(x, 70, 100, 340)
-    self.opacity = 0
-    @x = x
-    @y = 17
-
-    create_overlay
-    create_background
+    @face2.x = 564
+    @face2.y = 20
+    @face2.z = 101
   end
 
-  def create_overlay
-    background_sprite = Sprite.new
-    background_sprite.bitmap = Bitmap.new("Graphics/Pictures/overlay")
-    background_sprite.opacity = 200
+  def character_box(x)
+    y = 17
+    create_border(x, y)
+    create_character_image(x, y)
+  end
+
+  def create_border(x, y)
+    @border_image = Sprite.new
+    @border_image.bitmap = Bitmap.new("Graphics/Pictures/overlay")
+    @border_image.opacity = 200
     
-    background_sprite.x = @x
-    background_sprite.y = @y
-    background_sprite.z = 102
+    @border_image.x = x
+    @border_image.y = y
+    @border_image.z = 102
   end
 
-  def create_background
-    background_sprite = Sprite.new
+  def create_character_image(x, y)
+    @character_image = Sprite.new
 
-    background_sprite.bitmap = Bitmap.new("Graphics/Pictures/character_01")
-    background_sprite.x = @x + 6
-    background_sprite.y = @y + 6
-    background_sprite.z = 101
+    @character_image.bitmap = Bitmap.new("Graphics/Pictures/character_01")
+    @character_image.x = x + 6
+    @character_image.y = y + 6
+    @character_image.z = 101
   end
 end
-

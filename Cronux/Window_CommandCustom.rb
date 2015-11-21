@@ -6,7 +6,7 @@ class Window_CommandCustom < Window_Selectable
     @commands = commands
     self.contents = Bitmap.new(width - 32, @item_max * 80)
     refresh
-    self.opacity = 150
+    #self.opacity = 150
     self.index = 0
 
     create_images
@@ -112,5 +112,6 @@ class Window_Base < Window
     self.height = height
     self.z = 100
     Font.default_name = "Prototype"
+    self.opacity = 190
   end
 end

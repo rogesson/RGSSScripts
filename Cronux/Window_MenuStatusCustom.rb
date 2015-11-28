@@ -62,9 +62,8 @@ class Window_MenuStatusCustom < Window_SelectableArrow
 
     draw_actor_name(actor, x, y)
     draw_actor_class(actor, x + 144, y)
-    draw_actor_level(actor, x, y + 32)
-    draw_actor_state(actor, x + 90, y + 32)
-    draw_actor_exp(actor, x, y + 64)
+    draw_actor_state(actor, x, y + 32)
+    draw_actor_age(actor, x, y + 64)
     draw_actor_hp(actor, x + 236, y + 32)
     draw_actor_sp(actor, x + 236, y + 64)
   end
@@ -143,5 +142,18 @@ class Window_MenuStatusCustom < Window_SelectableArrow
     @character_image.x = x + 6
     @character_image.y = y + 6
     @character_image.z = 101
+  end
+end
+
+class Window_Base
+
+  def draw_actor_age(actor, x, y)
+    self.contents.font.color = system_color
+    self.contents.draw_text(x, y, 60, 32, "Idade")
+    self.contents.font.color = normal_color
+
+    age = 12 #actor.level.to_s
+    age = "#{age} Anos"
+    self.contents.draw_text(x + 10, y, 100, 32, age.to_s, 2)
   end
 end

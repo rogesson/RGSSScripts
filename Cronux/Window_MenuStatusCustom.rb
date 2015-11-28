@@ -76,7 +76,7 @@ class Window_MenuStatusCustom < Window_SelectableArrow
 
   def create_arrow_left
     @arrow_left = Sprite.new
-    @arrow_left.bitmap = Bitmap.new("Graphics/Pictures/arrow_left")
+    @arrow_left.bitmap = RPG::Cache.picture("arrow_left")
 
     @arrow_left.x = 270 
     @arrow_left.y = 125
@@ -87,7 +87,7 @@ class Window_MenuStatusCustom < Window_SelectableArrow
   
   def create_arrow_right
     @arrow_right = Sprite.new
-    @arrow_right.bitmap = Bitmap.new("Graphics/Pictures/arrow_right")
+    @arrow_right.bitmap = RPG::Cache.picture("arrow_right")
 
     @arrow_right.x = 525
     @arrow_right.y = 125
@@ -106,14 +106,14 @@ class Window_MenuStatusCustom < Window_SelectableArrow
 
   def create_face_list
     @face = Sprite.new
-    @face.bitmap = Bitmap.new("Graphics/Pictures/face_character1")
+    @face.bitmap = RPG::Cache.picture("face_character1")
 
     @face.x = 525
     @face.y = 20
     @face.z = 101
 
     @face2 = Sprite.new
-    @face2.bitmap = Bitmap.new("Graphics/Pictures/male_head")
+    @face2.bitmap = RPG::Cache.picture("male_head")
 
     @face2.x = 564
     @face2.y = 20
@@ -128,7 +128,7 @@ class Window_MenuStatusCustom < Window_SelectableArrow
 
   def create_border(x, y)
     @border_image = Sprite.new
-    @border_image.bitmap = Bitmap.new("Graphics/Pictures/overlay")
+    @border_image.bitmap = RPG::Cache.picture("overlay")
     @border_image.opacity = 200
     
     @border_image.x = x
@@ -139,7 +139,7 @@ class Window_MenuStatusCustom < Window_SelectableArrow
   def create_character_image(x, y)
     @character_image = Sprite.new
 
-    @character_image.bitmap = Bitmap.new("Graphics/Pictures/character_01")
+    @character_image.bitmap = RPG::Cache.picture("character_01")
     @character_image.x = x + 6
     @character_image.y = y + 6
     @character_image.z = 101

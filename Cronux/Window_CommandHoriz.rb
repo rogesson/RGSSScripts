@@ -94,7 +94,7 @@ class Window_CommandHoriz < Window_Base
     @option_name << name
 
     option_sprite = Sprite.new
-    option_sprite.bitmap = Bitmap.new("Graphics/Pictures/#{picture_name}")
+    option_sprite.bitmap = RPG::Cache.picture("#{picture_name}")
 
     option_sprite.x = x
     option_sprite.y = y
@@ -133,7 +133,7 @@ class Window_CommandHoriz < Window_Base
 
   def create_cursor
     @cursor = Sprite.new
-    @cursor.bitmap = Bitmap.new("Graphics/Pictures/#{IMAGES_CONFIG::CURSOR[:sprite_name]}")
+    @cursor.bitmap = RPG::Cache.picture("#{IMAGES_CONFIG::CURSOR[:sprite_name]}")
     @cursor.opacity = 180
   end
 
@@ -144,7 +144,7 @@ class Window_CommandHoriz < Window_Base
 
   def create_logo
     @logo = Sprite.new
-    @logo.bitmap = Bitmap.new("Graphics/Pictures/#{IMAGES_CONFIG::LOGO[:sprite_name]}")
+    @logo.bitmap = RPG::Cache.picture("#{IMAGES_CONFIG::LOGO[:sprite_name]}")
     @logo.x = IMAGES_CONFIG::LOGO[:x]
     @logo.opacity = 90
   end

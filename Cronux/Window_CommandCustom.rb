@@ -33,6 +33,8 @@ class Window_CommandCustom < Window_Selectable
     @commands[self.index][:name]
   end
 
+
+
   def draw_item(index, color)
     y = OPTION_HEIGHT * index + 60
 
@@ -100,21 +102,5 @@ class Window_CommandCustom < Window_Selectable
     @eagle_icon_sprite.y = -7
     @eagle_icon_sprite.z = 101
     @eagle_icon_sprite.opacity = 150
-  end
-end
-
-class Window_Base < Window
-  def initialize(x, y, width, height)
-    super()
-    @windowskin_name = $game_system.windowskin_name
-    
-    self.windowskin = RPG::Cache.windowskin(@windowskin_name)
-    self.x = x
-    self.y = y
-    self.width = width
-    self.height = height
-    self.z = 100
-    Font.default_name = "Prototype"
-    self.opacity = 190
   end
 end

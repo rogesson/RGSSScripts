@@ -154,7 +154,7 @@ class Scene_Save < Scene_File
       return
     end
     # Mudar para a tela do Menu
-    $scene = Scene_MenuCustom.new(4)
+    $scene = Scene_MenuCustom.new(7)
   end
 
   def on_cancel
@@ -169,7 +169,7 @@ class Scene_Save < Scene_File
       return
     end
     # Mudar para a tela do Menu
-    $scene = Scene_MenuCustom.new(4)
+    $scene = Scene_MenuCustom.new(7)
   end
 end
 
@@ -295,7 +295,7 @@ class Scene_End
     # Reproduzir SE de OK
     $game_system.se_play($data_system.decision_se)
     # Alternar para a tela do Menu
-    $scene = Scene_MenuCustom.new(5)
+    $scene = Scene_MenuCustom.new(8)
   end
 
   def update
@@ -306,7 +306,7 @@ class Scene_End
       # Reproduzir SE de cancelamento
       $game_system.se_play($data_system.cancel_se)
       # Alternar para a tela de Menu
-      $scene = Scene_MenuCustom.new(5)
+      $scene = Scene_MenuCustom.new(8)
       return
     end
     # Se o botão C for pressionado
@@ -338,6 +338,5 @@ class Window_Base < Window
     self.z = 100
     Font.default_name = "Prototype"
     self.opacity = 190
-    #self.back_opacity = 160
   end
 end

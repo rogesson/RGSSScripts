@@ -1,0 +1,24 @@
+class Scene_Map
+  def go_to_next_portal
+    
+    $game_map.search_limiter = 5000
+
+    find_next_portal
+    x = @next_portal["x"]
+    y = @next_portal["y"]
+    #@win = Window_Base.new(0, 0, 640, 40)
+
+    success = Proc.new { @win.dispose }
+    error   = Proc.new { @win.dispose }
+
+    Pathfind.new(Node.new(x, y), -1)
+  end
+
+  def find_next_portal
+    $game_map.events.values.each do |event|
+      event.list.first.parameters.each do |param|
+        @next_portal = { "x" => event.x, "y" => event.y } if param == "<portal>"
+      end
+    end
+  end
+end

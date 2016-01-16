@@ -1,4 +1,5 @@
 module QUEST
+  # TODO, read from file.
   def self.list
     [
       {
@@ -16,7 +17,7 @@ module QUEST
         "completed"   => false
       }
     ]
-  end 
+  end
 end
 
 class Scene_Quest
@@ -52,7 +53,9 @@ class Scene_Quest
   end
 
   def quests
-    QUEST::list
+    QUEST::list.collect do |quest|
+      Quest.new(quest["name"], quest["description"], quest["type"])
+    end
   end
 
   def create_windows
@@ -89,7 +92,7 @@ class Scene_Quest
   end
 
   def on_select_quest
-    @window_quest_info.draw_information("O inicio de um novo mundo.")
+    @window_quest_info.draw_information(@window_quest_list.quest_info)
 
     @window_quest_list.active = false
   end

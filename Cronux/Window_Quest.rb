@@ -8,6 +8,6 @@ class Window_Quest < Window_Base
   end
 
   def draw_title
-    self.contents.draw_text(32, 0, 212, 32, 'Missoes')
+    self.contents.draw_text(32, 0, 212, 32, 'Missões')
   end
 end

@@ -2,7 +2,6 @@ class Window_Quest_List < Window_Selectable
   def initialize(quests)
     super(20, 60, 350, 410)
 
-    @window_quest_info = Window_Quest_Info.new
     @quests       = quests
     @item_max     = quests.size
     self.contents = Bitmap.new(width - 32, row_max * 32)
@@ -14,6 +13,7 @@ class Window_Quest_List < Window_Selectable
 
   def refresh
     self.contents.clear
+    
     @quests.each_with_index do |quest, index|
       draw_quest(quest, index)
     end
@@ -30,7 +30,7 @@ class Window_Quest_List < Window_Selectable
     opacity = self.contents.font.color == normal_color ? 255 : 128
     
     #self.contents.blt(x, y + 4, bitmap, Rect.new(0, 0, 24, 24), opacity)
-    self.contents.draw_text(x + 28, y, 212, 32, quest["name"], 0)
+    self.contents.draw_text(x + 28, y, 212, 32, quest.name, 0)
     #self.contents.draw_text(x + 240, y, 88, 32, "bla", 2)
   end
 
@@ -57,5 +57,9 @@ class Window_Quest_List < Window_Selectable
 
 
     self.cursor_rect.set(x, y, cursor_width, 32)
+  end
+
+  def quest_info
+    @quests[self.index].description
   end
 end

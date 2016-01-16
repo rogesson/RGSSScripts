@@ -143,6 +143,9 @@ class Scene_MenuCustom
         play_se_ok
         @command_window.active = false
         @status_window = Window_MenuStatusCustom.new(:status)
+      when :quest
+        play_se_ok
+        $scene = Scene_Quest.new
       when :save
         play_se_ok
         $scene = Scene_Save.new

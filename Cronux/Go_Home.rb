@@ -16,21 +16,12 @@
 
     Adicione o comentário "<portal>" no evento de saída que o herói deve chegar (porta ou portal).
     
-    Existem três motivos para o herói voltar para casa:
-      * Sono  = :sleep
-      * Fome  = :hunger
-      * Danos = :damage
-
-    Chame o script: go_home(motivo)
-
-    Ex: go_home(:sleep)
-        go_home(:hunger)
-        go_home(:damage)
+   
+    Chame o script: go_home
 =end
 
 class Interpreter
-  def go_home(reason)
-    @reason = reason
+  def go_home
     find_next_portal
   end
 
@@ -44,12 +35,7 @@ class Interpreter
       end
     end
 
-    create_sleep_window
     go_to_next_portal
-  end
-
-  def create_sleep_window
-    @sleep_window = Sleep_Window.new(@reason)
   end
 
   def go_to_next_portal
@@ -58,51 +44,9 @@ class Interpreter
     y = @next_portal["y"]
 
     range   = 0
-    success = Proc.new { @sleep_window.dispose }
-    fail    = Proc.new { print 'Rota nao encontrada' }
+    success = Proc.new { nil }
+    fail    = Proc.new { nil }
 
     pathfind(x, y, -1, range, success, fail)
   end 
-end
-
-class Sleep_Window < Window_Base
-  def initialize(reason)
-    @reason = reason
-
-    width  = 320
-    height = 105 
-    x = 320
-    y = 240
-
-    x = x - width / 2
-    y = y - height / 2
-
-    super(x, y, width, height)
-
-    self.contents = Bitmap.new(width - 32, height - 32)
-    setup
-  end
-
-  def setup
-    find_reason
-    show_message
-  end
-
-  def find_reason
-    case @reason
-    when :sleep
-      @message = "Estou com muito sono ZzZzZ"
-    when :hunger
-      @message = "Estou com muita fome."
-    when :die
-      @message = "Estou muito ferido"
-    else
-      @message = ""
-    end
-  end
-
-  def show_message
-    self.contents.draw_text(4, 0, 406, 40, "Preciso ir para casa agora!")
-    self.contents.draw_text(4, 32, 400, 40, @message)
-  end
 end

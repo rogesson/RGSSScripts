@@ -59,7 +59,7 @@ class Window_Quest_List < Window_Selectable
     self.cursor_rect.set(x, y, cursor_width, 32)
   end
 
-  def quest_info
-    @quests[self.index].description
+  def current_quest
+    description = @quests[self.index]
   end
 end

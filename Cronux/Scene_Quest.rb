@@ -23,7 +23,6 @@ end
 class Scene_Quest
   def main
     create_windows
-    
     setup
 
     Graphics.transition
@@ -43,13 +42,25 @@ class Scene_Quest
     dispose_windows
   end
 
-  def setup
-    @window_quest_list.active
-  end
-
   def update
     update_windows
     listen_event
+  end
+
+  private
+
+  def setup
+    set_current_window(@window_quest_list)
+  end
+
+  #TODO, change it to the Scene_Base
+  def set_current_window(new_window)
+    # Deactive old window
+    @current_window.active = false if @current_window
+    
+    # Set new window and active it.
+    @current_window = new_window
+    @current_window.active = true
   end
 
   def quests
@@ -77,8 +88,26 @@ class Scene_Quest
   end
 
   def listen_event
-    on_return       if Input.trigger?(Input::B)
-    on_select_quest if Input.trigger?(Input::C)
+    on_cancel   if Input.trigger?(Input::B)
+    on_confirm  if Input.trigger?(Input::C)
+  end
+
+  def on_cancel
+    case @current_window      
+    when Window_Quest_List
+      quit
+    when Window_Quest_Info
+      set_current_window(@window_quest_list)
+    end
+  end
+
+  def on_confirm
+    case @current_window
+    when Window_Quest_List
+      select_quest
+    when Window_Quest_Info
+      print 'Quest options'
+    end
   end
 
   def on_return
@@ -91,9 +120,15 @@ class Scene_Quest
     end
   end
 
-  def on_select_quest
-    @window_quest_info.draw_information(@window_quest_list.quest_info)
+  def select_quest
+    set_current_window(@window_quest_info)
+    
+    @window_quest_info.quest = @window_quest_list.current_quest
+    @window_quest_info.draw_informations
+  end
 
-    @window_quest_list.active = false
+  def quit
+    $game_system.se_play($data_system.cancel_se)
+    $scene = Scene_MenuCustom.new(5)
   end
 end

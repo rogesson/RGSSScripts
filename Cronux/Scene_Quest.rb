@@ -7,14 +7,22 @@ module QUEST
         "description" => "Falar com o capitão para saber qual será o próximo passo.",
         "new"         => true,
         "type"        => "primária",
-        "completed"   => false
+        "completed"   => false,
+        "rewards"     => [
+                          { "name" => "Chave da Porta", "amount" => 1}
+                         ]
       },
       {
         "name"        => "Movendo os soldados",
         "description" => "Reunir todo batalhão para iniciar a caçada.",
         "new"         => true,
         "type"        => "primária",
-        "completed"   => false
+        "completed"   => false,
+        "rewards"     => [
+                          { "name" => "Semente da Vida", "amount" => 1},
+                          { "name" => "Pedra Inscrita", "amount" => 2}
+                         ]
+        
       }
     ]
   end
@@ -65,7 +73,7 @@ class Scene_Quest
 
   def quests
     QUEST::list.collect do |quest|
-      Quest.new(quest["name"], quest["description"], quest["type"])
+      Quest.new(quest["name"], quest["description"], quest["type"], quest["rewards"])
     end
   end
 

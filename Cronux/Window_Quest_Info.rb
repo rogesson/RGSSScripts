@@ -35,14 +35,8 @@ class Window_Quest_Info < Window_Base
     height_index = 120
 
     @quest.rewards.each do |reward|
-      item = nil
-      $data_items.each do |data_item|
-
-        next if data_item.nil?
-        
-        item = data_item if data_item.name == reward["name"]
-      end
-
+      item = $data_items.compact.find { |data_item|  data_item.name == reward["name"]}
+     
       bitmap = RPG::Cache.icon(item.icon_name)
       self.contents.blt(0, height_index, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
       self.contents.draw_text(40, height_index, 212, 32, "#{item.name} x1", 0)

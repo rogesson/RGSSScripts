@@ -339,6 +339,10 @@ class Window_Base < Window
     Font.default_name = "Prototype"
     self.opacity = 190
   end
+
+  def execute
+    $scene.set_current_window(self)
+  end
 end
 
 class String

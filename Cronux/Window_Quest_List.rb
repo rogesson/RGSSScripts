@@ -19,6 +19,16 @@ class Window_Quest_List < Window_Selectable
     end
   end
 
+  def confirm
+    $scene.window_quest_info.quest = current_quest
+    $scene.window_quest_info.execute
+  end
+
+  def cancel
+    $game_system.se_play($data_system.cancel_se)
+    $scene = Scene_MenuCustom.new(5)
+  end
+
   def draw_quest(quest, index)
     x = 4
     y = index * 32

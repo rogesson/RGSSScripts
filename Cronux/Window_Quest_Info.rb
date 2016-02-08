@@ -1,6 +1,6 @@
 
 
-class Window_Quest_Info < Window_Base
+class Window_Quest_Info < Window_Selectable
   attr_accessor :quest
 
   def initialize
@@ -8,23 +8,34 @@ class Window_Quest_Info < Window_Base
 
     self.contents = Bitmap.new(width - 32, height - 32)
     self.active = false
-
-    @need_update = false
   end
 
-  def update
+  def execute
     super
-
-    self.contents.clear unless self.active
+    refresh
   end
 
-  def draw_informations
-    self.active = true
-    draw_description
-    draw_reward
+  def refresh
+    self.contents.clear
+    draw_content
+  end
+
+  def confirm
+    print "confirm"
+  end
+
+  # TODO, create go_back method.
+  def cancel
+    self.contents.clear
+    $scene.set_current_window($scene.window_quest_list)
   end
 
   private
+
+  def draw_content
+    draw_description
+    draw_reward
+  end
 
   def draw_description
     description = @quest.description.multiline(27)

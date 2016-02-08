@@ -1,3 +1,5 @@
+
+
 class Window_Quest_Info < Window_Base
   attr_accessor :quest
 
@@ -25,7 +27,7 @@ class Window_Quest_Info < Window_Base
   private
 
   def draw_description
-    description = multiline(@quest.description, 25)
+    description = @quest.description.multiline(27)
     index_height = 0
 
     description.split("|").each do |desc|
@@ -47,26 +49,5 @@ class Window_Quest_Info < Window_Base
 
       height_index += 30
     end
-  end
-
-  def multiline(text, line_width)
-    words = text.split(" ")
-    line = ''
-    lines = []
-    new_line = true
-
-    for word in words
-      if line.size + word.size < line_width
-        line << "#{word} "
-      else
-        new_line = true
-        line = "|#{word} "
-      end
-
-      lines << line if new_line
-      new_line = false
-    end
-
-    lines.join
   end
 end

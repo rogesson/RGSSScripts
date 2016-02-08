@@ -340,3 +340,26 @@ class Window_Base < Window
     self.opacity = 190
   end
 end
+
+class String
+  def multiline(line_limit)
+    words = self.split(" ")
+    line = ''
+    lines = []
+    new_line = true
+
+    for word in words
+      if line.size + word.size < line_limit
+        line << "#{word} "
+      else
+        new_line = true
+        line = "|#{word} "
+      end
+
+      lines << line if new_line
+      new_line = false
+    end
+
+    lines.join
+  end
+end

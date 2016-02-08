@@ -23,15 +23,20 @@ class Window_Quest_Info < Window_Base
   end
 
   private
-  
+
   def draw_description
-    description = word_wrap(@quest.description, 10)
-    self.contents.draw_text(0, 0, 212, 32, description, 0)
+    description = multiline(@quest.description, 25)
+    index_height = 0
+
+    description.split("|").each do |desc|
+      self.contents.draw_text(0, index_height, 212, 32, desc, 0)
+      index_height += 20
+    end
   end
 
   def draw_reward
-    self.contents.draw_text(0, 80, 212, 32, "Recompensas:")
-    height_index = 120
+    self.contents.draw_text(0, 160, 212, 32, "Recompensas:")
+    height_index = 200
 
     @quest.rewards.each do |reward|
       item = $data_items.compact.find { |data_item|  data_item.name == reward["name"] }
@@ -42,5 +47,26 @@ class Window_Quest_Info < Window_Base
 
       height_index += 30
     end
+  end
+
+  def multiline(text, line_width)
+    words = text.split(" ")
+    line = ''
+    lines = []
+    new_line = true
+
+    for word in words
+      if line.size + word.size < line_width
+        line << "#{word} "
+      else
+        new_line = true
+        line = "|#{word} "
+      end
+
+      lines << line if new_line
+      new_line = false
+    end
+
+    lines.join
   end
 end

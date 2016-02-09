@@ -8,15 +8,16 @@ class Window_Quest_Info < Window_Selectable
 
     self.contents = Bitmap.new(width - 32, height - 32)
     self.active = false
+
+    self.index = -1
+    @column_max = 1
+    @item_max = 2
   end
 
   def execute
     super
-    refresh
-  end
 
-  def refresh
-    self.contents.clear
+    self.index = 0
     draw_content
   end
 
@@ -28,6 +29,7 @@ class Window_Quest_Info < Window_Selectable
   def cancel
     self.contents.clear
     $scene.set_current_window($scene.window_quest_list)
+    self.index = -1
   end
 
   private
@@ -35,6 +37,7 @@ class Window_Quest_Info < Window_Selectable
   def draw_content
     draw_description
     draw_reward
+    draw_options
   end
 
   def draw_description
@@ -60,5 +63,36 @@ class Window_Quest_Info < Window_Selectable
 
       height_index += 30
     end
+  end
+
+  def update_cursor_rect
+    super
+
+    if @index < 0
+      self.cursor_rect.empty
+      return
+    end
+
+    row = @index / @column_max
+    if row < self.top_row
+      self.top_row = row
+    end
+
+    if row > self.top_row + (self.page_row_max - 1)
+      self.top_row = row - (self.page_row_max - 1)
+    end
+
+    cursor_width = self.width / @column_max - 32
+    x = @index % @column_max * (cursor_width + 32)
+    y = @index / @column_max * 32 - self.oy
+
+    self.cursor_rect.set(x, y + 300, cursor_width, 32)
+  end
+
+  def draw_options
+    x = 4
+    y = 300
+    self.contents.draw_text(x + 28, y, 212, 32, "Iniciar", 0)
+    self.contents.draw_text(x + 28, y + 30, 212, 32, "Voltar", 0)
   end
 end

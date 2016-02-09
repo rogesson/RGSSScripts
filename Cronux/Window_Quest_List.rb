@@ -6,13 +6,12 @@ class Window_Quest_List < Window_Selectable
     @item_max     = quests.size
     self.contents = Bitmap.new(width - 32, row_max * 32)
 
-    refresh
     self.index = 0
     @column_max = 1
   end
 
-  def refresh
-    self.contents.clear
+  def execute
+    super
     
     @quests.each_with_index do |quest, index|
       draw_quest(quest, index)

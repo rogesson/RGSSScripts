@@ -55,15 +55,19 @@ class Scene_Quest < Scene_Base
   end
 
   def quests
-    QUEST_INFO::list.collect do |quest|
-      Quest.new(
-                quest["name"],
-                quest["description"],
-                quest["new_quest"],
-                quest["type"],
-                quest["completed"],
-                quest["rewards"]
-              )
-    end
+    @quest_list ||= create_quests
+  end
+
+  def create_quests
+    @quest_list = QUEST_INFO::list.collect do |quest|
+                Quest.new(
+                          quest["name"],
+                          quest["description"],
+                          quest["new_quest"],
+                          quest["type"],
+                          quest["completed"],
+                          quest["rewards"]
+                        )
+              end
   end
 end

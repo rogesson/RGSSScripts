@@ -24,7 +24,10 @@ class Window_Quest_Info < Window_Selectable
   def confirm
     #quest_index = $scene.window_quest_list.index
     @quest.start_quest
-    force_upate
+    
+    force_update do
+      draw_content
+    end
   end
 
   # TODO, create go_back method.
@@ -42,10 +45,6 @@ class Window_Quest_Info < Window_Selectable
     draw_options
   end
 
-  def force_upate
-    contents.clear
-    draw_content
-  end
 
   def draw_description
     description = @quest.description.multiline(30)
@@ -99,11 +98,23 @@ class Window_Quest_Info < Window_Selectable
   def draw_options
     x = 4
     y = 300
-
+    
     if @quest.new_quest
-      self.contents.draw_text(x, y, 212, 32, "Aceitar Missão", 0)
+      draw_accept_quest_buttom(x, y)
     else
-      self.contents.draw_text(x, y, 212, 32, "Concluir Missão", 0)
+      draw_finish_quest_buttom(x, y)
     end
+
+    contents.font.color = normal_color
+  end
+
+  def draw_accept_quest_buttom(x, y)
+    contents.font.color = normal_color
+    contents.draw_text(x, y, 212, 32, "Aceitar Missão", 0)
+  end
+
+  def draw_finish_quest_buttom(x, y)
+    contents.font.color = disabled_color
+    contents.draw_text(x, y, 212, 32, "Concluir Missão", 0)
   end
 end

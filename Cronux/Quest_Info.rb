@@ -5,7 +5,7 @@ module QUEST_INFO
       {
         "name"        => "Ajustes iniciais",
         "description" => "Falar com o capitão para saber qual será o próximo passo.",
-        "new"         => true,
+        "new_quest"   => true,
         "type"        => "primária",
         "completed"   => false,
         "rewards"     => [
@@ -15,7 +15,7 @@ module QUEST_INFO
       {
         "name"        => "Movendo os soldados",
         "description" => "Reunir todo batalhão para iniciar a caçada.",
-        "new"         => true,
+        "new_quest"   => true,
         "type"        => "primária",
         "completed"   => false,
         "rewards"     => [

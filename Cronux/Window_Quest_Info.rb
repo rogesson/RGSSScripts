@@ -11,7 +11,7 @@ class Window_Quest_Info < Window_Selectable
 
     self.index = -1
     @column_max = 1
-    @item_max = 2
+    @item_max = 1
   end
 
   def execute
@@ -22,7 +22,9 @@ class Window_Quest_Info < Window_Selectable
   end
 
   def confirm
-    print "confirm"
+    #quest_index = $scene.window_quest_list.index
+    @quest.start_quest
+    force_upate
   end
 
   # TODO, create go_back method.
@@ -40,8 +42,13 @@ class Window_Quest_Info < Window_Selectable
     draw_options
   end
 
+  def force_upate
+    contents.clear
+    draw_content
+  end
+
   def draw_description
-    description = @quest.description.multiline(27)
+    description = @quest.description.multiline(30)
     index_height = 0
 
     description.split("|").each do |desc|
@@ -92,7 +99,11 @@ class Window_Quest_Info < Window_Selectable
   def draw_options
     x = 4
     y = 300
-    self.contents.draw_text(x + 28, y, 212, 32, "Iniciar", 0)
-    self.contents.draw_text(x + 28, y + 30, 212, 32, "Voltar", 0)
+
+    if @quest.new_quest
+      self.contents.draw_text(x, y, 212, 32, "Aceitar Missão", 0)
+    else
+      self.contents.draw_text(x, y, 212, 32, "Concluir Missão", 0)
+    end
   end
 end

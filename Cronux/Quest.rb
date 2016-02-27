@@ -1,10 +1,17 @@
 class Quest
-  attr_reader :name, :description, :type, :rewards
+  attr_reader :name, :description, :type, :completed, :rewards
+  attr_accessor :new_quest
   
-  def initialize(name, description, type, rewards)
-    @name        = name
+  def initialize(name, description, new_quest, type, completed, rewards)
+    @name = name
     @description = description
-    @type        = type
-    @rewards     = rewards
+    @new_quest = new_quest
+    @type = type
+    @completed = completed
+    @rewards = rewards
+  end
+
+  def start_quest
+    self.new_quest = false
   end
 end

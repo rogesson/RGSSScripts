@@ -21,10 +21,9 @@ class Window_Quest_Info < Window_Selectable
 
   def confirm
     @quest.start_quest
+    contents.clear
     
-    force_update do
-      draw_content
-    end
+    draw_content
   end
 
   # TODO, create go_back method.

@@ -404,12 +404,6 @@ class Window_Base < Window
   def execute
     $scene.set_current_window(self)
   end
-
-  def force_update
-    contents.clear
-
-    yield
-  end
 end
 
 class String

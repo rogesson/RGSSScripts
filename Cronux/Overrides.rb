@@ -171,6 +171,67 @@ class Scene_Save < Scene_File
     # Mudar para a tela do Menu
     $scene = Scene_MenuCustom.new(7)
   end
+
+  def write_save_data(file)
+    # Criar desenho dos Heróis para salvar
+    characters = []
+    for i in 0...$game_party.actors.size
+      actor = $game_party.actors[i]
+      characters.push([actor.character_name, actor.character_hue])
+    end
+    # Gravar desenho dos Heróis para salvar
+    Marshal.dump(characters, file)
+    # Gravar contador de Tempo de Jogo
+    Marshal.dump(Graphics.frame_count, file)
+    # Acrescentar 1 em contador de saves
+    $game_system.save_count += 1
+    # Salvar número da Magia
+    # Um número aleatório será selecionado cada vez que você salvar
+    $game_system.magic_number = $data_system.magic_number
+    # Gravar cada tipo de objeto do jogo
+    Marshal.dump($game_system, file)
+    Marshal.dump($game_switches, file)
+    Marshal.dump($game_variables, file)
+    Marshal.dump($game_self_switches, file)
+    Marshal.dump($game_screen, file)
+    Marshal.dump($game_actors, file)
+    Marshal.dump($game_party, file)
+    Marshal.dump($game_troop, file)
+    Marshal.dump($game_map, file)
+    Marshal.dump($game_player, file)
+    Marshal.dump($game_quests, file)
+  end
+end
+
+
+class Scene_Load < Scene_File
+  def read_save_data(file)
+    # Ler dados dos Heróis para desenhar o arquivo de save
+    characters = Marshal.load(file)
+    # Ler o contador de Frames para obter o tempo de jogo
+    Graphics.frame_count = Marshal.load(file)
+    # Ler cada tipo de objeto do jogo
+    $game_system        = Marshal.load(file)
+    $game_switches      = Marshal.load(file)
+    $game_variables     = Marshal.load(file)
+    $game_self_switches = Marshal.load(file)
+    $game_screen        = Marshal.load(file)
+    $game_actors        = Marshal.load(file)
+    $game_party         = Marshal.load(file)
+    $game_troop         = Marshal.load(file)
+    $game_map           = Marshal.load(file)
+    $game_player        = Marshal.load(file)
+    $game_quests        = Marshal.load(file)
+    # Se o número mágico for diferente ao de quando foi salvo
+    # (Se uma edição foi adicionada por um editor)
+    if $game_system.magic_number != $data_system.magic_number
+      # Carregar mapa
+      $game_map.setup($game_map.map_id)
+      $game_player.center($game_player.x, $game_player.y)
+    end
+    # Atualizar membros do grupo
+    $game_party.refresh
+  end
 end
 
 class Scene_Item
@@ -353,7 +414,7 @@ end
 
 class String
   def multiline(line_limit)
-    words = self.split(" ")
+    words = self.split(' ')
     line = ''
     lines = []
     new_line = true
@@ -371,5 +432,57 @@ class String
     end
 
     lines.join
+  end
+end
+
+class Scene_Title
+  def command_new_game
+    # Reproduzir SE de OK
+    $game_system.se_play($data_system.decision_se)
+    # Parar BGM
+    Audio.bgm_stop
+    # Aqui o contador de frames é resetado para que se conte o Tempo de Jogo
+    Graphics.frame_count = 0
+    # Criar cada tipo de objetos do jogo
+    $game_temp          = Game_Temp.new
+    $game_system        = Game_System.new
+    $game_switches      = Game_Switches.new
+    $game_variables     = Game_Variables.new
+    $game_self_switches = Game_SelfSwitches.new
+    $game_screen        = Game_Screen.new
+    $game_actors        = Game_Actors.new
+    $game_party         = Game_Party.new
+    $game_troop         = Game_Troop.new
+    $game_map           = Game_Map.new
+    $game_player        = Game_Player.new
+    $game_quests        = quests_list
+    # Configurar Grupo Inicial
+    $game_party.setup_starting_members
+    # Configurar posição inicial no mapa
+    $game_map.setup($data_system.start_map_id)
+    # Aqui o Jogador é movido até a posição inical configurada
+    $game_player.moveto($data_system.start_x, $data_system.start_y)
+    # Atualizar Jogador
+    $game_player.refresh
+    # Rodar, de acordo com o mapa, a BGM e a BGS
+    $game_map.autoplay
+    # Atualizar mapa (executar processos paralelos)
+    $game_map.update
+    # Mudar para a tela do mapa
+    $scene = Scene_Map.new
+  end
+
+  def quests_list
+    QUEST_INFO::list.collect do |quest|
+                Quest.new(
+                          quest['name'],
+                          quest['description'],
+                          quest['new_quest'],
+                          quest['type'],
+                          quest['completed'],
+                          quest['open'],
+                          quest['rewards']
+                        )
+              end
   end
 end

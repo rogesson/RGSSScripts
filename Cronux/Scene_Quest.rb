@@ -37,8 +37,10 @@ class Scene_Quest < Scene_Base
   end
 
   def create_windows
+    available_quests = quests.select { |quest| quest.open }
+
     @window_quest      = Window_Quest.new
-    @window_quest_list = Window_Quest_List.new(quests)
+    @window_quest_list = Window_Quest_List.new(available_quests)
     @window_quest_info = Window_Quest_Info.new
   end
 
@@ -55,19 +57,6 @@ class Scene_Quest < Scene_Base
   end
 
   def quests
-    @quest_list ||= create_quests
-  end
-
-  def create_quests
-    @quest_list = QUEST_INFO::list.collect do |quest|
-                Quest.new(
-                          quest["name"],
-                          quest["description"],
-                          quest["new_quest"],
-                          quest["type"],
-                          quest["completed"],
-                          quest["rewards"]
-                        )
-              end
+    $game_quests
   end
 end

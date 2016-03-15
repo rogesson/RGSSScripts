@@ -1,5 +1,3 @@
-
-
 class Window_Quest_Info < Window_Selectable
   attr_accessor :quest
 
@@ -22,7 +20,6 @@ class Window_Quest_Info < Window_Selectable
   end
 
   def confirm
-    #quest_index = $scene.window_quest_list.index
     @quest.start_quest
     
     force_update do
@@ -32,7 +29,7 @@ class Window_Quest_Info < Window_Selectable
 
   # TODO, create go_back method.
   def cancel
-    self.contents.clear
+    contents.clear
     $scene.set_current_window($scene.window_quest_list)
     self.index = -1
   end
@@ -45,13 +42,12 @@ class Window_Quest_Info < Window_Selectable
     draw_options
   end
 
-
   def draw_description
     description = @quest.description.multiline(30)
     index_height = 0
 
-    description.split("|").each do |desc|
-      self.contents.draw_text(0, index_height, 212, 32, desc, 0)
+    description.split('|').each do |d|
+      self.contents.draw_text(0, index_height, 212, 32, d, 0)
       index_height += 20
     end
   end
@@ -62,7 +58,7 @@ class Window_Quest_Info < Window_Selectable
 
     @quest.rewards.each do |reward|
       item = $data_items.compact.find { |data_item|  data_item.name == reward["name"] }
-     
+
       bitmap = RPG::Cache.icon(item.icon_name)
       self.contents.blt(0, height_index, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
       self.contents.draw_text(40, height_index, 212, 32, "#{item.name} x1", 0)
@@ -99,22 +95,18 @@ class Window_Quest_Info < Window_Selectable
     x = 4
     y = 300
     
-    if @quest.new_quest
-      draw_accept_quest_buttom(x, y)
-    else
-      draw_finish_quest_buttom(x, y)
-    end
+    @quest.new_quest ? draw_accept_buttom(x, y) : draw_finish_buttom(x, y)
 
     contents.font.color = normal_color
   end
 
-  def draw_accept_quest_buttom(x, y)
+  def draw_accept_buttom(x, y)
     contents.font.color = normal_color
-    contents.draw_text(x, y, 212, 32, "Aceitar Missão", 0)
+    contents.draw_text(x, y, 212, 32, 'Aceitar Missão', 0)
   end
 
-  def draw_finish_quest_buttom(x, y)
+  def draw_finish_buttom(x, y)
     contents.font.color = disabled_color
-    contents.draw_text(x, y, 212, 32, "Concluir Missão", 0)
+    contents.draw_text(x, y, 212, 32, 'Concluir Missão', 0)
   end
 end

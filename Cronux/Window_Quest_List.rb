@@ -69,6 +69,6 @@ class Window_Quest_List < Window_Selectable
   end
 
   def current_quest
-    description = @quests[self.index]
+    description = @quests[index]
   end
 end

@@ -1,5 +1,6 @@
 # Override da chamada do menu.
 class Scene_Map
+  attr_accessor :window_new_quest
   def call_menu
     # Limpar flag de chamada de Menu
     $game_temp.menu_calling = false
@@ -15,6 +16,121 @@ class Scene_Map
     # Alternar para a tela de Menu
     $scene = Scene_MenuCustom.new
     #$scene = Scene_Menu.new
+  end
+
+  def update
+    # Loop
+    loop do
+      # Atualizar Mapa, Interpretador e Jogador
+      # (Esta ordenação de atualização é importante para quando as condições 
+      # estiverem cheias para executar qualquer evento e o jogador não tem a 
+      # oportunidade de se mover em algum instante)
+      $game_map.update
+      $game_system.map_interpreter.update
+      $game_player.update
+      # Atualizar tela de sistema
+      $game_system.update
+      $game_screen.update
+      update_windows
+
+      # Abortar o loop se o jogador não estiver se movendo
+      unless $game_temp.player_transferring
+        break
+      end
+      # Executar movimento
+      transfer_player
+      # Abortar loop se estiver ocorrendo um transição
+      if $game_temp.transition_processing
+        break
+      end
+    end
+    # Atualizar Spriteset
+    @spriteset.update
+    # Atualizar janela de mensagens
+    @message_window.update
+    # Se ocorrer um Game Over
+    if $game_temp.gameover
+      # Alternar para a tela de Game Over
+      $scene = Scene_Gameover.new
+      return
+    end
+    # Se estiver retornando à tela de Título
+    if $game_temp.to_title
+      # Alternar para a tela de Título
+      $scene = Scene_Title.new
+      return
+    end
+    # Abortar loop se estiver ocorrendo um transição
+    if $game_temp.transition_processing
+      # Limpar flag de transição
+      $game_temp.transition_processing = false
+      # Executar transição
+      if $game_temp.transition_name == ""
+        Graphics.transition(20)
+      else
+        Graphics.transition(40, "Graphics/Transitions/" +
+          $game_temp.transition_name)
+      end
+    end
+    # Se estiver exibindo uma mensagem
+    if $game_temp.message_window_showing
+      return
+    end
+    # Se a lista de encontros não estiver vazia, e o contador de encontro for 0
+    if $game_player.encounter_count == 0 and $game_map.encounter_list != []
+      # Se estiver ocorrendo um evento ou o encontro não for proibido
+      unless $game_system.map_interpreter.running? or
+             $game_system.encounter_disabled
+        # Confirmar loop
+        n = rand($game_map.encounter_list.size)
+        troop_id = $game_map.encounter_list[n]
+        # Se o Grupo de Inimigos não for inválido
+        if $data_troops[troop_id] != nil
+          # Definir flag de chamada de batalha
+          $game_temp.battle_calling = true
+          $game_temp.battle_troop_id = troop_id
+          $game_temp.battle_can_escape = true
+          $game_temp.battle_can_lose = false
+          $game_temp.battle_proc = nil
+        end
+      end
+    end
+    # Se o boão B for pressionado
+    if Input.trigger?(Input::B)
+      # Se estiver ocorrendo um evento ou o menu não for proibido
+      unless $game_system.map_interpreter.running? or
+             $game_system.menu_disabled
+        # Definir flag de chamda de Menu ou de Beep
+        $game_temp.menu_calling = true
+        $game_temp.menu_beep = true
+      end
+    end
+    # Se o Modo de Depuração estiver ativo ou a tecla F9 for pressionado
+    if $DEBUG and Input.press?(Input::F9)
+      # Definir flag de chamda de depuração
+      $game_temp.debug_calling = true
+    end
+    # Se o jogador não estiver se movendo
+    unless $game_player.moving?
+      # Executar a chamada de cada tela
+      if $game_temp.battle_calling
+        call_battle
+      elsif $game_temp.shop_calling
+        call_shop
+      elsif $game_temp.name_calling
+        call_name
+      elsif $game_temp.menu_calling
+        call_menu
+      elsif $game_temp.save_calling
+        call_save
+      elsif $game_temp.debug_calling
+        call_debug
+      end
+    end
+  end
+
+  def update_windows
+    @window_new_quest.update if @window_new_quest
   end
 end
 

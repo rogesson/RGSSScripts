@@ -30,6 +30,16 @@ class Scene_Quest < Scene_Base
     listen_event
   end
 
+  def self.gain_quest(name)
+    quest = $game_quests.select { |quest| quest.name == name }.first
+    quest.start_quest
+
+    $scene.window_new_quest = Window_NewQuest.new(quest)
+  end
+
+  def self.finish_quest(name)
+  end
+
   private
 
   def setup

@@ -7,7 +7,7 @@ module QUEST_INFO
         'new_quest'   => true,
         'type'        => 'primária',
         'completed'   => false,
-        'open'        => true,
+        'open'        => false,
         'rewards'     => [
                           { 'name' => 'Chave da Porta', 'amount' => 1 }
                          ]

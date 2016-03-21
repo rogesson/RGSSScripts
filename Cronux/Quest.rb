@@ -13,6 +13,6 @@ class Quest
   end
 
   def start_quest
-    self.new_quest = false
+    self.new_quest = true
   end
 end

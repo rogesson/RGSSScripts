@@ -17,22 +17,37 @@ class Window_NewQuest < Window_Base
     self.active = true
   end
 
+  def update
+    return unless active
+    #disappear if $scene.class != Scene_Map
+
+    super
+
+    keep_alive? ? increment_counter : disappear
+  end
+
+  private
+
+  def keep_alive?
+    @time_counter < @time_to_die
+  end
+
   def draw_message
     contents.draw_text(0, 0, 300, 32, "Nova Missão: #{@quest.name}")
   end
 
-  def update
-    return unless active
+  def increment_counter
+    @time_counter += 1
+  end
 
-    super
+  def reset_counter
+    @time_counter = 0
+  end
 
-    if @time_counter < @time_to_die
-      @time_counter += 1
-    else
-      @time_counter           = 0
-      self.active             = false
-      $scene.window_new_quest.dispose
-      $scene.window_new_quest = nil
-    end
+  def disappear
+    reset_counter
+    self.active             = false
+    $scene.window_new_quest.dispose
+    $scene.window_new_quest = nil
   end
 end

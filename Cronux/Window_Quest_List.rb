@@ -4,15 +4,17 @@ class Window_Quest_List < Window_Selectable
 
     @quests       = quests
     @item_max     = quests.size
-    self.contents = Bitmap.new(width - 32, row_max * 32)
 
+    return if @item_max == 0
+
+    self.contents = Bitmap.new(width - 32, row_max * 32)
     self.index = 0
     @column_max = 1
   end
 
   def execute
     super
-    
+
     @quests.each_with_index do |quest, index|
       draw_quest(quest, index)
     end
@@ -33,14 +35,10 @@ class Window_Quest_List < Window_Selectable
     y = index * 32
 
     rect = Rect.new(x, y, self.width - 32, 32)
-    
-    self.contents.fill_rect(rect, Color.new(0, 0, 0, 0))
-    #bitmap = RPG::Cache.icon(item.icon_name)
-    opacity = self.contents.font.color == normal_color ? 255 : 128
-    
-    #self.contents.blt(x, y + 4, bitmap, Rect.new(0, 0, 24, 24), opacity)
-    self.contents.draw_text(x + 28, y, 212, 32, quest.name, 0)
-    #self.contents.draw_text(x + 240, y, 88, 32, "bla", 2)
+
+    contents.fill_rect(rect, Color.new(0, 0, 0, 0))
+    opacity = contents.font.color == normal_color ? 255 : 128
+    contents.draw_text(x + 28, y, 212, 32, quest.name, 0)
   end
 
   def update_cursor_rect
@@ -65,7 +63,7 @@ class Window_Quest_List < Window_Selectable
     y = @index / @column_max * 32 - self.oy
 
 
-    self.cursor_rect.set(x, y, cursor_width, 32)
+    cursor_rect.set(x, y, cursor_width, 32)
   end
 
   def current_quest

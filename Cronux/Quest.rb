@@ -1,7 +1,7 @@
 class Quest
-  attr_reader :name, :description, :type, :completed, :open, :rewards
-  attr_accessor :new_quest
-  
+  attr_reader :name, :description, :type, :completed, :rewards
+  attr_accessor :new_quest, :open
+
   def initialize(name, description, new_quest, type, completed, open, rewards)
     @name        = name
     @description = description
@@ -17,7 +17,7 @@ class Quest
   end
 
   def enable_quest
-    start_quest
+    self.open = true
     $scene.window_new_quest = Window_NewQuest.new(self)
   end
 end

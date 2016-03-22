@@ -15,4 +15,9 @@ class Quest
   def start_quest
     self.new_quest = true
   end
+
+  def enable_quest
+    start_quest
+    $scene.window_new_quest = Window_NewQuest.new(self)
+  end
 end

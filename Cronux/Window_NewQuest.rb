@@ -1,15 +1,13 @@
 class Window_NewQuest < Window_Base
   def initialize(quest)
-
     window_width  = 400
     window_height = 64
 
     window_x      = 320 - window_width  / 2
     window_y      = 240 - window_height / 2
 
-    @time_to_die  = 20
+    @time_to_die  = 180
     @time_counter = 0
-
 
     super(window_x, window_y, window_width, window_height)
 
@@ -31,8 +29,9 @@ class Window_NewQuest < Window_Base
     if @time_counter < @time_to_die
       @time_counter += 1
     else
-      @time_counter           = false
+      @time_counter           = 0
       self.active             = false
+      $scene.window_new_quest.dispose
       $scene.window_new_quest = nil
     end
   end

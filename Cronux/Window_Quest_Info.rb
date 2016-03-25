@@ -22,7 +22,7 @@ class Window_Quest_Info < Window_Selectable
   def confirm
     @quest.start_quest
     contents.clear
-    
+
     draw_content
   end
 
@@ -93,9 +93,8 @@ class Window_Quest_Info < Window_Selectable
   def draw_options
     x = 4
     y = 300
-    
-    @quest.new_quest ? draw_accept_buttom(x, y) : draw_finish_buttom(x, y)
 
+    @quest.active ? draw_finish_buttom(x, y) : draw_accept_buttom(x, y)
     contents.font.color = normal_color
   end
 

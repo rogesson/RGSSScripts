@@ -22,8 +22,8 @@ class Scene_Map
     # Loop
     loop do
       # Atualizar Mapa, Interpretador e Jogador
-      # (Esta ordenação de atualização é importante para quando as condições 
-      # estiverem cheias para executar qualquer evento e o jogador não tem a 
+      # (Esta ordenação de atualização é importante para quando as condições
+      # estiverem cheias para executar qualquer evento e o jogador não tem a
       # oportunidade de se mover em algum instante)
       $game_map.update
       $game_system.map_interpreter.update
@@ -506,7 +506,7 @@ class Window_Base < Window
   def initialize(x, y, width, height)
     super()
     @windowskin_name = $game_system.windowskin_name
-    
+
     self.windowskin = RPG::Cache.windowskin(@windowskin_name)
     self.x = x
     self.y = y
@@ -587,7 +587,7 @@ class Scene_Title
                 Quest.new(
                           quest['name'],
                           quest['description'],
-                          quest['new_quest'],
+                          quest['active'],
                           quest['type'],
                           quest['completed'],
                           quest['open'],

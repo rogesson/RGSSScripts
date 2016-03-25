@@ -19,7 +19,6 @@ class Window_NewQuest < Window_Base
 
   def update
     return unless active
-    #disappear if $scene.class != Scene_Map
 
     super
 
@@ -45,9 +44,9 @@ class Window_NewQuest < Window_Base
   end
 
   def disappear
-    reset_counter
-    self.active             = false
+    self.active = false
     $scene.window_new_quest.dispose
     $scene.window_new_quest = nil
+    reset_counter
   end
 end

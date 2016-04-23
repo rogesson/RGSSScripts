@@ -4,6 +4,9 @@ class Scene_Map
   def call_menu
     # Limpar flag de chamada de Menu
     $game_temp.menu_calling = false
+
+    dispose_map_windows
+
     # Se a flag de Beep estiver definida
     if $game_temp.menu_beep
       # Reproduzir SE de OK
@@ -131,6 +134,15 @@ class Scene_Map
 
   def update_windows
     @window_new_quest.update if @window_new_quest
+  end
+
+  private
+
+  def dispose_map_windows
+    if @window_new_quest
+      @window_new_quest.dispose
+      @window_new_quest = nil
+    end
   end
 end
 
@@ -588,9 +600,9 @@ class Scene_Title
                           quest['name'],
                           quest['description'],
                           quest['active'],
-                          quest['type'],
                           quest['completed'],
                           quest['open'],
+                          quest['required_items'],
                           quest['rewards']
                         )
               end

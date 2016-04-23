@@ -3,13 +3,13 @@ class Quest
   attr_accessor :active, :open
 
   def initialize(name, description, active, completed, open, required_items, rewards)
-    @name        = name
-    @description = description
-    @active      = active
-    @completed   = completed
-    @open        = open
-    @required_items    = required_items
-    @rewards     = rewards
+    @name           = name
+    @description    = description
+    @active         = active
+    @completed      = completed
+    @open           = open
+    @required_items = required_items
+    @rewards        = rewards
   end
 
   def start_quest

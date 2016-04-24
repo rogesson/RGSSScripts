@@ -8,10 +8,10 @@ module QUEST_INFO
         'completed'      => false,
         'open'           => false,
         'required_items' => [
-                              { 'name' => 'Poção', 'amount' => 1 }
+                              { 'id' => 1, 'amount' => 1 }
                             ],
         'rewards'        => [
-                              { 'name' => 'Chave da Porta', 'amount' => 1 }
+                              { 'id' => 10, 'amount' => 1 }
                             ]
       },
       {
@@ -22,8 +22,8 @@ module QUEST_INFO
         'open'           => false,
         'required_items' => [],
         'rewards'        => [
-                              { 'name' => 'Semente da Vida', 'amount' => 1 },
-                              { 'name' => 'Pedra Inscrita', 'amount' => 2 }
+                              { 'id' => 1, 'amount' => 1 },
+                              { 'id' => 20, 'amount' => 2 }
                             ]
 
       }

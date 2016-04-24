@@ -14,12 +14,16 @@ class Window_Quest_Info < Window_Selectable
 
   def execute
     super
+
+    return if @quest.nil?
     active_flag = @quest.in_progress ? -1 : 0
     self.index = active_flag
     draw_content
   end
 
   def confirm
+    return if @quest.nil?
+
     @quest.start_quest
     contents.clear
     @index = -1
@@ -57,7 +61,7 @@ class Window_Quest_Info < Window_Selectable
     height_index = 200
 
     @quest.rewards.each do |reward|
-      item = $data_items.compact.find { |data_item|  data_item.name == reward["name"] }
+      item = $data_items.compact.find { |data_item|  data_item.id == reward['id'] }
 
       bitmap = RPG::Cache.icon(item.icon_name)
       contents.blt(0, height_index, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))

@@ -5,7 +5,7 @@ class Quest
   def initialize(name, description, in_progress, completed, open, required_items, rewards)
     @name           = name
     @description    = description
-    @in_progress         = in_progress
+    @in_progress    = in_progress
     @completed      = completed
     @open           = open
     @required_items = required_items
@@ -29,7 +29,21 @@ class Quest
     verify_requirements
   end
 
+  def complete_quest
+  end
+
   private
+
+  def gain_item(item)
+    case item
+    when RPG::Item
+      $game_party.gain_item(item.id, @number_window.number)
+    when RPG::Weapon
+      $game_party.gain_weapon(item.id, @number_window.number)
+    when RPG::Armor
+      $game_party.gain_armor(item.id, @number_window.number)
+    end
+  end
 
   def get_party_items
     @items = []
@@ -41,7 +55,10 @@ class Quest
 
   def verify_requirements
     @required_items.each do |req_item|
-      return false if @items.find { |i| i.name == req_item['name'] }.nil?
+      x = @items.find { |i| i.id == req_item['id'] }.nil?
+      return false if @items.find { |i| i.id == req_item['id'] }.nil?
     end
+
+    true
   end
 end

@@ -1,11 +1,11 @@
 class Quest
   attr_reader :name, :description, :completed, :rewards
-  attr_accessor :active, :open
+  attr_accessor :in_progress, :open
 
-  def initialize(name, description, active, completed, open, required_items, rewards)
+  def initialize(name, description, in_progress, completed, open, required_items, rewards)
     @name           = name
     @description    = description
-    @active         = active
+    @in_progress         = in_progress
     @completed      = completed
     @open           = open
     @required_items = required_items
@@ -13,7 +13,7 @@ class Quest
   end
 
   def start_quest
-    self.active = true
+    self.in_progress = true
     can_finish?
   end
 

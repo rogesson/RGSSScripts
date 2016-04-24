@@ -14,14 +14,15 @@ class Window_Quest_Info < Window_Selectable
 
   def execute
     super
-
-    self.index = 0
+    active_flag = @quest.in_progress ? -1 : 0
+    self.index = active_flag
     draw_content
   end
 
   def confirm
     @quest.start_quest
     contents.clear
+    @index = -1
 
     draw_content
   end
@@ -91,20 +92,11 @@ class Window_Quest_Info < Window_Selectable
   end
 
   def draw_options
-    x = 4
-    y = 300
-
-    @quest.active ? draw_finish_buttom(x, y) : draw_accept_buttom(x, y)
-    contents.font.color = normal_color
+    return if @quest.in_progress
+    draw_accept_buttom
   end
 
-  def draw_accept_buttom(x, y)
-    contents.font.color = normal_color
-    contents.draw_text(x, y, 212, 32, 'Aceitar Missão', 0)
-  end
-
-  def draw_finish_buttom(x, y)
-    contents.font.color = disabled_color
-    contents.draw_text(x, y, 212, 32, 'Concluir Missão', 0)
+  def draw_accept_buttom
+    contents.draw_text(4, 300, 212, 32, 'Iniciar Missão', 0)
   end
 end

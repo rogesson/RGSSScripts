@@ -4,7 +4,7 @@ module QUEST_INFO
       {
         'name'           => 'Ajuda ao Próximo',
         'description'    => 'Encontre uma Poção em um baú escondido na floresta e ajude o caçador ferido.',
-        'active'         => false,
+        'in_progress'    => false,
         'completed'      => false,
         'open'           => false,
         'required_items' => [
@@ -17,7 +17,7 @@ module QUEST_INFO
       {
         'name'           => 'Movendo os soldados',
         'description'    => 'Reunir todo batalhão para iniciar a caçada.',
-        'active'         => false,
+        'in_progress'    => false,
         'completed'      => false,
         'open'           => false,
         'required_items' => [],

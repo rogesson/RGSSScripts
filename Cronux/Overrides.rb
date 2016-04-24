@@ -1,6 +1,43 @@
 # Override da chamada do menu.
 class Scene_Map
   attr_accessor :window_new_quest
+
+  def main
+    # Criar o Spriteset
+    @spriteset = Spriteset_Map.new
+    # Criar as janelas de mensagem
+    @message_window = Window_Message.new
+
+    @window_nav_quest = Window_NavQuest.new
+
+    # Fazer transições
+    Graphics.transition
+    # Loop principal
+    loop do
+      # Atualizar tela de jogo
+      Graphics.update
+      # Atualizar a entrada de informações
+      Input.update
+      # Atualizar Frame
+      update
+      # Abortar loop se a tela foi alterada
+      if $scene != self
+        break
+      end
+    end
+    # Preparar para transição
+    Graphics.freeze
+    # Exibição do Spriteset
+    @spriteset.dispose
+    # Exibição da janela de mensagem
+    @message_window.dispose
+    # Se estiver alternando para a tela de Título
+    if $scene.is_a?(Scene_Title)
+      # Desmaecer tela
+      Graphics.transition
+      Graphics.freeze
+    end
+  end
   def call_menu
     # Limpar flag de chamada de Menu
     $game_temp.menu_calling = false
@@ -134,6 +171,7 @@ class Scene_Map
 
   def update_windows
     @window_new_quest.update if @window_new_quest
+    @window_nav_quest.update if @window_nav_quest && @window_nav_quest.active
   end
 
   private
@@ -143,6 +181,8 @@ class Scene_Map
       @window_new_quest.dispose
       @window_new_quest = nil
     end
+
+    @window_nav_quest.dispose if @window_nav_quest
   end
 end
 
@@ -599,7 +639,7 @@ class Scene_Title
                 Quest.new(
                           quest['name'],
                           quest['description'],
-                          quest['active'],
+                          quest['in_progress'],
                           quest['completed'],
                           quest['open'],
                           quest['required_items'],

@@ -42,6 +42,7 @@ class Window_Quest_Info < Window_Selectable
 
   def draw_content
     draw_description
+    draw_requirements
     draw_reward
     draw_options
   end
@@ -56,9 +57,24 @@ class Window_Quest_Info < Window_Selectable
     end
   end
 
+  def draw_requirements
+    contents.draw_text(0, 120, 212, 32, "Requerimentos:")
+
+    @quest.required_items.each do |required_item|
+      item = $data_items.compact.find { |data_item|  data_item.id == required_item['id'] }
+      height_index = 150
+
+      bitmap = RPG::Cache.icon(item.icon_name)
+      contents.blt(0, height_index, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
+      contents.draw_text(40, height_index, 212, 32, "#{item.name} (0/1)", 0)
+
+      height_index += 30
+    end
+  end
+
   def draw_reward
-    contents.draw_text(0, 160, 212, 32, "Recompensas:")
-    height_index = 200
+    contents.draw_text(0, 230, 212, 32, "Recompensas:")
+    height_index = 260
 
     @quest.rewards.each do |reward|
       item = $data_items.compact.find { |data_item|  data_item.id == reward['id'] }
@@ -92,7 +108,7 @@ class Window_Quest_Info < Window_Selectable
     x = @index % @column_max * (cursor_width + 32)
     y = @index / @column_max * 32 - self.oy
 
-    cursor_rect.set(x, y + 300, cursor_width, 32)
+    cursor_rect.set(x, y + 350, cursor_width, 32)
   end
 
   def draw_options
@@ -101,6 +117,6 @@ class Window_Quest_Info < Window_Selectable
   end
 
   def draw_accept_buttom
-    contents.draw_text(4, 300, 212, 32, 'Iniciar Missão', 0)
+    contents.draw_text(53, 350, 212, 32, 'Iniciar Missão', 0)
   end
 end

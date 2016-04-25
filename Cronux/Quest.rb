@@ -1,5 +1,5 @@
 class Quest
-  attr_reader :name, :description, :completed, :rewards
+  attr_reader :name, :description, :completed, :required_items, :rewards
   attr_accessor :in_progress, :open
 
   def initialize(name, description, in_progress, completed, open, required_items, rewards)
@@ -30,19 +30,28 @@ class Quest
   end
 
   def complete_quest
+    rewards.each do |reward|
+      gain_item(reward['id'], reward['amount'])
+    end
+
+    completed_alert
   end
 
   private
 
-  def gain_item(item)
+  def gain_item(item, amount)
     case item
     when RPG::Item
-      $game_party.gain_item(item.id, @number_window.number)
+      $game_party.gain_item(item.id, amount)
     when RPG::Weapon
-      $game_party.gain_weapon(item.id, @number_window.number)
+      $game_party.gain_weapon(item.id, amount)
     when RPG::Armor
-      $game_party.gain_armor(item.id, @number_window.number)
+      $game_party.gain_armor(item.id, amount)
     end
+  end
+
+  def completed_alert
+    p 'Quest completa'
   end
 
   def get_party_items

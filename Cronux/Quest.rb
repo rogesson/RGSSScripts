@@ -29,6 +29,8 @@ class Quest
   end
 
   def finish_quest
+    return false unless can_finish?
+
     remove_requireds
     get_reward
     self.in_progress = false
@@ -36,6 +38,8 @@ class Quest
     $scene.window_nav_quest.remove_finished_quest
 
     finish_message
+
+    true
   end
 
   def verify_requirements

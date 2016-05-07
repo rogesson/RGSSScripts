@@ -16,13 +16,14 @@ class Window_Quest_Info < Window_Selectable
     super
 
     return if @quest.nil?
-    active_flag = @quest.in_progress ? -1 : 0
+    active_flag = @quest.in_progress || @quest.completed ? -1 : 0
     self.index = active_flag
     draw_content
   end
 
   def confirm
     return if @quest.nil?
+    return if @quest.in_progress || @quest.completed
 
     @quest.start_quest
     contents.clear
@@ -113,11 +114,14 @@ class Window_Quest_Info < Window_Selectable
   end
 
   def draw_options
-    return if @quest.in_progress
-    draw_accept_buttom
-  end
+    message = if @quest.in_progress
+                'Em Andamento'
+              elsif @quest.completed
+                'Quest Completa'
+              else
+                'Iniciar Missão'
+              end
 
-  def draw_accept_buttom
-    contents.draw_text(53, 350, 212, 32, 'Iniciar Missão', 0)
+    contents.draw_text(50, 350, 212, 32, message, 0)
   end
 end

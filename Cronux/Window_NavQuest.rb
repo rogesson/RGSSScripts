@@ -14,8 +14,10 @@ class Window_NavQuest < Window_Base
   def draw_quests
     return if quests.empty?
 
-    contents.clear
-    draw_title
+    draw_quests_in_progress
+  end
+
+  def remove_finished_quest
     draw_quests_in_progress
   end
 
@@ -26,6 +28,9 @@ class Window_NavQuest < Window_Base
   end
 
   def draw_quests_in_progress
+    contents.clear
+    draw_title
+
     line_height = 20
 
     quests.each do |q|

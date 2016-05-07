@@ -31,14 +31,20 @@ class Scene_Quest < Scene_Base
   end
 
   def self.gain_quest(name)
-    quest = $game_quests.select { |quest| quest.name == name }.first
+    quest = find_by_name(name)
     quest.enable_quest
   end
 
   def self.finish_quest(name)
+    quest = find_by_name(name)
+    quest.finish_quest
   end
 
   private
+
+  def self.find_by_name(name)
+    $game_quests.select { |quest| quest.name == name }.first
+  end
 
   def setup
     @window_quest_list.execute

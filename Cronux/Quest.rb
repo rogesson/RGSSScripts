@@ -1,6 +1,6 @@
 class Quest
-  attr_reader :name, :description, :completed, :required_items, :rewards
-  attr_accessor :in_progress, :open
+  attr_reader :name, :description, :required_items, :rewards
+  attr_accessor :in_progress, :open, :completed
 
   def initialize(name, description, in_progress, completed, open, required_items, rewards)
     @name           = name
@@ -28,29 +28,48 @@ class Quest
     count_acquired_items
   end
 
-  def complete_quest
-    rewards.each do |reward|
-      gain_item(reward['id'], reward['amount'])
-    end
+  def finish_quest
+    remove_requireds
+    get_reward
+    self.in_progress = false
+    self.completed = true
+    $scene.window_nav_quest.remove_finished_quest
 
-    completed_alert
+    finish_message
   end
 
   def verify_requirements
     @required_items.each do |required_item|
       item = inventory_items.find { |i| i.id == required_item['id'] }
-      required_item['acquired'] =  case item
-                                    when RPG::Item
-                                       $game_party.item_number(item.id)
-                                    when RPG::Weapon
-                                      $game_party.weapon_number(item.id)
-                                    when RPG::Armor
-                                      $game_party.armor_number(item.id)
-                                    end
+      required_item['acquired'] = count_item(item)
     end
   end
 
   private
+
+  def remove_requireds
+    @required_items.each do |required_item|
+      remove_item($data_items[required_item['id']],  required_item['amount'])
+    end
+  end
+
+  def get_reward
+    rewards.each do |reward|
+      item = $data_items[reward['id']]
+      gain_item(item, reward['amount'])
+    end
+  end
+
+  def count_item(item)
+    case item
+    when RPG::Item
+       $game_party.item_number(item.id)
+    when RPG::Weapon
+      $game_party.weapon_number(item.id)
+    when RPG::Armor
+      $game_party.armor_number(item.id)
+    end
+  end
 
   def count_acquired_items
     verify_requirements
@@ -74,7 +93,18 @@ class Quest
     end
   end
 
-  def completed_alert
+  def remove_item(item, amount)
+    case item
+    when RPG::Item
+      $game_party.lose_item(item.id, amount)
+    when RPG::Weapon
+      $game_party.lose_weapon(item.id, amount)
+    when RPG::Armor
+      $game_party.lose_armor(item.id, amount)
+    end
+  end
+
+  def finish_message
     p 'Quest Completa'
   end
 

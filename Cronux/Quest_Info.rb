@@ -8,7 +8,7 @@ module QUEST_INFO
         'completed'      => false,
         'open'           => false,
         'required_items' => [
-                              { 'id' => 1, 'amount' => 1 }
+                              { 'id' => 1, 'amount' => 5 }
                             ],
         'rewards'        => [
                               { 'id' => 10, 'amount' => 1 }

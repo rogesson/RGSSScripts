@@ -29,9 +29,10 @@ class Window_NavQuest < Window_Base
     line_height = 20
 
     quests.each do |q|
-      completed = q.can_finish? ? " - OK" : nil
-      #completed = nil
-      contents.draw_text(15, line_height, 300, 32, "- #{q.name}#{completed}")
+      text_color = q.can_finish? ? crisis_color : normal_color
+      self.contents.font.color = text_color
+
+      contents.draw_text(15, line_height, 300, 32, "#{q.name}")
       line_height += 20
     end
   end

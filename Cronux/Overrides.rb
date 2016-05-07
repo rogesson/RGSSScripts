@@ -1,6 +1,7 @@
 # Override da chamada do menu.
 class Scene_Map
   attr_accessor :window_new_quest
+  attr_reader :window_nav_quest
 
   def main
     # Criar o Spriteset
@@ -646,5 +647,92 @@ class Scene_Title
                           quest['rewards']
                         )
               end
+  end
+end
+
+class Game_Party
+  def gain_item(item_id, n)
+
+    # Atualizar a quantidade nesta divisão
+    if item_id > 0
+      @items[item_id] = [[item_number(item_id) + n, 0].max, 99].min
+    end
+
+    update_scene_map
+  end
+
+  #--------------------------------------------------------------------------
+  # Ganhar ou Perder Armas
+  #
+  #     weapon_id : ID da Arma
+  #     n         : quantidade
+  #--------------------------------------------------------------------------
+
+  def gain_weapon(weapon_id, n)
+    # Atualizar a quantidade nesta divisão
+    if weapon_id > 0
+      @weapons[weapon_id] = [[weapon_number(weapon_id) + n, 0].max, 99].min
+    end
+
+    update_scene_map
+  end
+
+  #--------------------------------------------------------------------------
+  # Ganhar ou Perder Armaduras
+  #
+  #     armor_id : ID da Armadura
+  #     n        : quantidade
+  #--------------------------------------------------------------------------
+
+  def gain_armor(armor_id, n)
+    # Atualizar a quantidade nesta divisão
+    if armor_id > 0
+      @armors[armor_id] = [[armor_number(armor_id) + n, 0].max, 99].min
+    end
+
+    update_scene_map
+  end
+
+  #--------------------------------------------------------------------------
+  # Perder Itens
+  #
+  #     item_id : ID do Item
+  #     n       : quantidade
+  #--------------------------------------------------------------------------
+  def lose_item(item_id, n)
+    # Reverter o valor numerical e chamar gain_item
+    gain_item(item_id, -n)
+    update_scene_map
+  end
+
+  #--------------------------------------------------------------------------
+  # Perder Armas
+  #
+  #     weapon_id : ID da Arma
+  #     n         : quantidade
+  #--------------------------------------------------------------------------
+
+  def lose_weapon(weapon_id, n)
+    # Reverter o valor numerical e chamar gain_weapon
+    gain_weapon(weapon_id, -n)
+    update_scene_map
+  end
+
+  #--------------------------------------------------------------------------
+  # Perder Armadura
+  #
+  #     armor_id : ID da Armadura
+  #     n        : quantidade
+  #--------------------------------------------------------------------------
+
+  def lose_armor(armor_id, n)
+    # Reverter o valor numerical e chamar gain_armor
+    gain_armor(armor_id, -n)
+    update_scene_map
+  end
+
+  def update_scene_map
+    #return unless $scene.is_a? Scene_Map
+    $scene.window_nav_quest.update
   end
 end

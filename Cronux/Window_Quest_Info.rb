@@ -58,30 +58,31 @@ class Window_Quest_Info < Window_Selectable
   end
 
   def draw_requirements
-    contents.draw_text(0, 120, 212, 32, "Requerimentos:")
-
-    @quest.required_items.each do |required_item|
-      item = $data_items.compact.find { |data_item|  data_item.id == required_item['id'] }
-      height_index = 150
-
-      bitmap = RPG::Cache.icon(item.icon_name)
-      contents.blt(0, height_index, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
-      contents.draw_text(40, height_index, 212, 32, "#{item.name} (0/1)", 0)
-
-      height_index += 30
-    end
+    @quest.verify_requirements
+    draw_item_list("Requerimentos:", 120, @quest.required_items, :required)
   end
 
   def draw_reward
-    contents.draw_text(0, 230, 212, 32, "Recompensas:")
-    height_index = 260
+    draw_item_list("Recompensas:", 230, @quest.rewards, :reward)
+  end
 
-    @quest.rewards.each do |reward|
-      item = $data_items.compact.find { |data_item|  data_item.id == reward['id'] }
+  def draw_item_list(title, initial_y, items, item_type)
+
+    contents.draw_text(0, initial_y, 212, 32, title)
+    height_index = initial_y + 30
+
+    items.each do |i|
+      item = $data_items.compact.find { |data_item|  data_item.id == i['id'] }
+
+      amount = if item_type == :reward
+                "#{i['amount']}x"
+               else
+                "(#{i['acquired'].to_i}/#{i['amount']})"
+               end
 
       bitmap = RPG::Cache.icon(item.icon_name)
       contents.blt(0, height_index, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
-      contents.draw_text(40, height_index, 212, 32, "#{item.name} x1", 0)
+      contents.draw_text(40, height_index, 212, 32, "#{item.name} #{amount}", 0)
 
       height_index += 30
     end

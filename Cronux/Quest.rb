@@ -25,8 +25,7 @@ class Quest
   end
 
   def can_finish?
-    get_party_items
-    verify_requirements
+    count_acquired_items
   end
 
   def complete_quest
@@ -37,7 +36,32 @@ class Quest
     completed_alert
   end
 
+  def verify_requirements
+    @required_items.each do |required_item|
+      item = inventory_items.find { |i| i.id == required_item['id'] }
+      required_item['acquired'] =  case item
+                                    when RPG::Item
+                                       $game_party.item_number(item.id)
+                                    when RPG::Weapon
+                                      $game_party.weapon_number(item.id)
+                                    when RPG::Armor
+                                      $game_party.armor_number(item.id)
+                                    end
+    end
+  end
+
   private
+
+  def count_acquired_items
+    verify_requirements
+
+    completed = []
+    @required_items.each do |item|
+      completed.push(item['acquired'].to_i >= item['amount'])
+    end
+
+    !completed.include?(false)
+  end
 
   def gain_item(item, amount)
     case item
@@ -51,23 +75,16 @@ class Quest
   end
 
   def completed_alert
-    p 'Quest completa'
+    p 'Quest Completa'
   end
 
-  def get_party_items
-    @items = []
+  def inventory_items
+    items = []
 
     for i in 1...$data_items.size
-      @items.push($data_items[i]) if $game_party.item_number(i) > 0
-    end
-  end
-
-  def verify_requirements
-    @required_items.each do |req_item|
-      x = @items.find { |i| i.id == req_item['id'] }.nil?
-      return false if @items.find { |i| i.id == req_item['id'] }.nil?
+      items.push($data_items[i]) if $game_party.item_number(i) > 0
     end
 
-    true
+    items
   end
 end

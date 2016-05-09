@@ -35,7 +35,7 @@ class Quest
     get_reward
     self.in_progress = false
     self.completed = true
-    $scene.window_nav_quest.remove_finished_quest
+    $scene.window_nav_quest.update
 
     finish_message
   end

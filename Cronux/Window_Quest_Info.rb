@@ -49,7 +49,7 @@ class Window_Quest_Info < Window_Selectable
   end
 
   def draw_description
-    description = @quest.description.multiline(30)
+    description = @quest.description.multiline(28)
     index_height = 0
 
     description.split('|').each do |desc|

@@ -21,7 +21,7 @@ class Quest
     return if open
 
     self.open = true
-    $scene.window_new_quest = Window_NewQuest.new(self)
+    $scene.window_new_quest = Window_QuestMessages.new(self, true)
   end
 
   def can_finish?
@@ -29,7 +29,7 @@ class Quest
   end
 
   def finish_quest
-    return false unless can_finish?
+    return unless can_finish?
 
     remove_requireds
     get_reward
@@ -38,8 +38,6 @@ class Quest
     $scene.window_nav_quest.remove_finished_quest
 
     finish_message
-
-    true
   end
 
   def verify_requirements
@@ -109,7 +107,7 @@ class Quest
   end
 
   def finish_message
-    p 'Quest Completa'
+    $scene.window_new_quest = Window_QuestMessages.new(self, false)
   end
 
   def inventory_items

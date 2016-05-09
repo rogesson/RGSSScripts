@@ -1,5 +1,8 @@
-class Window_NewQuest < Window_Base
-  def initialize(quest)
+class Window_QuestMessages < Window_Base
+
+  attr_reader :new_quest
+
+  def initialize(quest, new_quest)
     window_width  = 400
     window_height = 64
 
@@ -8,6 +11,8 @@ class Window_NewQuest < Window_Base
 
     @time_to_die  = 180
     @time_counter = 0
+
+    @new_quest = new_quest
 
     super(window_x, window_y, window_width, window_height)
 
@@ -32,7 +37,9 @@ class Window_NewQuest < Window_Base
   end
 
   def draw_message
-    contents.draw_text(0, 0, 300, 32, "Nova Missão: #{@quest.name}")
+    message = new_quest ? "Nova Missão: #{@quest.name}" : "Missão #{@quest.name} concluída"
+
+    contents.draw_text(0, 0, 300, 32, message)
   end
 
   def increment_counter

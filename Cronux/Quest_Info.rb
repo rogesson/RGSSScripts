@@ -7,10 +7,12 @@ module QUEST_INFO
         'in_progress'    => false,
         'completed'      => false,
         'open'           => false,
+        'force_accept'   => true,
         'required_items' => [
                               { 'id' => 1, 'amount' => 5 }
                             ],
         'rewards'        => [
+                              { 'id' => 30, 'amount' => 100, 'gold' => true },
                               { 'id' => 10, 'amount' => 1 }
                             ]
       },
@@ -20,6 +22,7 @@ module QUEST_INFO
         'in_progress'    => false,
         'completed'      => false,
         'open'           => false,
+        'force_accept'   => false,
         'required_items' => [],
         'rewards'        => [
                               { 'id' => 1, 'amount' => 1 },

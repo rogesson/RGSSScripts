@@ -9,7 +9,7 @@ class Window_QuestMessages < Window_Base
     window_x      = 320 - window_width  / 2
     window_y      = 240 - window_height / 2
 
-    @time_to_die  = 180
+    @time_to_die  = 98
     @time_counter = 0
 
     @new_quest = new_quest
@@ -37,13 +37,14 @@ class Window_QuestMessages < Window_Base
   end
 
   def draw_message
-    message = new_quest ? "Nova Missão: #{@quest.name}" : "Missão #{@quest.name} concluída"
+    message = new_quest ? "Nova Missão (#{@quest.name})" : "Missão (#{@quest.name}) concluída"
 
     contents.draw_text(0, 0, 300, 32, message)
   end
 
   def increment_counter
     @time_counter += 1
+    fade_in
   end
 
   def reset_counter
@@ -54,6 +55,12 @@ class Window_QuestMessages < Window_Base
     self.active = false
     $scene.window_new_quest.dispose
     $scene.window_new_quest = nil
+
     reset_counter
+  end
+
+  def fade_in
+    self.y -= 0.7
+    self.opacity -= 1.8
   end
 end

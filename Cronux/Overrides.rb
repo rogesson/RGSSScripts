@@ -643,6 +643,7 @@ class Scene_Title
                           quest['in_progress'],
                           quest['completed'],
                           quest['open'],
+                          quest['force_accept'],
                           quest['required_items'],
                           quest['rewards']
                         )
@@ -732,7 +733,7 @@ class Game_Party
   end
 
   def update_scene_map
-    #return unless $scene.is_a? Scene_Map
+    return unless $scene.is_a? Scene_Map
     $scene.window_nav_quest.update
   end
 end

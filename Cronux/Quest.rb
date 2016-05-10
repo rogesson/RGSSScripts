@@ -2,12 +2,13 @@ class Quest
   attr_reader :name, :description, :required_items, :rewards
   attr_accessor :in_progress, :open, :completed
 
-  def initialize(name, description, in_progress, completed, open, required_items, rewards)
+  def initialize(name, description, in_progress, completed, open, force_accept, required_items, rewards)
     @name           = name
     @description    = description
     @in_progress    = in_progress
     @completed      = completed
     @open           = open
+    @force_accept   = force_accept
     @required_items = required_items
     @rewards        = rewards
   end
@@ -21,7 +22,9 @@ class Quest
     return if open
 
     self.open = true
+    self.in_progress = true if @force_accept
     $scene.window_new_quest = Window_QuestMessages.new(self, true)
+    $scene.window_nav_quest.update
   end
 
   def can_finish?
@@ -58,7 +61,11 @@ class Quest
   def get_reward
     rewards.each do |reward|
       item = $data_items[reward['id']]
-      gain_item(item, reward['amount'])
+      if reward['gold']
+        $game_party.gain_gold(reward['amount'])
+      else
+        gain_item(item, reward['amount'])
+      end
     end
   end
 

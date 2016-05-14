@@ -734,6 +734,7 @@ class Game_Party
 
   def update_scene_map
     return unless $scene.is_a? Scene_Map
+    $scene.window_nav_quest.active = true
     $scene.window_nav_quest.update
   end
 end

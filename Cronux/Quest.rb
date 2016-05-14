@@ -24,7 +24,7 @@ class Quest
     self.open = true
     self.in_progress = true if @force_accept
     $scene.window_new_quest = Window_QuestMessages.new(self, true)
-    $scene.window_nav_quest.update
+    $scene.window_nav_quest.active = true
   end
 
   def can_finish?
@@ -38,23 +38,41 @@ class Quest
     get_reward
     self.in_progress = false
     self.completed = true
-    $scene.window_nav_quest.update
+    $scene.window_nav_quest.active = true
 
     finish_message
   end
 
+  def complete_talk(name)
+    talk = @required_items.find { |talk| talk['talk'] == name }
+    talk['done'] = true
+
+    $scene.window_nav_quest.active = true
+  end
+
   def verify_requirements
     @required_items.each do |required_item|
-      item = inventory_items.find { |i| i.id == required_item['id'] }
-      required_item['acquired'] = count_item(item)
+      next if required_item['talk']
+
+      verify_items(required_item)
     end
   end
 
   private
 
+  def verify_items(required_item)
+    item = inventory_items.find { |i| i.id == required_item['id'] }
+
+    required_item['acquired'] = count_item(item)
+  end
+
   def remove_requireds
     @required_items.each do |required_item|
-      remove_item($data_items[required_item['id']],  required_item['amount'])
+      if required_item['talk']
+        required_item['done'] = false
+      else
+        remove_item($data_items[required_item['id']], required_item['amount'])
+      end
     end
   end
 
@@ -85,7 +103,11 @@ class Quest
 
     completed = []
     @required_items.each do |item|
-      completed.push(item['acquired'].to_i >= item['amount'])
+      if item['talk']
+        completed.push(item['done'] == true)
+      else
+        completed.push(item['acquired'].to_i >= item['amount'])
+      end
     end
 
     !completed.include?(false)

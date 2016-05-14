@@ -40,10 +40,15 @@ class Scene_Quest < Scene_Base
     quest.finish_quest
   end
 
+  def self.complete_talk(quest_name, talk_name)
+    quest = find_by_name(quest_name)
+    quest.complete_talk(talk_name)
+  end
+
   private
 
   def self.find_by_name(name)
-    $game_quests.select { |quest| quest.name == name }.first
+    $game_quests.find { |quest| quest.name == name }
   end
 
   def setup

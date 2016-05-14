@@ -73,6 +73,11 @@ class Window_Quest_Info < Window_Selectable
     height_index = initial_y + 30
 
     items.each do |i|
+      if i['talk']
+        contents.draw_text(0, height_index, 212, 32, i['talk'], 0)
+        next
+      end
+
       item = $data_items.compact.find { |data_item|  data_item.id == i['id'] }
 
       amount = if item_type == :reward

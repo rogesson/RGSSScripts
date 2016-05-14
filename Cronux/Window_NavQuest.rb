@@ -7,6 +7,8 @@ class Window_NavQuest < Window_Base
   end
 
   def update
+    return unless active
+
     draw_quests
     self.active = false
   end

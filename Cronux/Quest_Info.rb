@@ -9,7 +9,7 @@ module QUEST_INFO
         'open'           => false,
         'force_accept'   => true,
         'required_items' => [
-                              { 'id' => 1, 'amount' => 5 },
+                              { 'id' => 1, 'amount' => 5, 'done' => false },
                               { 'talk' => 'Falar com o Rei',  'done' => false }
                             ],
         'rewards'        => [

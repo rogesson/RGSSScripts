@@ -72,6 +72,7 @@ class Quest
         required_item['done'] = false
       else
         remove_item($data_items[required_item['id']], required_item['amount'])
+        required_item['done'] = false
       end
     end
   end
@@ -106,7 +107,12 @@ class Quest
       if item['talk']
         completed.push(item['done'] == true)
       else
-        completed.push(item['acquired'].to_i >= item['amount'])
+        if item['acquired'].to_i >= item['amount']
+          item['done'] = true
+          completed.push(true)
+        else
+          completed.push(false)
+        end
       end
     end
 

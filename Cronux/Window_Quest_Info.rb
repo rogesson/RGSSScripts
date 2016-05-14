@@ -73,25 +73,36 @@ class Window_Quest_Info < Window_Selectable
     height_index = initial_y + 30
 
     items.each do |i|
+
+      text_color = item_type == :required && i['done'] ? crisis_color : normal_color
+      self.contents.font.color = text_color
+
       if i['talk']
         contents.draw_text(0, height_index, 212, 32, i['talk'], 0)
-        next
+      else
+        item = $data_items.compact.find { |data_item|  data_item.id == i['id'] }
+
+        amount = if item_type == :reward
+                  "#{i['amount']}x"
+                 else
+                  "(#{i['acquired'].to_i}/#{i['amount']})"
+                 end
+
+        bitmap = RPG::Cache.icon(item.icon_name)
+        contents.blt(0, height_index, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
+
+        contents.draw_text(40, height_index, 212, 32, "#{item.name} #{amount}", 0)
       end
 
-      item = $data_items.compact.find { |data_item|  data_item.id == i['id'] }
-
-      amount = if item_type == :reward
-                "#{i['amount']}x"
-               else
-                "(#{i['acquired'].to_i}/#{i['amount']})"
-               end
-
-      bitmap = RPG::Cache.icon(item.icon_name)
-      contents.blt(0, height_index, bitmap, Rect.new(0, 0, bitmap.width, bitmap.height))
-      contents.draw_text(40, height_index, 212, 32, "#{item.name} #{amount}", 0)
-
+      self.contents.font.color = normal_color
       height_index += 30
     end
+  end
+
+  def draw_item
+  end
+
+  def draw_talk
   end
 
   def update_cursor_rect

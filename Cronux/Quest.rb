@@ -44,6 +44,8 @@ class Quest
   end
 
   def complete_talk(name)
+    return unless in_progress
+
     talk = @required_items.find { |talk| talk['talk'] == name }
     talk['done'] = true
 

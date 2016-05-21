@@ -18,13 +18,15 @@ module QUEST_INFO
                             ]
       },
       {
-        'name'           => 'Movendo os soldados',
+        'name'           => 'Movendo os Soldados',
         'description'    => 'Reunir todo batalhão para iniciar a caçada.',
         'in_progress'    => false,
         'completed'      => false,
         'open'           => false,
         'force_accept'   => false,
-        'required_items' => [],
+        'required_items' => [
+                              { 'id' => 5, 'amount' => 50, 'done' => false },
+                            ],
         'rewards'        => [
                               { 'id' => 1, 'amount' => 1 },
                               { 'id' => 20, 'amount' => 2 }

@@ -26,6 +26,10 @@ class Scene_Map
         break
       end
     end
+
+    # Remover janelas
+    dispose_map_windows
+
     # Preparar para transição
     Graphics.freeze
     # Exibição do Spriteset
@@ -42,8 +46,6 @@ class Scene_Map
   def call_menu
     # Limpar flag de chamada de Menu
     $game_temp.menu_calling = false
-
-    dispose_map_windows
 
     # Se a flag de Beep estiver definida
     if $game_temp.menu_beep
@@ -183,7 +185,10 @@ class Scene_Map
       @window_new_quest = nil
     end
 
-    @window_nav_quest.dispose if @window_nav_quest
+    if @window_nav_quest
+      @window_nav_quest.dispose
+      @window_nav_quest = nil
+    end
   end
 end
 

@@ -37,9 +37,9 @@ class Window_NavQuest < Window_Base
 
       contents.draw_text(15, line_height, 300, 32, "#{q.name}")
       line_height += 20
-    end
 
-    self.contents.font.color = normal_color
+      self.contents.font.color = normal_color
+    end
   end
 
   def quests

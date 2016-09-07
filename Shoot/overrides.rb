@@ -1,5 +1,16 @@
 class Scene_Map < Scene_Base
-  attr_accessor :shots
+
+  def start
+    super
+    SceneManager.clear
+    $game_player.straighten
+    $game_map.refresh
+    $game_message.visible = false
+    create_spriteset
+    create_all_windows
+    @menu_calling = false
+    @shots = []
+  end
 
   def update_scene
     check_gameover
@@ -12,17 +23,18 @@ class Scene_Map < Scene_Base
 
   def update_action
     if Input.trigger?(:C)
-      #$game_player.turn_right_90
+      p 'Troca de arma'
+      p @shots.size
     end
 
     if Input.trigger?(:B)
-      @shot = Shot.new
+      @shots << Shot.new
     end
   end
 
   def update_shot
-    if @shot && @shot.active
-      @shot.update
+    @shots.each do |shot|
+      shot.update
     end
   end
 end

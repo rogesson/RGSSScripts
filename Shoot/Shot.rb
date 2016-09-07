@@ -12,49 +12,42 @@ class Shot
     @active           = true
     @speed            = 10
     @weapon_direction = $game_player.direction
-    @fired            = false
+    @current_sprite   = { sprite: nil }
 
     set_shot_direction
     set_initial_position
+    create_bitmap
+    create_animation
   end
 
   def update
+    return unless @active
+
     @duration += 1
 
-    if !@fired
-      sprite        = Sprite.new
-      sprite.bitmap = Cache.system("fire_shot")
+    update_position
+    @animate.execute
 
-      set_angle(sprite)
-      set_mirror(sprite)
-
-      @fired        = true
-      @animate      = Animate.new(self, sprite, 4, true)
-    else
-      update_position
-      @animate.execute
-    end
-
-    if sprite
-      sprite.x = @x
-      sprite.y = @y
-    end
+    @current_sprite[:sprite].x = @x
+    @current_sprite[:sprite].y = @y
 
     if @animate && @duration > @delay
       self.active = false
-      sprite.dispose if sprite
-      sprite = nil
+      @current_sprite[:sprite].dispose if @current_sprite[:sprite]
+      @current_sprite[:sprite] = nil
     end
+
+    p @current_sprite
   end
 
   private
 
-  def set_angle(sprite)
-    sprite.angle  = 90   if @direction == :up || direction == :down
+  def set_angle
+    @current_sprite[:sprite].angle = 90 if @direction == :up || @direction == :down
   end
 
-  def set_mirror(sprite)
-    sprite.mirror = true if @direction == :left || @direction == :down
+  def set_mirror
+    @current_sprite[:sprite].mirror = true if @direction == :left || @direction == :down
   end
 
   def set_shot_direction
@@ -101,5 +94,17 @@ class Shot
     when :left
       self.x -= @speed
     end
+  end
+
+  def create_bitmap
+    @current_sprite[:sprite] = Sprite.new
+    @current_sprite[:sprite].bitmap = Cache.system("fire_shot")
+
+    set_angle
+    set_mirror
+  end
+
+  def create_animation
+    @animate = Animate.new(self, @current_sprite[:sprite], 4, true)
   end
 end

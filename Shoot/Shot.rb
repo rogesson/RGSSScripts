@@ -1,10 +1,10 @@
 class Shot
-  attr_accessor :active
   attr_accessor :character
-  attr_accessor :x
-  attr_accessor :y
-  attr_accessor :direction
-  attr_accessor :current_sprite
+
+  attr_reader   :active
+  attr_reader   :current_sprite
+  attr_reader   :x
+  attr_reader   :y
 
   def initialize
     @character        = character
@@ -25,18 +25,21 @@ class Shot
   def update
     return unless @active
 
-    check_status
+    execute_state do
+      if @state != :explosion
+        update_position
+      end
 
-    if @state != :explosion
-      update_position
-      @current_sprite[:sprite].x = @x
-      @current_sprite[:sprite].y = @y
+      if @state == :explosion && !@state_executed
+        @x -= 30
+        @y -= 30
+      end
     end
 
     @animate.execute
 
     if @animate && @lifetime > @time_to_die
-      self.active = false
+      @active = false
       @current_sprite[:sprite].dispose if @current_sprite[:sprite]
       @current_sprite[:sprite] = nil
     end
@@ -55,16 +58,16 @@ class Shot
   end
 
   def set_shot_direction
-    self.direction =  case @weapon_direction
-                      when 8
-                        :up
-                      when 6
-                        :right
-                      when 2
-                        :down
-                      when 4
-                        :left
-                      end
+    @direction =  case @weapon_direction
+                  when 8
+                    :up
+                  when 6
+                    :right
+                  when 2
+                    :down
+                  when 4
+                    :left
+                  end
   end
 
   def set_initial_position
@@ -83,27 +86,30 @@ class Shot
       screen_x = $game_player.screen_x - 20
     end
 
-    self.x = screen_x
-    self.y = screen_y
+    @x = screen_x
+    @y = screen_y
   end
 
   def update_position
     case @direction
     when :up
-      self.y -= @speed
+      @y -= @speed
     when :right
-      self.x += @speed
+      @x += @speed
     when :down
-      self.y += @speed
+      @y += @speed
     when :left
-      self.x -= @speed
+      @x -= @speed
     end
+
+    @current_sprite[:sprite].x = @x
+    @current_sprite[:sprite].y = @y
   end
 
   def set_bitmap(name, angle = 0, mirror = false)
     @current_sprite[:sprite] ||= Sprite.new
     @current_sprite[:sprite].bitmap = Cache.system(name)
-    @current_sprite[:sprite].angle = angle
+    @current_sprite[:sprite].angle  = angle
     @current_sprite[:sprite].mirror = mirror
   end
 
@@ -111,7 +117,7 @@ class Shot
     @animate = Animate.new(self, @current_sprite[:sprite], images, repeat, chain)
   end
 
-  def check_status
+  def execute_state(&block)
     old_state = @state
 
     new_state = case @lifetime
@@ -121,7 +127,13 @@ class Shot
                   :explosion
                 end
 
-    change_state(new_state) if old_state != new_state
+    if old_state != new_state
+      change_state(new_state)
+    end
+
+    yield if block_given?
+
+    @state_executed = true
   end
 
   def change_state(state)
@@ -129,11 +141,10 @@ class Shot
 
     @state = state
     config = Shot_State::state[state]
+    @state_executed = false
 
     if config[:change_animation]
       set_bitmap(config[:animation_name])
-      self.x -= 30
-      self.y -= 30
       set_animate(config[:images], config[:repeat], config[:chain])
     end
   end

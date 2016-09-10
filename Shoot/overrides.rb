@@ -23,8 +23,7 @@ class Scene_Map < Scene_Base
 
   def update_action
     if Input.trigger?(:C)
-      p 'Troca de arma'
-      p @shots.size
+      #p @explosions.size
     end
 
     if Input.trigger?(:B)
@@ -33,8 +32,8 @@ class Scene_Map < Scene_Base
   end
 
   def update_shot
-    @shots.each do |shot|
-      shot.update
-    end
+    @shots.each { |shot | shot.update }
+
+    @shots.delete_if {|s| !s.active }
   end
 end

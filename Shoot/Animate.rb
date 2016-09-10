@@ -1,5 +1,5 @@
 class Animate
-  def initialize(resource, sprite, images, repeat=false)
+  def initialize(resource, sprite, images, repeat=false, chain=false)
     @resource            = resource
     @sprite              = sprite
     @position            = 0
@@ -8,13 +8,13 @@ class Animate
     @bitmap_width        = @sprite.bitmap.width
     @single_image_width  = @bitmap_width / images
     @single_image_height = @sprite.bitmap.height
-    @executed            = false
+    @chain               = chain
+    @chain_count         = 0
 
     reset_posisiton
   end
 
   def execute
-    return if @executed
     @frames >= 60 ? update : @frames += @speed
 
     update_position
@@ -28,10 +28,32 @@ class Animate
 
   def update
     @position += @single_image_width
-    @position = 0 if @position >= @bitmap_width
+
+    @position = 0 if @position >= @bitmap_width && @repeat
+
+    if @position >= @bitmap_width && @chain
+      @chain_count += 1
+      @position = 0
+      create_bitmap
+    end
 
     @sprite.src_rect.set(@position, 0, @single_image_width, @single_image_height)
+
     @frames = 0
+  end
+
+  def create_bitmap
+    @sprite.bitmap = Cache.system("explosion_#{@chain_count}")
+    set_angle
+    set_mirror
+  end
+
+  def set_angle
+    @sprite.angle = @resource.current_sprite[:sprite].angle
+  end
+
+  def set_mirror
+    @sprite.mirror = @resource.current_sprite[:sprite].mirror
   end
 
   def update_position

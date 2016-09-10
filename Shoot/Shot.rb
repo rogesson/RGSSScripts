@@ -1,18 +1,38 @@
+module ShotState
+  def self.states
+    [
+      :lauching,
+      :lauched,
+      :explosion
+    ]
+  end
+
+  def self.state(state)
+    {
+      lauching:  { change_animation: false },
+      lauched:   { change_animation: false },
+      explosion: { change_animation: true  }
+    }
+  end
+end
+
 class Shot
   attr_accessor :active
   attr_accessor :character
   attr_accessor :x
   attr_accessor :y
   attr_accessor :direction
+  attr_accessor :current_sprite
 
   def initialize
     @character        = character
-    @duration         = 60
-    @delay            = 89
+    @lifetime         = 0
+    @time_to_die      = 120
     @active           = true
-    @speed            = 10
+    @speed            = 7
     @weapon_direction = $game_player.direction
     @current_sprite   = { sprite: nil }
+    @state            = :lauching
 
     set_shot_direction
     set_initial_position
@@ -23,21 +43,23 @@ class Shot
   def update
     return unless @active
 
-    @duration += 1
+    check_status
 
-    update_position
+    if @state != :explosion
+      update_position
+      @current_sprite[:sprite].x = @x
+      @current_sprite[:sprite].y = @y
+    end
+
     @animate.execute
 
-    @current_sprite[:sprite].x = @x
-    @current_sprite[:sprite].y = @y
-
-    if @animate && @duration > @delay
+    if @animate && @lifetime > @time_to_die
       self.active = false
       @current_sprite[:sprite].dispose if @current_sprite[:sprite]
       @current_sprite[:sprite] = nil
     end
 
-    p @current_sprite
+    @lifetime += 1
   end
 
   private
@@ -51,9 +73,9 @@ class Shot
   end
 
   def set_shot_direction
-    self.direction = case @weapon_direction
+    self.direction =  case @weapon_direction
                       when 8
-                         :up
+                        :up
                       when 6
                         :right
                       when 2
@@ -97,7 +119,7 @@ class Shot
   end
 
   def create_bitmap
-    @current_sprite[:sprite] = Sprite.new
+    @current_sprite[:sprite]        = Sprite.new
     @current_sprite[:sprite].bitmap = Cache.system("fire_shot")
 
     set_angle
@@ -106,5 +128,33 @@ class Shot
 
   def create_animation
     @animate = Animate.new(self, @current_sprite[:sprite], 4, true)
+  end
+
+  def check_status
+    old_state = @state
+
+    new_state = case @lifetime
+                when 0..1
+                  :lauched
+                when 20..25
+                  :explosion
+                end
+
+    change_state(new_state) if old_state != new_state
+  end
+
+  def change_state(state)
+    return unless state
+
+    @state = state
+
+    if state == :explosion
+      @current_sprite[:sprite].bitmap = Cache.system("explosion_0")
+      @current_sprite[:sprite].mirror = false
+      @current_sprite[:sprite].angle = 0
+      self.x -= 35
+      self.y -= 35
+      @animate = Animate.new(self, @current_sprite[:sprite], 5, true, 3)
+    end
   end
 end

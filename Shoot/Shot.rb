@@ -1,21 +1,3 @@
-module ShotState
-  def self.states
-    [
-      :lauching,
-      :lauched,
-      :explosion
-    ]
-  end
-
-  def self.state(state)
-    {
-      lauching:  { change_animation: false },
-      lauched:   { change_animation: false },
-      explosion: { change_animation: true  }
-    }
-  end
-end
-
 class Shot
   attr_accessor :active
   attr_accessor :character
@@ -36,8 +18,8 @@ class Shot
 
     set_shot_direction
     set_initial_position
-    create_bitmap
-    create_animation
+    set_bitmap('fire_shot', angle, mirror)
+    set_animate(4, true)
   end
 
   def update
@@ -64,12 +46,12 @@ class Shot
 
   private
 
-  def set_angle
-    @current_sprite[:sprite].angle = 90 if @direction == :up || @direction == :down
+  def angle
+    @direction == :up || @direction == :down ? 90 : 0
   end
 
-  def set_mirror
-    @current_sprite[:sprite].mirror = true if @direction == :left || @direction == :down
+  def mirror
+    :left || @direction == :down
   end
 
   def set_shot_direction
@@ -118,16 +100,15 @@ class Shot
     end
   end
 
-  def create_bitmap
-    @current_sprite[:sprite]        = Sprite.new
-    @current_sprite[:sprite].bitmap = Cache.system("fire_shot")
-
-    set_angle
-    set_mirror
+  def set_bitmap(name, angle = 0, mirror = false)
+    @current_sprite[:sprite] ||= Sprite.new
+    @current_sprite[:sprite].bitmap = Cache.system(name)
+    @current_sprite[:sprite].angle = angle
+    @current_sprite[:sprite].mirror = mirror
   end
 
-  def create_animation
-    @animate = Animate.new(self, @current_sprite[:sprite], 4, true)
+  def set_animate(images, repeat = false, chain = false)
+    @animate = Animate.new(self, @current_sprite[:sprite], images, repeat, chain)
   end
 
   def check_status
@@ -147,14 +128,13 @@ class Shot
     return unless state
 
     @state = state
+    config = Shot_State::state[state]
 
-    if state == :explosion
-      @current_sprite[:sprite].bitmap = Cache.system("explosion_0")
-      @current_sprite[:sprite].mirror = false
-      @current_sprite[:sprite].angle = 0
-      self.x -= 35
-      self.y -= 35
-      @animate = Animate.new(self, @current_sprite[:sprite], 5, true, 3)
+    if config[:change_animation]
+      set_bitmap(config[:animation_name])
+      self.x -= 30
+      self.y -= 30
+      set_animate(config[:images], config[:repeat], config[:chain])
     end
   end
 end

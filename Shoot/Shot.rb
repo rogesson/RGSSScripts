@@ -1,10 +1,13 @@
 class Shot
   attr_accessor :character
+  attr_accessor :collided
 
   attr_reader   :active
   attr_reader   :current_sprite
   attr_reader   :x
   attr_reader   :y
+  attr_reader   :real_x
+  attr_reader   :real_y
 
   def initialize
     @character        = character
@@ -15,6 +18,7 @@ class Shot
     @weapon_direction = $game_player.direction
     @current_sprite   = { sprite: nil }
     @state            = :lauching
+    @collided           = false
 
     set_shot_direction
     set_initial_position
@@ -47,6 +51,11 @@ class Shot
     @lifetime += 1
   end
 
+  def colide
+    @lifetime = 25
+    @collided = true
+  end
+
   private
 
   def angle
@@ -71,23 +80,25 @@ class Shot
   end
 
   def set_initial_position
+
+    vector_screen = []
     case @direction
     when :right
-      screen_y = $game_player.screen_y - 40
-      screen_x = $game_player.screen_x + 20
+      vector_screen[0] = $game_player.screen_x + 20
+      vector_screen[1] = $game_player.screen_y - 40
     when :left
-      screen_y = $game_player.screen_y - 40
-      screen_x = $game_player.screen_x - 80
+      vector_screen[0] = $game_player.screen_x - 80
+      vector_screen[1] = $game_player.screen_y - 40
     when :down
-      screen_y = $game_player.screen_y + 40
-      screen_x = $game_player.screen_x - 20
+      vector_screen[0] = $game_player.screen_x - 20
+      vector_screen[1] = $game_player.screen_y + 40
     when :up
-      screen_y = $game_player.screen_y - 40
-      screen_x = $game_player.screen_x - 20
+      vector_screen[0] = $game_player.screen_x - 20
+      vector_screen[1] = $game_player.screen_y - 40
     end
 
-    @x = screen_x
-    @y = screen_y
+    @x = vector_screen[0]
+    @y = vector_screen[1]
   end
 
   def update_position
@@ -104,6 +115,8 @@ class Shot
 
     @current_sprite[:sprite].x = @x
     @current_sprite[:sprite].y = @y
+    @real_x = (@x / 32).to_i
+    @real_y = (@y / 32).to_i
   end
 
   def set_bitmap(name, angle = 0, mirror = false)

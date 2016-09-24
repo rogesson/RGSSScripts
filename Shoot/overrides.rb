@@ -39,7 +39,7 @@ class Scene_Map < Scene_Base
 
   def update_action
     if Input.trigger?(:C)
-      enemie = @players.first[1]
+      call_menu
     end
 
     if Input.trigger?(:B)
@@ -117,6 +117,7 @@ class Game_Character
   def die
     if self.player_ai
       moveto(500, 0)
+      self.player_hp.terminate
       self.player_hp = Player_HP.new(self, 300)
     else
       SceneManager.goto(Scene_Gameover)

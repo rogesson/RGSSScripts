@@ -2,8 +2,7 @@
 
   Credits:
     Music:
-      4) Nightcore - Super Hero - Simon Curtis
-      Halestorm - Don't Know How To Stop 38:22 (usar essa)
+      - (Nightcore) Halestorm - Don't Know How To Stop
 
     Shoot Images:
       -

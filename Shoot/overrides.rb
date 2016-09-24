@@ -53,7 +53,7 @@ class Scene_Map < Scene_Base
       p.first[1].state = :none
       p.first[1].player_hp = Player_HP.new(p.first[1], 200)
       p.first[1].player_ai = Player_AI.new(p.first[1])
-      p.first[1].player_ai.active = true # Mudar
+      p.first[1].player_ai.active = true
     end
 
     @hero.player_hp = Player_HP.new(@hero, 100)
@@ -91,8 +91,8 @@ class Game_Character
   def update
     super
     update_shot_delay
-    @player_hp.update if @player_hp
-    @player_ai.update   if @player_ai && player_ai.active
+    @player_hp.update  if @player_hp
+    @player_ai.update  if @player_ai && player_ai.active
   end
 
   def update_shot_delay

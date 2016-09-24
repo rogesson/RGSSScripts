@@ -7,13 +7,21 @@ class Player_HP
     @current_hp = @max_hp
     @old_hp     = 0
 
+    @current_position = [player.screen_x - 60, player.screen_y]
+    @old_possition    = []
+
     create_hp_bar
   end
 
   def update
     draw_hp_bar
-    @spr_bar.x = @player.screen_x - 60
-    @spr_bar.y = @player.screen_y
+    @current_position = [@player.screen_x - 60, @player.screen_y]
+
+    if @current_position != @old_possition
+      @spr_bar.x = @player.screen_x - 60
+      @spr_bar.y = @player.screen_y
+      @old_possition = @current_position
+    end
   end
 
   def terminate

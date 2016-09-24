@@ -1,3 +1,12 @@
+=begin
+  Autor: Resque
+  Script: Resque Battle System
+  Email: rogessonb@gmail.com
+  Date: 24/09/2016
+
+  Note: Fell free to use this.
+=end
+
 class Shoot
 
   attr_accessor :collided
@@ -9,6 +18,7 @@ class Shoot
   attr_reader   :real_x
   attr_reader   :real_y
   attr_reader   :state
+  attr_reader   :character
 
   def initialize(character)
     @character        = character
@@ -25,6 +35,7 @@ class Shoot
     set_initial_position
     set_bitmap('fire_shot', angle, mirror)
     set_animate(4, true)
+    RPG::SE.new("Break").play
   end
 
   def update
@@ -37,6 +48,7 @@ class Shoot
       if @state == :explosion && !@state_executed
         @x -= 30
         @y -= 30
+        RPG::SE.new("Collapse2").play
       end
     end
 

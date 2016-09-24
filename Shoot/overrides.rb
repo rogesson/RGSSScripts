@@ -1,3 +1,12 @@
+=begin
+  Autor: Resque
+  Script: Resque Battle System
+  Email: rogessonb@gmail.com
+  Date: 24/09/2016
+
+  Note: Fell free to use this.
+=end
+
 class Scene_Map < Scene_Base
   attr_accessor :players
   attr_accessor :shoot_observer

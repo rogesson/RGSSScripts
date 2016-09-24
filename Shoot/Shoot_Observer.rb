@@ -1,3 +1,12 @@
+=begin
+  Autor: Resque
+  Script: Resque Battle System
+  Email: rogessonb@gmail.com
+  Date: 24/09/2016
+
+  Note: Fell free to use this.
+=end
+
 class Shoot_Observer
   attr_accessor :shoots
 
@@ -38,12 +47,17 @@ class Shoot_Observer
 
   def match_coor(shoot, player)
     if ((shoot.real_x + 1) == player.real_x) && ((shoot.real_y + 1) == player.real_y)
-      colide(shoot)
-      player.damage(10)
+      colide(player, shoot)
     end
   end
 
-  def colide(shoot)
-    shoot.colide if shoot.state != :explosion
+  def colide(player, shoot)
+    return if shoot.character == player
+
+    if shoot.state != :explosion
+      shoot.colide
+      player.damage(10)
+      RPG::SE.new("Explosion7").play
+    end
   end
 end

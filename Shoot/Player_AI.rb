@@ -1,8 +1,10 @@
 class Player_AI
-  def initialize(game_event)
-    @game_event = game_event
-    @active     = false
-    @status     = :none
+  attr_accessor :active
+
+  def initialize(player)
+    @player = player
+    @active = false
+    @status = :none
   end
 
   def update
@@ -16,8 +18,8 @@ class Player_AI
   private
 
   def chase
-    @game_event.move_toward_player
-    @game_event.shoot
+    @player.move_toward_player
+    @player.shoot
     @status = :none
   end
 end

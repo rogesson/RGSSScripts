@@ -28,17 +28,12 @@ class Scene_Map < Scene_Base
     initialize_players
   end
 
-  def shoot_list
-    @shoots
-  end
-
   def update_scene
     check_gameover
     update_transfer_player unless scene_changing?
     update_encounter       unless scene_changing?
     update_action          unless scene_changing?
     update_call_debug      unless scene_changing?
-    update_players         unless scene_changing?
     @shoot_observer.update unless scene_changing?
   end
 
@@ -52,45 +47,24 @@ class Scene_Map < Scene_Base
     end
   end
 
-  def update_players
-    @players.each do |e|
-      e[1].player_ai.update
-    end
-  end
-
   def initialize_players
     @players << $game_map.events
     @players.each do |p|
       p.first[1].state = :none
       p.first[1].create_hp_bar
       p.first[1].player_ai = Player_AI.new(p.first[1])
+      p.first[1].player_ai.active = true # Mudar
     end
 
     @hero.create_hp_bar
   end
 end
 
-class Game_Event < Game_Character
-  attr_accessor :state
-  attr_accessor :player_ai
-
-  def update_ai
-    rand_number = rand(1000)
-    @status = :chasing if rand(1000) < 15
-
-    return if @status == :none
-
-    if @status == :chasing
-      move_toward_player
-      shoot
-      @status = :none
-    end
-  end
-end
-
 class Game_Character
   attr_accessor :shoot_delay
   attr_accessor :current_hp
+  attr_accessor :state
+  attr_accessor :player_ai
 
   def init_private_members
     super
@@ -110,6 +84,7 @@ class Game_Character
     super
     update_shot_delay
     update_value_hp_bar if @spr_bar
+    @player_ai.update   if @player_ai && player_ai.active
   end
 
   def update_shot_delay
@@ -147,7 +122,7 @@ class Game_Character
     @current_hp -= 10
 
     if @current_hp < 1
-     p 'morto'
+     player_ai.active = false if self.player_ai
     end
   end
 end

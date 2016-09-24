@@ -1,4 +1,4 @@
-module Shot_State
+module Shoot_State
   def self.state
     {
       lauching:  lauching,

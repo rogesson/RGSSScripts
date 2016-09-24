@@ -1,5 +1,7 @@
 class Scene_Map < Scene_Base
-
+  attr_accessor :players
+  attr_accessor :shoot_observer
+  attr_reader   :hero
   def start
     super
     SceneManager.clear
@@ -9,10 +11,16 @@ class Scene_Map < Scene_Base
     create_spriteset
     create_all_windows
     @menu_calling = false
-    @shots   = []
+    @shoots  = []
     @team    = []
-    @enemies = []
+    @players = []
+    @hero    = $game_player
+    @shoot_observer = Shoot_Observer.new(SceneManager.scene)
     create_characters
+  end
+
+  def shoot_list
+    @shoots
   end
 
   def update_scene
@@ -21,57 +29,85 @@ class Scene_Map < Scene_Base
     update_encounter       unless scene_changing?
     update_action          unless scene_changing?
     update_call_debug      unless scene_changing?
-    update_shot            unless scene_changing?
-    update_enemies         unless scene_changing?
+    update_players         unless scene_changing?
+    @shoot_observer.update unless scene_changing?
   end
 
   def update_action
     if Input.trigger?(:C)
-      enemie = @enemies.first[1]
+      enemie = @players.first[1]
     end
 
     if Input.trigger?(:B)
-      @shots << Shot.new
+      #@shoot_observer.shoots << Shoot.new($game_player)
+      $game_player.shoot
     end
   end
 
-  def update_shot
-    @shots.each { |shot | shot.update }
-
-    @shots.delete_if {|s| !s.active }
-
-    @shots.each do |s|
-      @enemies.each do |e|
-        next if s.collided
-
-        if ((s.real_x + 1) == e[1].real_x) && ((s.real_y + 1) == e.first[1].real_y)
-          s.colide
-        end
-      end
-    end
-  end
-
-  def update_enemies
-    @enemies.each do |e|
+  def update_players
+    return
+    @players.each do |e|
       e.first[1].update_ai
     end
   end
 
   def create_characters
-    @enemies << $game_map.events
-    @enemies[0].first[1].state = :none
+    @players << $game_map.events
+    @players[0].first[1].state = :none
+    @players[0].first[1].map_hp = 100
   end
 end
 
 class Game_Event < Game_Character
   attr_accessor :state
 
+  attr_accessor :map_hp
+
   def update_ai
-    @status = :chasing if rand(1000) < 10
+    rand_number = rand(1000)
+    @status = :chasing if rand(1000) < 15
 
     return if @status == :none
 
-    move_toward_player  if @status == :chasing
-    @status = :none
+    if @status == :chasing
+      move_toward_player
+      shoot
+      @status = :none
+    end
+
+    #if rand_number < 500
+    #  shoot
+    #end
+  end
+end
+
+class Game_Character
+  attr_accessor :shoot_delay
+
+  def init_private_members
+    super
+    @move_route = nil                 # Move route
+    @move_route_index = 0             # Move route execution position
+    @original_move_route = nil        # Original move route
+    @original_move_route_index = 0    # Original move route execution position
+    @wait_count = 0                   # Wait count
+    @shoot_delay = 0
+  end
+
+  def update
+    super
+    update_shot_delay
+  end
+
+  def update_shot_delay
+    return if @shoot_delay == 0
+    @shoot_delay -= 1 if @shoot_delay > 0
+  end
+
+  def shoot
+    return if @shoot_delay > 0
+
+    @shoot_delay = 100
+    SceneManager.scene.shoot_observer.shoots << Shoot.new(self)
   end
 end

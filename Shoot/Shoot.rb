@@ -1,5 +1,5 @@
-class Shot
-  attr_accessor :character
+class Shoot
+  #attr_accessor :character
   attr_accessor :collided
 
   attr_reader   :active
@@ -8,14 +8,15 @@ class Shot
   attr_reader   :y
   attr_reader   :real_x
   attr_reader   :real_y
+  attr_reader   :state
 
-  def initialize
+  def initialize(character)
     @character        = character
     @lifetime         = 0
     @time_to_die      = 120
     @active           = true
     @speed            = 7
-    @weapon_direction = $game_player.direction
+    @weapon_direction = @character.direction
     @current_sprite   = { sprite: nil }
     @state            = :lauching
     @collided           = false
@@ -28,7 +29,6 @@ class Shot
 
   def update
     return unless @active
-
     execute_state do
       if @state != :explosion
         update_position
@@ -52,7 +52,7 @@ class Shot
   end
 
   def colide
-    @lifetime = 25
+    @lifetime = 19
     @collided = true
   end
 
@@ -84,17 +84,17 @@ class Shot
     vector_screen = []
     case @direction
     when :right
-      vector_screen[0] = $game_player.screen_x + 20
-      vector_screen[1] = $game_player.screen_y - 40
+      vector_screen[0] = @character.screen_x + 20
+      vector_screen[1] = @character.screen_y - 40
     when :left
-      vector_screen[0] = $game_player.screen_x - 80
-      vector_screen[1] = $game_player.screen_y - 40
+      vector_screen[0] = @character.screen_x - 80
+      vector_screen[1] = @character.screen_y - 40
     when :down
-      vector_screen[0] = $game_player.screen_x - 20
-      vector_screen[1] = $game_player.screen_y + 40
+      vector_screen[0] = @character.screen_x - 20
+      vector_screen[1] = @character.screen_y + 40
     when :up
-      vector_screen[0] = $game_player.screen_x - 20
-      vector_screen[1] = $game_player.screen_y - 40
+      vector_screen[0] = @character.screen_x - 20
+      vector_screen[1] = @character.screen_y - 40
     end
 
     @x = vector_screen[0]
@@ -153,7 +153,7 @@ class Shot
     return unless state
 
     @state = state
-    config = Shot_State::state[state]
+    config = Shoot_State::state[state]
     @state_executed = false
 
     if config[:change_animation]

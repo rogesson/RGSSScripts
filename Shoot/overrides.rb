@@ -51,20 +51,32 @@ class Scene_Map < Scene_Base
     @players << $game_map.events
     @players.each do |p|
       p.first[1].state = :none
-      p.first[1].create_hp_bar
+      p.first[1].player_hp = Player_HP.new(p.first[1], 200)
       p.first[1].player_ai = Player_AI.new(p.first[1])
       p.first[1].player_ai.active = true # Mudar
     end
 
-    @hero.create_hp_bar
+    @hero.player_hp = Player_HP.new(@hero, 100)
+  end
+
+  def terminate
+    super
+    SceneManager.snapshot_for_background
+    dispose_spriteset
+    perform_battle_transition if SceneManager.scene_is?(Scene_Battle)
+
+   @hero.player_hp.terminate
+    @players.each do |p|
+      p.first[1].player_hp.terminate
+    end
   end
 end
 
 class Game_Character
   attr_accessor :shoot_delay
-  attr_accessor :current_hp
   attr_accessor :state
   attr_accessor :player_ai
+  attr_accessor :player_hp
 
   def init_private_members
     super
@@ -74,16 +86,12 @@ class Game_Character
     @original_move_route_index = 0    # Original move route execution position
     @wait_count = 0                   # Wait count
     @shoot_delay = 0
-
-    @max_hp     = 100
-    @current_hp = @max_hp
-    @old_hp     = 0
   end
 
   def update
     super
     update_shot_delay
-    update_value_hp_bar if @spr_bar
+    @player_hp.update if @player_hp
     @player_ai.update   if @player_ai && player_ai.active
   end
 
@@ -99,30 +107,19 @@ class Game_Character
     SceneManager.scene.shoot_observer.shoots << Shoot.new(self)
   end
 
-  def create_hp_bar
-    @spr_bar        = Sprite.new
-    @spr_bar.bitmap = Bitmap.new(120, 20)
-  end
-
-  def update_value_hp_bar
-    draw_hp_bar
-    @spr_bar.x = self.screen_x - 60
-    @spr_bar.y = self.screen_y
-  end
-
-  def draw_hp_bar
-    if @current_hp != @old_hp
-      @spr_bar.bitmap = Bitmap.new(120, 20)
-      @spr_bar.bitmap.draw_text(0, 0, 120, 20, "(#{@current_hp}/#{@max_hp})", 1)
-      @old_hp = @current_hp
+  def damage(shoot)
+    @player_hp.current_hp -= 10
+    if @player_hp.current_hp < 1
+      die
     end
   end
 
-  def damage(shoot)
-    @current_hp -= 10
-
-    if @current_hp < 1
-     player_ai.active = false if self.player_ai
+  def die
+    if self.player_ai
+      moveto(500, 0)
+      self.player_hp = Player_HP.new(self, 300)
+    else
+      SceneManager.goto(Scene_Gameover)
     end
   end
 end

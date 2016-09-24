@@ -2,7 +2,8 @@
 
   Credits:
     Music:
-      It's Over when It's Over - Falling In Reverse
+      4) Nightcore - Super Hero - Simon Curtis
+      Halestorm - Don't Know How To Stop 38:22 (usar essa)
 
     Shoot Images:
       -

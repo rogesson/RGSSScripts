@@ -54,7 +54,7 @@ class Scene_Map < Scene_Base
 
   def update_players
     @players.each do |e|
-      e[1].update_ai
+      e[1].player_ai.update
     end
   end
 
@@ -63,6 +63,7 @@ class Scene_Map < Scene_Base
     @players.each do |p|
       p.first[1].state = :none
       p.first[1].create_hp_bar
+      p.first[1].player_ai = Player_AI.new(p.first[1])
     end
 
     @hero.create_hp_bar
@@ -71,6 +72,7 @@ end
 
 class Game_Event < Game_Character
   attr_accessor :state
+  attr_accessor :player_ai
 
   def update_ai
     rand_number = rand(1000)
@@ -83,10 +85,6 @@ class Game_Event < Game_Character
       shoot
       @status = :none
     end
-
-    #if rand_number < 500
-    #  shoot
-    #end
   end
 end
 

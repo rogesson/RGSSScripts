@@ -66,6 +66,7 @@ class Shoot
   def colide
     @lifetime = 19
     @collided = true
+    RPG::SE.new("Explosion7").play
   end
 
   private

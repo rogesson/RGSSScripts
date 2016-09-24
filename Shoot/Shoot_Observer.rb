@@ -4,7 +4,6 @@
   Email: rogessonb@gmail.com
   Date: 24/09/2016
 
-  Note: Fell free to use this.
 =end
 
 class Shoot_Observer
@@ -36,7 +35,6 @@ class Shoot_Observer
 
   def check_collision
     @shoots.each do |shoot|
-      next if shoot.collided
       @players.each do |player|
         match_coor(shoot, player[1])
       end
@@ -46,18 +44,18 @@ class Shoot_Observer
   end
 
   def match_coor(shoot, player)
-    if ((shoot.real_x + 1) == player.real_x) && ((shoot.real_y + 1) == player.real_y)
+    if ((shoot.real_x + 1) == player.real_x.to_i) && ((shoot.real_y + 1) == player.real_y.to_i)
       colide(player, shoot)
     end
   end
 
   def colide(player, shoot)
     return if shoot.character == player
+    return if shoot.collided
 
     if shoot.state != :explosion
       shoot.colide
       player.damage(10)
-      RPG::SE.new("Explosion7").play
     end
   end
 end

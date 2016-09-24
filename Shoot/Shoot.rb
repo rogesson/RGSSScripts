@@ -1,5 +1,5 @@
 class Shoot
-  #attr_accessor :character
+
   attr_accessor :collided
 
   attr_reader   :active

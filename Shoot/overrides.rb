@@ -16,7 +16,7 @@ class Scene_Map < Scene_Base
     @players = []
     @hero    = $game_player
     @shoot_observer = Shoot_Observer.new(SceneManager.scene)
-    create_characters
+    initialize_players
   end
 
   def shoot_list
@@ -39,29 +39,29 @@ class Scene_Map < Scene_Base
     end
 
     if Input.trigger?(:B)
-      #@shoot_observer.shoots << Shoot.new($game_player)
       $game_player.shoot
     end
   end
 
   def update_players
-    return
     @players.each do |e|
-      e.first[1].update_ai
+      e[1].update_ai
     end
   end
 
-  def create_characters
+  def initialize_players
     @players << $game_map.events
-    @players[0].first[1].state = :none
-    @players[0].first[1].map_hp = 100
+    @players.each do |p|
+      p.first[1].state = :none
+      p.first[1].create_hp_bar
+    end
+
+    @hero.create_hp_bar
   end
 end
 
 class Game_Event < Game_Character
   attr_accessor :state
-
-  attr_accessor :map_hp
 
   def update_ai
     rand_number = rand(1000)
@@ -83,6 +83,7 @@ end
 
 class Game_Character
   attr_accessor :shoot_delay
+  attr_accessor :current_hp
 
   def init_private_members
     super
@@ -92,11 +93,16 @@ class Game_Character
     @original_move_route_index = 0    # Original move route execution position
     @wait_count = 0                   # Wait count
     @shoot_delay = 0
+
+    @max_hp     = 100
+    @current_hp = @max_hp
+    @old_hp     = 0
   end
 
   def update
     super
     update_shot_delay
+    update_value_hp_bar if @spr_bar
   end
 
   def update_shot_delay
@@ -109,5 +115,32 @@ class Game_Character
 
     @shoot_delay = 100
     SceneManager.scene.shoot_observer.shoots << Shoot.new(self)
+  end
+
+  def create_hp_bar
+    @spr_bar        = Sprite.new
+    @spr_bar.bitmap = Bitmap.new(120, 20)
+  end
+
+  def update_value_hp_bar
+    draw_hp_bar
+    @spr_bar.x = self.screen_x - 60
+    @spr_bar.y = self.screen_y
+  end
+
+  def draw_hp_bar
+    if @current_hp != @old_hp
+      @spr_bar.bitmap = Bitmap.new(120, 20)
+      @spr_bar.bitmap.draw_text(0, 0, 120, 20, "(#{@current_hp}/#{@max_hp})", 1)
+      @old_hp = @current_hp
+    end
+  end
+
+  def damage(shoot)
+    @current_hp -= 10
+
+    if @current_hp < 1
+     p 'morto'
+    end
   end
 end

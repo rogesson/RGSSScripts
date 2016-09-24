@@ -29,27 +29,21 @@ class Shoot_Observer
     @shoots.each do |shoot|
       next if shoot.collided
       @players.each do |player|
-        match_coor(shoot, player)
+        match_coor(shoot, player[1])
       end
 
-      match_coor_hero(shoot, @scene_map.hero)
+      match_coor(shoot, @scene_map.hero)
     end
   end
 
   def match_coor(shoot, player)
-    if ((shoot.real_x + 1) == player[1].real_x) && ((shoot.real_y + 1) == player[1].real_y)
-      colide(shoot)
-    end
-  end
-
-  def match_coor_hero(shoot, player)
     if ((shoot.real_x + 1) == player.real_x) && ((shoot.real_y + 1) == player.real_y)
       colide(shoot)
+      player.damage(10)
     end
   end
 
   def colide(shoot)
-    p 'colidiu'
     shoot.colide if shoot.state != :explosion
   end
 end

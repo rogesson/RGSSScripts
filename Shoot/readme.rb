@@ -1,21 +1,30 @@
 =begin
+  Resque Shoot System -v 1.0.0
+  Autor: Resque
+  Created At: 24/09/2016
 
   Credits:
     Music:
       - (Nightcore) Halestorm - Don't Know How To Stop
 
-    Shoot Images:
-      -
+    Shoot Sprites:
+      - sonicguy234
 
-    Explosion Images:
+    Explosion Sprites:
+      - mammouth_x
 
+    Tank Sprites:
+      - IceDragon
+
+    Title Image:
+      - http://wonderfulengineering.com
 
     Scripts:
-      Resque
-
+      - Resque
 
   Especial Thanks:
-    - Mask4d for the challenge.
-    - Centro RPG Maker for the oportunity (http://centrorpg.com/)
-    - Betamilkv for moral
+    - Masked for the challenge;
+    - Centro RPG Maker for the opportunity (http://centrorpg.com/);
+    - Betamilkv for moral support;
+    - Enterbrain for the engine;
 end

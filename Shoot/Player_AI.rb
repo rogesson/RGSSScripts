@@ -1,3 +1,10 @@
+=begin
+  Autor: Resque
+  Script: This is part of Resque Shoot System
+  Email: rogessonb@gmail.com
+  Date: 24/09/2016
+=end
+
 class Player_AI
   attr_accessor :active
 

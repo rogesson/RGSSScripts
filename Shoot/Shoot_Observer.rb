@@ -1,9 +1,8 @@
 =begin
   Autor: Resque
-  Script: Resque Battle System
+  Script: This is part of Resque Shoot System
   Email: rogessonb@gmail.com
   Date: 24/09/2016
-
 =end
 
 class Shoot_Observer

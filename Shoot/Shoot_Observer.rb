@@ -35,7 +35,7 @@ class Shoot_Observer
   def check_collision
     @shoots.each do |shoot|
       @players.each do |player|
-        match_coor(shoot, player[1])
+        match_coor(shoot, player)
       end
 
       match_coor(shoot, @scene_map.hero)

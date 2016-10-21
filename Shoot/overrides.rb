@@ -46,15 +46,24 @@ class Scene_Map < Scene_Base
   end
 
   def initialize_players
-    @players << $game_map.events
-    @players.each do |p|
-      p.first[1].state = :none
-      p.first[1].player_hp = Player_HP.new(p.first[1], 200)
-      p.first[1].player_ai = Player_AI.new(p.first[1])
-      p.first[1].player_ai.active = true
+    enemies_events
+
+    @players.each_with_index do |player, i|
+      player.state = :none
+      player.player_hp = Player_HP.new(player, 200)
+      player.player_ai = Player_AI.new(player)
+      player.player_ai.active = true
     end
 
     @hero.player_hp = Player_HP.new(@hero, 100)
+  end
+
+  def enemies_events
+    $game_map.events.values.each do |event|
+      event.list.first.parameters.each do |param|
+        @players << event if param == "<enemie>"
+      end
+    end
   end
 
   def terminate
@@ -65,7 +74,7 @@ class Scene_Map < Scene_Base
 
    @hero.player_hp.terminate
     @players.each do |p|
-      p.first[1].player_hp.terminate
+      p.player_hp.terminate
     end
   end
 end
@@ -120,5 +129,19 @@ class Game_Character
     else
       SceneManager.goto(Scene_Gameover)
     end
+  end
+end
+
+class Scene_Title < Scene_Base
+  def start
+    super
+    SceneManager.clear
+    Graphics.freeze
+    create_background
+    create_foreground
+    create_command_window
+    play_title_music
+
+    $rtest = Rtest.new
   end
 end

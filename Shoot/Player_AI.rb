@@ -12,21 +12,40 @@ class Player_AI
     @player = player
     @active = false
     @status = :none
+    @global_delay_manager  = GlobalDelayManager.new
   end
 
   def update
-    rand_number = rand(1000)
-    @status = :chasing if rand(1000) < 15
-    return if @status == :none
+    @global_delay_manager.update
 
-    chase if @status == :chasing
+    chase
+    #rand_number = rand(1000)
+    #@status = :chasing if rand(1000) < 10
+    #return if @status == :none
+
+    #chase if @status == :chasing
   end
 
   private
 
   def chase
-    @player.move_toward_player
-    @player.shoot
+    walk
+
     @status = :none
+  end
+
+  def walk
+    @global_delay_manager.check_time(60) do
+      if rand(100) < 70
+        @player.move_toward_player
+        shoot
+      else
+        @player.move_random
+      end
+    end
+  end
+
+  def shoot
+    @player.shoot if rand(100) < 60
   end
 end

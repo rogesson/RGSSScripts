@@ -50,12 +50,12 @@ class Scene_Map < Scene_Base
 
     @players.each_with_index do |player, i|
       player.state = :none
-      player.player_hp = Player_HP.new(player, 200)
+      player.player_hp = Player_HP.new(200)
       player.player_ai = Player_AI.new(player)
       player.player_ai.active = true
     end
 
-    @hero.player_hp = Player_HP.new(@hero, 100)
+    @hero.player_hp = Player_HP.new(100)
   end
 
   def enemies_events
@@ -98,7 +98,13 @@ class Game_Character
   def update
     super
     update_shot_delay
-    @player_hp.update  if @player_hp
+
+    if @player_hp
+      @player_hp.screen_x = self.screen_x
+      @player_hp.screen_y = self.screen_y
+      @player_hp.update
+    end
+
     @player_ai.update  if @player_ai && player_ai.active
   end
 
@@ -115,7 +121,7 @@ class Game_Character
   end
 
   def damage(shoot)
-    @player_hp.current_hp -= 10
+    @player_hp.damage(10)
     if @player_hp.current_hp < 1
       die
     end
@@ -129,19 +135,5 @@ class Game_Character
     else
       SceneManager.goto(Scene_Gameover)
     end
-  end
-end
-
-class Scene_Title < Scene_Base
-  def start
-    super
-    SceneManager.clear
-    Graphics.freeze
-    create_background
-    create_foreground
-    create_command_window
-    play_title_music
-
-    $rtest = Rtest.new
   end
 end

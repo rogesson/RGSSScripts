@@ -6,47 +6,54 @@
 =end
 
 class Player_HP
-  attr_accessor :current_hp
+  attr_reader :current_hp
+  attr_reader :max_hp
+  attr_reader :sprite
 
-  def initialize(player, max_hp)
-    @player     = player
-    @max_hp     = max_hp
-    @current_hp = @max_hp
-    @old_hp     = 0
+  attr_accessor :screen_x
+  attr_accessor :screen_y
 
-    @current_position = [player.screen_x - 60, player.screen_y]
-    @old_possition    = []
+  def initialize(hp)
+    @max_hp     = hp
+    @current_hp = hp
 
-    create_hp_bar
+    create_sprite
+    update_sprite
+  end
+
+  def get_bar_position
+    [(@screen_x - 60).to_i, @screen_y.to_i]
   end
 
   def update
-    draw_hp_bar
-    @current_position = [@player.screen_x - 60, @player.screen_y]
+    vector_position = get_bar_position
+    return false if [@sprite.x.to_i, @sprite.y.to_i] == vector_position
 
-    if @current_position != @old_possition
-      @spr_bar.x = @player.screen_x - 60
-      @spr_bar.y = @player.screen_y
-      @old_possition = @current_position
-    end
+    @sprite.x = vector_position[0]
+    @sprite.y = vector_position[1]
+
+    true
   end
 
   def terminate
-    @spr_bar.dispose
+    @sprite.dispose
+  end
+
+  def damage(value)
+    @current_hp -= value
+    update_sprite
   end
 
   private
 
-  def create_hp_bar
-    @spr_bar        = Sprite.new
-    @spr_bar.bitmap = Bitmap.new(120, 20)
+  def create_sprite
+    @sprite        = Sprite.new
+    @sprite.bitmap = Bitmap.new(120, 20)
   end
 
-  def draw_hp_bar
-    if @current_hp != @old_hp
-      @spr_bar.bitmap = Bitmap.new(120, 20)
-      @spr_bar.bitmap.draw_text(0, 0, 120, 20, "(#{@current_hp}/#{@max_hp})", 1)
-      @old_hp = @current_hp
-    end
+  def update_sprite
+    @sprite.bitmap.clear
+    @sprite.bitmap.draw_text(0, 0, 120, 20, "(#{@current_hp}/#{@max_hp})", 1)
+    true
   end
 end

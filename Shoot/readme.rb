@@ -23,8 +23,5 @@
       - Resque
 
   Especial Thanks:
-    - Masked for the challenge;
-    - Centro RPG Maker for the opportunity (http://centrorpg.com/);
-    - Betamilkv for moral support;
-    - Enterbrain for the engine;
+      - Enterbrain for the engine;
 end

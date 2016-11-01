@@ -11,7 +11,7 @@ class Player_HP_Test < RTeste::Teste
     afirmar_igualdade 300, @player_hp.current_hp
   end
 
-  isso "Deve ficar na posição screen_x: 10 , screen_y: 20" do
+  isso "Deve ficar na posição screen_x: 10, screen_y: 20" do
     @player_hp.screen_x = 70
     @player_hp.screen_y = 20
 
@@ -28,7 +28,7 @@ class Player_HP_Test < RTeste::Teste
   end
 
   isso "Não pode atualizar o HP, pois o tank não mudou de posição" do
-      afirmar_igualdade false, @player_hp.update
+    afirmar_igualdade false, @player_hp.update
   end
 
   isso "Deve atualizar a barra de HP, pois a posição do tank mudou" do
@@ -39,9 +39,5 @@ class Player_HP_Test < RTeste::Teste
   isso "Deve reduzir 30 pontos de HP" do
     afirmar_igualdade true, @player_hp.damage(30)
     afirmar_igualdade 270, @player_hp.current_hp
-  end
-
-  isso "deve finalizar o teste" do
-    @player_hp.sprite.bitmap.clear
   end
 end

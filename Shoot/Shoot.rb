@@ -6,7 +6,6 @@
 =end
 
 class Shoot
-
   attr_accessor :collided
 
   attr_reader   :active

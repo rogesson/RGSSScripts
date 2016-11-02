@@ -15,10 +15,9 @@ class Global_DelayManager
   def check_time(seconds, flag_list, flag_name, &block)
     if seconds.include?(@counter)
       yield if block_given?
-
       flag_list[flag_name] = true if !flag_list[flag_name]
     else
-      flag_list[flag_name] = false
+      flag_list[flag_name] = false if flag_list[flag_name]
     end
   end
 end

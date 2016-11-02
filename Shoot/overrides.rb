@@ -5,10 +5,30 @@
   Date: 24/09/2016
 =end
 
+
+module DataManager
+  def self.create_game_objects
+    $game_temp          = Game_Temp.new
+    $game_system        = Game_System.new
+    $game_timer         = Game_Timer.new
+    $game_message       = Game_Message.new
+    $game_switches      = Game_Switches.new
+    $game_variables     = Game_Variables.new
+    $game_self_switches = Game_SelfSwitches.new
+    $game_actors        = Game_Actors.new
+    $game_party         = Game_Party.new
+    $game_troop         = Game_Troop.new
+    $game_map           = Game_Map.new
+    $game_player        = Game_Player.new
+    $global_delay_manager = Global_DelayManager.new
+  end
+end
+
 class Scene_Map < Scene_Base
   attr_accessor :players
   attr_accessor :shoot_observer
   attr_reader   :hero
+
   def start
     super
     SceneManager.clear
@@ -64,6 +84,16 @@ class Scene_Map < Scene_Base
         @players << event if param == "<enemie>"
       end
     end
+  end
+
+  def update
+    super
+    $game_map.update(true)
+    $game_player.update
+    $game_timer.update
+    $global_delay_manager.update
+    @spriteset.update
+    update_scene if scene_change_ok?
   end
 
   def terminate

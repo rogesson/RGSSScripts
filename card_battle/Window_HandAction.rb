@@ -23,7 +23,7 @@ class Window_HandAction < Window_Command
 
   def make_command_list
     add_command('Summon', :summon) if @card
-    add_command('Set', :set) if @card
+    add_command('Set',    :set)    if @card
     add_command('Cancel', :cancel)
     @card = nil
   end

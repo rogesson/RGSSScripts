@@ -119,7 +119,21 @@ class Scene_CardBattle < Scene_Base
   end
 
   def create_window_phase
-   @window_phase = Window_Phase.new
+    @window_phase = Window_Phase.new
+    @window_phase.set_handler(:battle_phase, method(:command_battle_phase))
+    @window_phase.set_handler(:end_turn, method(:command_end_turn))
+    @window_phase.set_handler(:cancel, method(:command_cancel))
+  end
+
+  def command_battle_phase
+
+  end
+
+  def command_end_turn
+    @window_battle_field.change_state(:enemy_turn)
+
+
+    end
   end
 
   def command_summon
@@ -161,6 +175,9 @@ class Scene_CardBattle < Scene_Base
 
     @window_battle_field.unselect_card
     @window_battle_field.deactivate
+
+    @window_phase.close
+    @window_phase.deactivate
 
     @window_hand.activate
     @window_hand.select_card

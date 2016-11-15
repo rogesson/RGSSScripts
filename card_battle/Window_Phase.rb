@@ -24,8 +24,8 @@ class Window_Phase < Window_Command
   def make_command_list
     return if @current_phase.nil?
 
-    add_command('Battle Phase', :attack)
-    add_command('End Turn',  :defense)
+    add_command('Battle Phase', :battle_phase)
+    add_command('End Turn',  :end_turn)
     add_command('Cancel',   :cancel)
 
     @current_phase = nil

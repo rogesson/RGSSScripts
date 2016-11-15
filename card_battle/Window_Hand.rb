@@ -100,7 +100,7 @@ class Window_Hand < Window_Base
     @hand.delete_at(@hand_index)
     @hand_index = 0
     @hand_index_max -=1
-    #select_card
+    @selected_card = nil
   end
 
   def update

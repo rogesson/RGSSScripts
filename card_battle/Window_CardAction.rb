@@ -10,9 +10,10 @@ class Window_CardAction < Window_Command
 
   def set_card(card)
     @card = card
-    open
-    activate
+    refresh
     select(0)
+    activate
+    open
   end
 
   def update_placement
@@ -21,8 +22,16 @@ class Window_CardAction < Window_Command
   end
 
   def make_command_list
-    add_command('Attack', :attack)
-    add_command('Defense', :defense)
-    add_command('Cancel', :cancel)
+    return if @card.nil?
+
+    add_command('Attack',   :attack)  if @card.can_attack
+    add_command('Defense',  :defense) if @card.can_defend
+    add_command('Cancel',   :cancel)
+
+    @card = nil
+  end
+
+  def window_height
+    100
   end
 end

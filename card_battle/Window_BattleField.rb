@@ -26,6 +26,7 @@ class Window_BattleField < Window_Base
   end
 
   def update_selected
+    return if @selected_card.nil?
     card_selected = @selected_card
     card_selected.sprite.opacity < 250 ? card_selected.sprite.opacity += 4 : card_selected.sprite.opacity = 70
   end

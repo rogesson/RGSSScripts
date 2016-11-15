@@ -54,7 +54,16 @@ class Scene_CardBattle < Scene_Base
       end
 
       if Input.trigger?(:C)
-        @window_hand_action.set_card(@window_hand.selected_card)
+        if @window_hand.selected_card
+           @window_hand_action.set_card(@window_hand.selected_card)
+        else
+          @window_phase.change_phase(@current_phase)
+        end
+        @window_hand.active = false
+      end
+
+      if Input.trigger?(:B)
+        @window_phase.change_phase(@current_phase)
         @window_hand.active = false
       end
     end
@@ -73,7 +82,7 @@ class Scene_CardBattle < Scene_Base
       end
 
       if Input.trigger?(:C)
-        @window_card_action.set_card(@window_hand.selected_card)
+        @window_card_action.set_card(@window_battle_field.selected_card)
         @window_battle_field.active = false
       end
     end
@@ -84,6 +93,7 @@ class Scene_CardBattle < Scene_Base
     create_window_battle_field
     create_window_hand_action
     create_window_card_action
+    create_window_phase
   end
 
   def create_message_window
@@ -106,6 +116,10 @@ class Scene_CardBattle < Scene_Base
     @window_card_action.set_handler(:attack, method(:command_attack))
     @window_card_action.set_handler(:defense, method(:command_defense))
     @window_card_action.set_handler(:cancel, method(:command_cancel))
+  end
+
+  def create_window_phase
+   @window_phase = Window_Phase.new
   end
 
   def command_summon

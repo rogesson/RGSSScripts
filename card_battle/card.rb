@@ -1,12 +1,15 @@
 class Card
   attr_accessor :sprite, :location
-  attr_reader :selected
+  attr_reader :selected, :can_attack, :can_defend
 
   def initialize(x, y)
     @x        = x
     @y        = y
     @location = :deck
     @selected = false
+
+    @can_attack = false
+    @can_defend = false
 
     create_sprite
   end

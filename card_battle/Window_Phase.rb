@@ -1,4 +1,4 @@
-class Window_HandAction < Window_Command
+class Window_Phase < Window_Command
   def initialize
     super(0, 0)
     self.z = 300
@@ -8,8 +8,8 @@ class Window_HandAction < Window_Command
     deactivate
   end
 
-  def set_card(card)
-    @card = card
+  def change_phase(current_phase)
+    @current_phase = current_phase
     refresh
     select(0)
     activate
@@ -22,13 +22,16 @@ class Window_HandAction < Window_Command
   end
 
   def make_command_list
-    add_command('Summon', :summon) if @card
-    add_command('Set', :set) if @card
-    add_command('Cancel', :cancel)
-    @card = nil
+    return if @current_phase.nil?
+
+    add_command('Battle Phase', :attack)
+    add_command('End Turn',  :defense)
+    add_command('Cancel',   :cancel)
+
+    @current_phase = nil
   end
 
   def window_height
-    100
+    150
   end
 end

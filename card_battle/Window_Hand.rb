@@ -1,6 +1,6 @@
 class Window_Hand < Window_Base
   attr_reader :current_state
-  attr_reader :selected_card
+  #attr_reader :selected_card
 
   def initialize
     y = Graphics.height - window_height

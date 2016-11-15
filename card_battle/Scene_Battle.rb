@@ -16,8 +16,6 @@ class Scene_CardBattle < Scene_Base
     @window_hand.update if @window_hand.active
 
     update_input
-
-    #update_scene if scene_change_ok?
   end
 
   def terminate
@@ -75,8 +73,8 @@ class Scene_CardBattle < Scene_Base
       @window_battle_field.input_previous if Input.trigger?(:LEFT)
 
       if Input.trigger?(:DOWN)
-        @window_battle_field.unselect_card
         @window_battle_field.deactivate
+        @window_battle_field.unselect_card
         @window_hand.activate
         @window_hand.select_card
       end
@@ -130,10 +128,16 @@ class Scene_CardBattle < Scene_Base
   end
 
   def command_end_turn
-    @window_battle_field.change_state(:enemy_turn)
+    #if @window_battle_field.change_state(:enemy_turn)
+      @window_phase.close
+      @window_battle_field.player = :enemy
+      free_field = @window_battle_field.free_field
+      free_field.card = Card.new(free_field.sprite.x, free_field.sprite.y)
+    #end
+  end
 
+  def attack(card, target)
 
-    end
   end
 
   def command_summon
@@ -148,8 +152,8 @@ class Scene_CardBattle < Scene_Base
     free_field.free = false
     @window_hand_action.close
     @window_hand.remove_from_hand
-    @window_battle_field.player_field_index_max += 1
-    @window_battle_field.player_field_index = @window_battle_field.player_field_index_max - 1
+    @window_battle_field.current_player[:field_index_max] += 1
+    @window_battle_field.current_player[:field_index] = @window_battle_field.current_player[:field_index_max] - 1
     @window_battle_field.select_card
     @window_battle_field.activate
   end

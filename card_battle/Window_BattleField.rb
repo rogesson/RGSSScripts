@@ -1,28 +1,56 @@
 class Window_BattleField < Window_Base
   attr_reader :player_fields, :selected_card
-  attr_accessor :player_field_index, :player_field_index_max
+  attr_writer :player
 
   def initialize
     super(20, 15, window_width, window_height)
     self.z = 200
+
+
+    @player       = :player
+
+    @player_list  =  {
+                        player: {
+                                  fields:          [],
+                                  field_index:     0,
+                                  field_index_max: 0
+                        },
+                        enemy: {
+                                  fields:          [],
+                                  field_index:     0,
+                                  field_index_max: 0
+                        }
+                      }
+
     deactivate
-    @player_fields = []
-    @enemy_fields  = []
-
-
-    @player_field_index     = 0
-    @player_field_index_max = 0
-
     create_fields
   end
 
+  def current_player
+    @player_list[@player]
+  end
+
   def free_field
-    @player_fields.select { |s| s.free }.first
+    current_player[:fields].select { |s| s.free }.first
   end
 
   def update
     return if !active
     update_selected
+
+    enemy_turn
+  end
+
+  def enemy_turn
+    if @current_state == :enemy_turn && @states[@current_state][:execute]
+      p 'enemy_turn'
+    end
+  end
+
+  def change_state(state)
+    @states[@current_state][:execute] = false if @current_state
+    @current_state = state
+    @states[@current_state][:execute] = true
   end
 
   def update_selected
@@ -33,34 +61,37 @@ class Window_BattleField < Window_Base
 
   def input_next
     unselect_card
-    check_index_max(@player_field_index + 1)
+    check_index_max(current_player[:field_index] + 1)
     select_card
   end
 
   def input_previous
     unselect_card
-    check_index_max(@player_field_index - 1)
+    check_index_max(current_player[:field_index] - 1)
     select_card
   end
 
   def unselect_card
-    card = @player_fields[@player_field_index].card
-    return if card.nil?
-    card.unselect
+
+    return if card_at_slot.nil?
+    card_at_slot.unselect
   end
 
   def select_card
-    card = @player_fields[@player_field_index].card
-    return if card.nil?
-    card.select
-    @selected_card = card
+    return if card_at_slot.nil?
+    card_at_slot.select
+    @selected_card = card_at_slot
+  end
+
+  def card_at_slot
+    current_player[:fields][current_player[:field_index]].card
   end
 
   def check_index_max(index)
-    index = 0  if index > @player_field_index_max - 1
-    index = @player_field_index_max - 1 if index < 0
+    index = 0  if index > current_player[:field_index_max] - 1
+    index = current_player[:field_index_max] - 1 if index < 0
 
-    @player_field_index = index
+    current_player[:field_index] = index
   end
 
   private
@@ -75,9 +106,7 @@ class Window_BattleField < Window_Base
     end
 
     6.times do
-      fields = player == :player ? @player_fields : @enemy_fields
-
-      fields << FieldSlot.new(slot_x + self.x, slot_y)
+      @player_list[player][:fields] << FieldSlot.new(slot_x + self.x, slot_y)
 
       slot_x += 80
     end

@@ -2,10 +2,16 @@ class Window_BattleField < Window_Base
   attr_reader :player_fields, :selected_card
   attr_writer :player
 
+  attr_accessor :player_list, :can_battle
+  attr_accessor :battler, :battler_target, :current_state
+
+  @@battle_hits = 7
+
   def initialize
     super(20, 15, window_width, window_height)
     self.z = 200
 
+    @can_battle = false
 
     @player       = :player
 
@@ -22,6 +28,13 @@ class Window_BattleField < Window_Base
                         }
                       }
 
+    @states =   {
+                  battle: { execute:  false }
+                }
+
+    @bg = Sprite.new
+    @bg.bitmap = Cache.system("bg")
+
     deactivate
     create_fields
   end
@@ -37,8 +50,45 @@ class Window_BattleField < Window_Base
   def update
     return if !active
     update_selected
+    update_battle
 
     enemy_turn
+  end
+
+
+  def update_battle
+    if @current_state == :battle && @states[@current_state][:execute]
+
+      if @battler.sprite.y != @battler_target.slot.sprite.y
+        @battler.sprite.y < @battler_target.slot.sprite.y ? @battler.sprite.y  += 5 :  @battler.sprite.y  -= 5
+      else
+         @battler.sprite.angle = rand(200)
+         @battler_target.sprite.y -= rand(2)
+         @battler_target.sprite.x -= rand(2)
+
+        if  @battler.sprite.x != @battler_target.sprite.x
+          @battler.sprite.x < @battler_target.sprite.x ? @battler.sprite.x  += 5 :  @battler.sprite.x  -= 5
+        else
+          @battler.sprite.y = @battler.slot.sprite.y
+          @battler.sprite.x = @battler.slot.sprite.x
+          @@battle_hits -= 1
+
+          if @@battle_hits == 0
+            @battler.sprite.y = @battler.slot.sprite.y
+            @battler.sprite.x = @battler.slot.sprite.x
+            @battler.sprite.angle = 0
+
+            @battler_target.slot.free = true
+            @battler_target.sprite.dispose
+            @battler_target.sprite = nil
+            @@battle_hits = 7
+            player_list[:enemy][:fields][0].card = nil
+            @states[@current_state][:execute] = false
+          end
+        end
+      end
+    end
+
   end
 
   def enemy_turn

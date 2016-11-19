@@ -45,6 +45,8 @@ class Scene_CardBattle < Scene_Base
       @window_hand.input_previous if Input.trigger?(:LEFT)
 
       if Input.trigger?(:UP)
+        return if @window_battle_field.selected_card.nil?
+
         @window_hand.unselect_card
         @window_hand.deactivate
         @window_battle_field.select_card
@@ -83,6 +85,11 @@ class Scene_CardBattle < Scene_Base
         @window_card_action.set_card(@window_battle_field.selected_card)
         @window_battle_field.active = false
       end
+
+      if Input.trigger?(:B)
+        @window_phase.change_phase(@current_phase)
+        @window_battle_field.active = false
+      end
     end
   end
 
@@ -105,49 +112,51 @@ class Scene_CardBattle < Scene_Base
   def create_window_hand_action
     @window_hand_action = Window_HandAction.new
     @window_hand_action.set_handler(:summon, method(:command_summon))
-    @window_hand_action.set_handler(:set, method(:command_set))
     @window_hand_action.set_handler(:cancel, method(:command_cancel))
   end
 
   def create_window_card_action
     @window_card_action = Window_CardAction.new
+    @window_card_action.window_battle_field = @window_battle_field
     @window_card_action.set_handler(:attack, method(:command_attack))
-    @window_card_action.set_handler(:defense, method(:command_defense))
     @window_card_action.set_handler(:cancel, method(:command_cancel))
   end
 
   def create_window_phase
     @window_phase = Window_Phase.new
-    @window_phase.set_handler(:battle_phase, method(:command_battle_phase))
+    @window_phase.window_battle_field = @window_battle_field
     @window_phase.set_handler(:end_turn, method(:command_end_turn))
     @window_phase.set_handler(:cancel, method(:command_cancel))
   end
 
-  def command_battle_phase
-
-  end
-
   def command_end_turn
-    #if @window_battle_field.change_state(:enemy_turn)
-      @window_phase.close
-      @window_battle_field.player = :enemy
-      free_field = @window_battle_field.free_field
-      free_field.card = Card.new(free_field.sprite.x, free_field.sprite.y)
-    #end
-  end
+    @window_phase.close
+    @window_battle_field.player = :enemy
+    free_field = @window_battle_field.free_field
 
-  def attack(card, target)
+    free_field.card = Card.new(free_field.sprite.x, free_field.sprite.y)
+    free_field.free = false
+    free_field.card.slot = free_field
 
+    @window_battle_field.current_player[:fields][0] = free_field
+
+    @window_battle_field.player = :player
+
+    @window_battle_field.can_battle = true if !@window_battle_field.can_battle
+    @window_hand.activate
+    @window_hand.change_state(:draw)
   end
 
   def command_summon
     card = @window_hand.selected_card
+    card.slot.free = true
     free_field = @window_battle_field.free_field
     card.unselect
     free_field.card = card
     card.sprite.x = free_field.sprite.x
     card.sprite.y = free_field.sprite.y
     card.location = :field
+    card.slot     = free_field
 
     free_field.free = false
     @window_hand_action.close
@@ -158,16 +167,16 @@ class Scene_CardBattle < Scene_Base
     @window_battle_field.activate
   end
 
-  def command_set
-
-  end
-
   def command_attack
+    @window_card_action.close
 
-  end
-
-  def command_defense
-
+    battler = @window_battle_field.selected_card
+    target  = @window_battle_field.player_list[:enemy][:fields][0].card
+    @window_battle_field.battler = battler
+    @window_battle_field.battler_target = target
+    @window_battle_field.activate
+    @window_battle_field.change_state(:battle)
+    @window_battle_field.can_battle = false
   end
 
   def command_cancel

@@ -1,5 +1,5 @@
 class Card
-  attr_accessor :sprite, :location
+  attr_accessor :sprite, :location, :slot
   attr_reader :selected, :can_attack, :can_defend
 
   def initialize(x, y)
@@ -34,7 +34,7 @@ class Card
 
   def create_sprite
     sprite        = Sprite.new
-    sprite.bitmap = Cache.system("deck")
+    sprite.bitmap = Cache.system("c#{Random.new.rand(2..11)}")
     sprite.x      = @x
     sprite.y      = @y
     sprite.z      = 201

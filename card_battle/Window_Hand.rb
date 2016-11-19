@@ -1,6 +1,7 @@
 class Window_Hand < Window_Base
   attr_reader :current_state
-  #attr_reader :selected_card
+  attr_reader :selected_card
+  attr_reader :selected_slot
 
   def initialize
     y = Graphics.height - window_height
@@ -28,7 +29,7 @@ class Window_Hand < Window_Base
   end
 
   def create_deck
-    4.times do
+    50.times do
       @cards << Card.new(466, self.y + 15)
     end
   end
@@ -68,16 +69,27 @@ class Window_Hand < Window_Base
       card = @cards.select { |c| c.location == :deck }.last
       slot = @slots.select { |s| s.free }.first
 
+
+      if slot.nil? || card.nil?
+          change_state(:main)
+          @draw_count = 0
+          return
+      end
+
       if card.sprite.x > slot.sprite.x
         card.sprite.x -= 3
       else
         card.location = :hand
         slot.free     = false
+        card.slot = slot
         @hand << card
         @draw_count += 1
         @hand_index_max +=1
 
-        change_state(:main) if @draw_count == 4
+        if @draw_count == 2
+          change_state(:main)
+          @draw_count = 0
+        end
       end
     end
   end

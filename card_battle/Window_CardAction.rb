@@ -1,4 +1,7 @@
 class Window_CardAction < Window_Command
+
+  attr_accessor :window_battle_field, :card
+
   def initialize
     super(0, 0)
     self.z = 300
@@ -24,8 +27,7 @@ class Window_CardAction < Window_Command
   def make_command_list
     return if @card.nil?
 
-    add_command('Attack',   :attack)  if @card.can_attack
-    add_command('Defense',  :defense) if @card.can_defend
+    add_command('Attack',   :attack)  if @window_battle_field.can_battle
     add_command('Cancel',   :cancel)
 
     @card = nil

@@ -1,4 +1,7 @@
 class Window_Phase < Window_Command
+
+  attr_accessor :window_battle_field
+
   def initialize
     super(0, 0)
     self.z = 300
@@ -24,7 +27,6 @@ class Window_Phase < Window_Command
   def make_command_list
     return if @current_phase.nil?
 
-    add_command('Battle Phase', :battle_phase)
     add_command('End Turn',  :end_turn)
     add_command('Cancel',   :cancel)
 

@@ -144,12 +144,13 @@ class Game_Player < Game_Character
     return false if $game_message.busy? || $game_message.visible
     return false if vehicle && !vehicle.movable?
 
-    if !@followers.is_passable?(Input.dir4)
-      @followers.reorganize(self)
-      return false
-    end
+    passable_followers?
 
     return true
+  end
+
+  def passable_followers?
+    @followers.reorganize(self) if !@followers.is_passable?(Input.dir4)
   end
 end
 

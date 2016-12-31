@@ -36,6 +36,14 @@ class Game_Followers
     end
   end
 
+  def reorganize(player)
+    each do |follower|
+      3.times { follower.move_toward_character(player) }
+    end
+
+    triangle_formation
+  end
+
   def is_passable?(d)
     passable_list = []
 
@@ -108,8 +116,11 @@ class Game_Player < Game_Character
     return false if @vehicle_getting_on || @vehicle_getting_off
     return false if $game_message.busy? || $game_message.visible
     return false if vehicle && !vehicle.movable?
-    return false if !@followers.is_passable?(Input.dir4)
-
+    #return false if !@followers.is_passable?(Input.dir4)
+    if !@followers.is_passable?(Input.dir4)
+      @followers.reorganize(self)
+      return false
+    end
     return true
   end
 end

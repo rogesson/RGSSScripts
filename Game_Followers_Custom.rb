@@ -1,4 +1,4 @@
-# Autor:
+# Autor: Nunnu
 
 # Modificações Resque :
 #    E-mail: rogessonb@gmail.com

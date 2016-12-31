@@ -1,9 +1,45 @@
+# Autor:
+
+# Modificações Resque :
+#    E-mail: rogessonb@gmail.com
+#    Bloqueio de passabilidade dos seguidores
+#    Reagrupamento automático
+
+# Configuracao do Triângulo
+module TriangleFormation
+  DOWN  = [:left, :right, :up]
+  LEFT  = [:up, :down , :right]
+  RIGHT = [:up, :down, :left]
+  UP    = [:right, :left, :down]
+end
+
+module Directions
+  def self.position
+    {
+      up:     8,
+      right:  6,
+      left:   4,
+      down:   2
+    }
+  end
+
+  def self.get_direction(direction_number)
+    self::position.key(direction_number)
+  end
+end
+
 class Game_Followers
   alias prev_initialize initialize
   def initialize(leader)
     prev_initialize(leader)
     @switch_one = false
     @switch_two = false
+
+    # Não Mudar o nome das variáveis abaixo, ou eu puxarei o seu pé de noite.
+    @down_list  = TriangleFormation::DOWN
+    @left_list  = TriangleFormation::LEFT
+    @right_list = TriangleFormation::RIGHT
+    @up_list    = TriangleFormation::UP
   end
 
   alias prev_update update
@@ -38,7 +74,7 @@ class Game_Followers
 
   def reorganize(player)
     each do |follower|
-      3.times { follower.move_toward_character(player) }
+      3.times { follower.move_toward_player }
     end
 
     triangle_formation
@@ -55,45 +91,36 @@ class Game_Followers
   def triangle_formation
     case Directions::get_direction($game_player.direction)
     when :down
-      self[0].move_straight(Directions::position[:left])
-      self[0].set_direction(Directions::position[:down])
-
-      self[1].move_straight(Directions::position[:right])
-      self[1].set_direction(Directions::position[:down])
-
-      self[2].move_straight(Directions::position[:up])
-      self[2].set_direction(Directions::position[:down])
+      triangle(:down)
     when :left
-      self[0].move_straight(Directions::position[:up])
-      self[0].set_direction(Directions::position[:left])
-
-      self[1].move_straight(Directions::position[:down])
-      self[1].set_direction(Directions::position[:left])
-
-      self[2].move_straight(Directions::position[:right])
-      self[2].set_direction(Directions::position[:left])
+      triangle(:left)
     when :right
-      self[0].move_straight(Directions::position[:up])
-      self[0].set_direction(Directions::position[:right])
-
-      self[1].move_straight(Directions::position[:down])
-      self[1].set_direction(Directions::position[:right])
-
-      self[2].move_straight(Directions::position[:left])
-      self[2].set_direction(Directions::position[:right])
+      triangle(:right)
     when :up
-      self[0].move_straight(Directions::position[:right])
-      self[0].set_direction(Directions::position[:up])
-
-      self[1].move_straight(Directions::position[:left])
-      self[1].set_direction(Directions::position[:up])
-
-      self[2].move_straight(Directions::position[:down])
-      self[2].set_direction(Directions::position[:up])
+      triangle(:up)
     end
 
     @switch_one = false
     @switch_two = true
+  end
+
+  private
+
+  def triangle(pos)
+    @data.each_with_index do |follower, index|
+      set_triangle(follower, pos, index)
+    end
+  end
+
+  def set_triangle(follower, position, index)
+    pos = eval_variable_list("@#{position.to_s}_list")
+
+    follower.move_straight(Directions::position[pos[index]])
+    follower.set_direction(Directions::position[position])
+  end
+
+  def eval_variable_list(instance_var_name)
+    instance_variable_get(instance_var_name)
   end
 end
 
@@ -116,11 +143,12 @@ class Game_Player < Game_Character
     return false if @vehicle_getting_on || @vehicle_getting_off
     return false if $game_message.busy? || $game_message.visible
     return false if vehicle && !vehicle.movable?
-    #return false if !@followers.is_passable?(Input.dir4)
+
     if !@followers.is_passable?(Input.dir4)
       @followers.reorganize(self)
       return false
     end
+
     return true
   end
 end
@@ -136,20 +164,5 @@ class Game_Follower < Game_Character
 
   def is_passable?(d)
    passable?(@x, @y, d)
-  end
-end
-
-module Directions
-  def self.position
-    {
-      up:     8,
-      right:  6,
-      left:   4,
-      down:   2
-    }
-  end
-
-  def self.get_direction(direction_number)
-    self::position.key(direction_number)
   end
 end

@@ -1,11 +1,4 @@
 class Game_Followers
-  DIRECTIONS =  {
-                  up:     8,
-                  right:  6,
-                  left:   4,
-                  down:   2
-                }
-
   alias prev_initialize initialize
   def initialize(leader)
     prev_initialize(leader)
@@ -46,61 +39,53 @@ class Game_Followers
   def is_passable?(d)
     passable_list = []
 
-    each do |x|
-      passable_list << x.is_passable?(d)
-    end
+    each { |follower| passable_list << follower.is_passable?(d) }
 
     !passable_list.include?(false)
   end
 
   def triangle_formation
-    case get_direction($game_player.direction)
+    case Directions::get_direction($game_player.direction)
     when :down
-      self[0].move_straight(DIRECTIONS[:left])
-      self[0].set_direction(DIRECTIONS[:down])
+      self[0].move_straight(Directions::position[:left])
+      self[0].set_direction(Directions::position[:down])
 
-      self[1].move_straight(DIRECTIONS[:right])
-      self[1].set_direction(DIRECTIONS[:down])
+      self[1].move_straight(Directions::position[:right])
+      self[1].set_direction(Directions::position[:down])
 
-      self[2].move_straight(DIRECTIONS[:up])
-      self[2].set_direction(DIRECTIONS[:down])
+      self[2].move_straight(Directions::position[:up])
+      self[2].set_direction(Directions::position[:down])
     when :left
-      self[0].move_straight(DIRECTIONS[:up])
-      self[0].set_direction(DIRECTIONS[:left])
+      self[0].move_straight(Directions::position[:up])
+      self[0].set_direction(Directions::position[:left])
 
-      self[1].move_straight(DIRECTIONS[:down])
-      self[1].set_direction(DIRECTIONS[:left])
+      self[1].move_straight(Directions::position[:down])
+      self[1].set_direction(Directions::position[:left])
 
-      self[2].move_straight(DIRECTIONS[:right])
-      self[2].set_direction(DIRECTIONS[:left])
+      self[2].move_straight(Directions::position[:right])
+      self[2].set_direction(Directions::position[:left])
     when :right
-      self[0].move_straight(DIRECTIONS[:up])
-      self[0].set_direction(DIRECTIONS[:right])
+      self[0].move_straight(Directions::position[:up])
+      self[0].set_direction(Directions::position[:right])
 
-      self[1].move_straight(DIRECTIONS[:down])
-      self[1].set_direction(DIRECTIONS[:right])
+      self[1].move_straight(Directions::position[:down])
+      self[1].set_direction(Directions::position[:right])
 
-      self[2].move_straight(DIRECTIONS[:left])
-      self[2].set_direction(DIRECTIONS[:right])
+      self[2].move_straight(Directions::position[:left])
+      self[2].set_direction(Directions::position[:right])
     when :up
-      self[0].move_straight(DIRECTIONS[:right])
-      self[0].set_direction(DIRECTIONS[:up])
+      self[0].move_straight(Directions::position[:right])
+      self[0].set_direction(Directions::position[:up])
 
-      self[1].move_straight(DIRECTIONS[:left])
-      self[1].set_direction(DIRECTIONS[:up])
+      self[1].move_straight(Directions::position[:left])
+      self[1].set_direction(Directions::position[:up])
 
-      self[2].move_straight(DIRECTIONS[:down])
-      self[2].set_direction(DIRECTIONS[:up])
+      self[2].move_straight(Directions::position[:down])
+      self[2].set_direction(Directions::position[:up])
     end
 
     @switch_one = false
     @switch_two = true
-  end
-
-  private
-
-  def get_direction(direction_number)
-    DIRECTIONS.key(direction_number)
   end
 end
 
@@ -140,5 +125,20 @@ class Game_Follower < Game_Character
 
   def is_passable?(d)
    passable?(@x, @y, d)
+  end
+end
+
+module Directions
+  def self.position
+    {
+      up:     8,
+      right:  6,
+      left:   4,
+      down:   2
+    }
+  end
+
+  def self.get_direction(direction_number)
+    self::position.key(direction_number)
   end
 end

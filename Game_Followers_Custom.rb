@@ -5,6 +5,12 @@
 #    Bloqueio de passabilidade dos seguidores
 #    Reagrupamento automático
 
+
+#################################################
+#                  SCRIPT                       #
+#################################################
+
+
 # Configuracao do Triângulo
 module TriangleFormation
   DOWN  = [:left, :right, :up]
@@ -89,16 +95,7 @@ class Game_Followers
   end
 
   def triangle_formation
-    case Directions::get_direction($game_player.direction)
-    when :down
-      triangle(:down)
-    when :left
-      triangle(:left)
-    when :right
-      triangle(:right)
-    when :up
-      triangle(:up)
-    end
+    triangle(Directions::get_direction($game_player.direction))
 
     @switch_one = false
     @switch_two = true

@@ -73,7 +73,9 @@ class Game_Party < Game_Unit
   end
 
   def clear_all_summons
-    @actors.collect {|actor| @actors.delete(actor) if actor.is_a?(Game_Summon) }
+    summons = []
+    @actors.collect {|actor| summons << actor if actor.is_a?(Game_Summon) }
+    summons.each { |summon| @actors.delete(summon) }
 
     $game_player.refresh
     $game_map.need_refresh = true
@@ -154,7 +156,8 @@ class Game_Summon < Game_Actor
     @actor_id = monster_id
     @name = actor.name
     @enemy = $data_enemies[monster_id]
-    @nickname = ''
+    @battler_name = @enemy.battler_name
+    @nickname = @battler_name
     init_graphics
     @class_id = 1
     @level = @master.level
@@ -221,7 +224,11 @@ class Game_Summon < Game_Actor
   end
 
   def drain_master_hp
-    @master.mp = @master.mp - (@master.mp * ResqueSummon::DRAIN_MP_PERCENTAGE / 100)
+    @master.mp = drain_rate
+  end
+
+  def drain_rate
+    (@master.mp - (@master.mp * ResqueSummon::DRAIN_MP_PERCENTAGE / 100)).to_i
   end
 end
 

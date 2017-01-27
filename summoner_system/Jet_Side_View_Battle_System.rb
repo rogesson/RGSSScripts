@@ -328,8 +328,7 @@ class Sprite_Battler
     #bitmap = Cache.character(@battler.character_name)
 
     if @battler.is_a?(Game_Summon)
-      self.bitmap = Cache.battler(@battler.character_name, 0)
-      #self.mirror = true
+      self.bitmap = Cache.battler(@battler.battler_name, 0)
       return
       #return self.src_rect.set(0, 0, 100, 100)
     else

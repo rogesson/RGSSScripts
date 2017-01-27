@@ -303,9 +303,6 @@ class Sprite_Battler
     if @battler.actor? || @battler.bat_sprite?
       actor_update_bitmap
     end
-    #elsif @battler.enemy?
-    #  jet3835_update_bitmap(*args, &block)
-    #end
   end
 
   def actor_update_bitmap
@@ -325,12 +322,10 @@ class Sprite_Battler
       @index = 1
     end
     @char_index = @battler.character_index
-    #bitmap = Cache.character(@battler.character_name)
 
     if @battler.is_a?(Game_Summon)
       self.bitmap = Cache.battler(@battler.battler_name, 0)
       return
-      #return self.src_rect.set(0, 0, 100, 100)
     else
       bitmap = Cache.character(@battler.character_name)
     end

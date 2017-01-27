@@ -11,8 +11,6 @@
 # Descrição
 # Invoca um monstro para lutar ao seu lado do grupo.
 
-
-
 ######################### Configuração #########################
 
 module ResqueSummon
@@ -54,6 +52,12 @@ end
 class Game_Party < Game_Unit
   attr_accessor :actors
 
+  alias resque_initialize initialize
+  def initialize
+    resque_initialize
+    @summons = []
+  end
+
   def add_actor(actor_id)
     @actors.push(actor_id) unless @actors.include?(actor_id)
     $game_player.refresh
@@ -61,21 +65,24 @@ class Game_Party < Game_Unit
   end
 
   def add_summon(monster_id, actor)
-    @actors << Game_Summon.new(monster_id, actor)
+    summon = Game_Summon.new(monster_id, actor)
+    @actors << summon
+    @summons << summon
     $game_player.refresh
     $game_map.need_refresh = true
   end
 
   def remove_summon
+    return if @summons.empty?
+
     @actors.pop
     $game_player.refresh
     $game_map.need_refresh = true
   end
 
   def clear_all_summons
-    summons = []
-    @actors.collect {|actor| summons << actor if actor.is_a?(Game_Summon) }
-    summons.each { |summon| @actors.delete(summon) }
+    @actors.collect {|actor| @summons << actor if actor.is_a?(Game_Summon) }
+    @summons.each { |summon| @actors.delete(summon) }
 
     $game_player.refresh
     $game_map.need_refresh = true
@@ -86,12 +93,11 @@ class Scene_Battle < Scene_Base
   def on_skill_ok
     @skill = @skill_window.item
 
-    if @skill.note.match(/<summon>/)
+    if @skill.note.match(/<unsummon>/)
       BattleManager.actor.input.set_skill(@skill.id)
       BattleManager.actor.last_skill.object = @skill
       @skill_window.hide
       $game_party.remove_summon
-
       next_command
     end
 

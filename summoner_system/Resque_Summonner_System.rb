@@ -1,3 +1,56 @@
+
+# Sistema:    Resque Summoner System
+# Autor:      Resque
+# Email:      rogessonb@gmail.com
+# Data:       27/01/2017
+# Engine:     RPG MAKER Ace VX
+# Linguagem:  RGSS3
+# Utilização: Livre, desde que devidamente creditado.
+
+
+# Descrição
+# Invoca um monstro para lutar ao seu lado do grupo.
+
+
+
+######################### Configuração #########################
+
+module ResqueSummon
+  # Level máximo que o summon pode ter.
+  # Valor mínimo = 1
+  SUMMON_MAX_LEVEL = 99
+
+  # Opção de batalha do summon.
+  # Caso o valor for (true), o summon atacará e
+  # usará habilidades sozinho.
+  # Caso o valor for (false), você controlará as ações.
+  AUTO_BATTLE = true
+
+  # Opção de consumir MP do invocador do summon quando o summon
+  # executar alguma ação (ataque, skill, etc).
+  # Para não consumir MP, o valor deverá ser (false).
+  USE_MP_TO_KEEP_ALIVE = true
+
+  # Valor de drenagem de mp caso a opção acima seja (true)
+  # O invocador perderá uma porcentagem de MP quando o summon
+  # executar uma ação.
+  # Ex de valores:
+  # 0.6 = 0,6% de drenagem
+  # 1.0 = 1% de drenagem
+  # 5.6 = 5,6% de drenagem
+  # 70.2 = 70.2% de drenagem
+  DRAIN_MP_PERCENTAGE = 0.6
+
+  # Quantidade máxima de membros em batalha.
+  # O summon será invocado apenas a quantidade de
+  # de membros no grupo for menor do que o valor definido.
+  MAX_ACTOR_SIZE = 4
+end
+
+
+######################### Script #########################
+
+
 class Game_Party < Game_Unit
   attr_accessor :actors
 
@@ -20,15 +73,10 @@ class Game_Party < Game_Unit
   end
 
   def clear_all_summons
-    summons = []
-    @actors.collect {|actor| summons << actor if actor.is_a?(Game_Summon) }
-    summons.each { |sum| @actors.delete(sum) }
+    @actors.collect {|actor| @actors.delete(actor) if actor.is_a?(Game_Summon) }
+
     $game_player.refresh
     $game_map.need_refresh = true
-  end
-
-  def usable?(item)
-    members.any? {|actor| actor.usable?(item) }
   end
 end
 
@@ -93,21 +141,9 @@ class Game_Actors
   end
 end
 
-class Game_Actor < Game_Battler
-  attr_accessor :summons
-
-  def initialize(actor_id)
-    super()
-    setup(actor_id)
-    @last_skill = Game_BaseItem.new
-    @summons = []
-  end
-end
-
 class Game_Summon < Game_Actor
   def initialize(monster_id, master)
     @master         = master
-    @master.summons  << self
     @last_skill     = Game_BaseItem.new
 
     super(monster_id)
@@ -134,20 +170,16 @@ class Game_Summon < Game_Actor
     return true
   end
 
-  def summon?
-    true
-  end
-
   def actor
     $data_enemies[@actor_id]
   end
 
   def max_level
-    99
+    ResqueSummon::SUMMON_MAX_LEVEL
   end
 
   def auto_battle?
-    true
+    ResqueSummon::AUTO_BATTLE
   end
 
   def init_skills
@@ -185,11 +217,11 @@ class Game_Summon < Game_Actor
   private
 
   def check_master_mp
-    $game_party.clear_all_summons if @master.mp <= 0
+    $game_party.clear_all_summons if @master.mp <= 0 && ResqueSummon::USE_MP_TO_KEEP_ALIVE
   end
 
   def drain_master_hp
-    @master.mp -= 6
+    @master.mp = @master.mp - (@master.mp * ResqueSummon::DRAIN_MP_PERCENTAGE / 100)
   end
 end
 
@@ -211,7 +243,7 @@ end
 
 class Window_ItemList < Window_Selectable
   def enable?(item)
-    return false if item.note.match(/<summon>/) && $game_party.actors.size >= 4
+    return false if item.note.match(/<summon>/) && $game_party.actors.size >= ResqueSummon::MAX_ACTOR_SIZE
     $game_party.usable?(item)
   end
 end

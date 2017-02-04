@@ -21,18 +21,17 @@ class Player_HP
     update_sprite
   end
 
-  def get_bar_position
-    [(@screen_x - 60).to_i, @screen_y.to_i]
+  def hp_position
+    x = (@screen_x - 60).to_i
+    y = @screen_y.to_i
+
+    { x: x, y: y }
   end
 
   def update
-    vector_position = get_bar_position
-    return false if [@sprite.x.to_i, @sprite.y.to_i] == vector_position
+    return if same_position?
 
-    @sprite.x = vector_position[0]
-    @sprite.y = vector_position[1]
-
-    true
+    update_position
   end
 
   def terminate
@@ -46,6 +45,15 @@ class Player_HP
 
   private
 
+  def same_position?
+    @sprite.x.to_i== hp_position[:x] && @sprite.y.to_i == hp_position[:y]
+  end
+
+  def update_position
+    @sprite.x = hp_position[:x]
+    @sprite.y = hp_position[:y]
+  end
+
   def create_sprite
     @sprite        = Sprite.new
     @sprite.bitmap = Bitmap.new(120, 20)
@@ -54,6 +62,5 @@ class Player_HP
   def update_sprite
     @sprite.bitmap.clear
     @sprite.bitmap.draw_text(0, 0, 120, 20, "(#{@current_hp}/#{@max_hp})", 1)
-    true
   end
 end

@@ -1,8 +1,9 @@
 class Global_DelayManagerTest < RTeste::Teste
+=begin
   before do
     @global_delay_manager = Global_DelayManager.new
   end
-=begin
+
   isso "Deve ter exibir uma mensagem após 1 segundo" do
     current_time = Time.new
 

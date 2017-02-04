@@ -1,43 +1,32 @@
 class Player_HP_Test < RTeste::Teste
-  before do
-    @player_hp = Player_HP.new(300)
+  antes do
+    sujeito { Player_HP.new(300) }
+    sujeito.screen_x = 20
+    sujeito.screen_y = 10
   end
 
   isso "Deve ter 300 de HP Máximo" do
-    afirmar_igualdade 300, @player_hp.max_hp
+    afirmar_igualdade 300, sujeito.max_hp
   end
 
-  isso "Deve ter 300 de HP corrente" do
-    afirmar_igualdade 300, @player_hp.current_hp
+  isso "Deve ter 300 de HP" do
+    afirmar_igualdade 300, sujeito.current_hp
   end
 
-  isso "Deve ficar na posição screen_x: 10, screen_y: 20" do
-    @player_hp.screen_x = 70
-    @player_hp.screen_y = 20
-
-    afirmar_igualdade [10, 20], @player_hp.get_bar_position
+  isso 'Deve ter a mesma posicao' do
+    sujeito.send(:update_position)
+    afirmar sujeito.send(:same_position?)
   end
 
-  isso "Deve desenhar a barra de HP" do
-    afirmar_igualdade Sprite, @player_hp.sprite.class
-    afirmar_desigualdade nil, @player_hp.sprite.bitmap
+  isso 'deve ter posicao diferente' do
+    sujeito.screen_y = 15
+    nao_afirmar sujeito.send(:same_position?)
   end
 
-  isso "Deve atualizar a barra de HP" do
-    afirmar_igualdade true, @player_hp.update
-  end
+  isso 'deve criar o bitmap e o sprite do HP' do
+    sujeito.send(:create_sprite)
 
-  isso "Não pode atualizar o HP, pois o tank não mudou de posição" do
-    afirmar_igualdade false, @player_hp.update
-  end
-
-  isso "Deve atualizar a barra de HP, pois a posição do tank mudou" do
-    @player_hp.screen_x = 100
-    afirmar_igualdade true, @player_hp.update
-  end
-
-  isso "Deve reduzir 30 pontos de HP" do
-    afirmar_igualdade true, @player_hp.damage(30)
-    afirmar_igualdade 270, @player_hp.current_hp
+    afirmar sujeito.instance_variable_get('@sprite').is_a?(Sprite)
+    afirmar sujeito.instance_variable_get('@sprite').bitmap.is_a?(Bitmap)
   end
 end

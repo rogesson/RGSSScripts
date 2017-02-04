@@ -1,3 +1,8 @@
+# Autor: Resque
+# E-mail: Rogessonb@gmail.com
+# Data: 28/01/2017
+# Engine: RPG Maker Ace VX
+
 class Resque_Character_Name
   def initialize(character)
     @character = character

@@ -1,3 +1,8 @@
+# Autor: Resque
+# E-mail: Rogessonb@gmail.com
+# Data: 28/01/2017
+# Engine: RPG Maker Ace VX
+
 module Rmock
   def self.define(klass_name, opt)
     name = opt[:as]

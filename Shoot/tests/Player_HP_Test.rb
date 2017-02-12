@@ -5,28 +5,39 @@ class Player_HP_Test < RTeste::Teste
     sujeito.screen_y = 10
   end
 
-  isso "Deve ter 300 de HP Máximo" do
-    afirmar_igualdade 300, sujeito.max_hp
+  descrever '#max_hp' do
+    isso "Deve ter 300 de HP Máximo" do
+      afirmar_igualdade 300, sujeito.max_hp
+    end
   end
 
-  isso "Deve ter 300 de HP" do
-    afirmar_igualdade 300, sujeito.current_hp
+  descrever '#current_hp' do
+    isso "Deve ter 300 de HP" do
+      afirmar_igualdade 300, sujeito.current_hp
+    end
   end
 
-  isso 'Deve ter a mesma posicao' do
-    sujeito.send(:update_position)
-    afirmar sujeito.send(:same_position?)
+  descrever '#update_position' do
+    isso 'Deve ter a mesma posicao' do
+      sujeito.send(:update_position)
+      afirmar sujeito.send(:same_position?)
+    end
   end
 
-  isso 'deve ter posicao diferente' do
-    sujeito.screen_y = 15
-    nao_afirmar sujeito.send(:same_position?)
+  # TODO Criar um 'contexto'
+  descrever '#update_position' do
+    isso 'deve ter posicao diferente' do
+      sujeito.screen_y = 15
+      nao_afirmar sujeito.send(:same_position?)
+    end
   end
 
-  isso 'deve criar o bitmap e o sprite do HP' do
-    sujeito.send(:create_sprite)
+  descrever '#create_sprite' do
+    isso 'deve criar o bitmap e o sprite do HP' do
+      sujeito.send(:create_sprite)
 
-    afirmar sujeito.instance_variable_get('@sprite').is_a?(Sprite)
-    afirmar sujeito.instance_variable_get('@sprite').bitmap.is_a?(Bitmap)
+      afirmar sujeito.instance_variable_get('@sprite').is_a?(Sprite)
+      afirmar sujeito.instance_variable_get('@sprite').bitmap.is_a?(Bitmap)
+    end
   end
 end

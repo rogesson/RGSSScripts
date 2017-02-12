@@ -9,45 +9,36 @@ class Player_AI
   attr_accessor :active
 
   def initialize(player)
-    @player = player
-    @active = false
-    @status = :none
+    @player     = player
+    @active     = false
+    @status     = :none
     @event_list = { shot: false, walk: false }
+    @walk_delay = Delay.new(35)
+    @shot_delay = Delay.new(120)
   end
 
   def update
-    walk
-    shoot
-    update_rand_counter
+    update_walk
+    update_shoot
   end
 
   private
 
-  def walk
-    execute_event([90], :walk) do
-      if @rand_counter < 70
-        @player.move_toward_player
-      else
-        @player.move_random
-      end
+  def update_walk
+    @walk_delay.update
+
+    if @walk_delay.fire
+      @player.move_toward_player
+      @walk_delay.reset_rand
     end
   end
 
-  def shoot
-    execute_event([2, 70], :shoot) do
-      @player.shoot if @rand_counter < 70
-    end
-  end
+  def update_shoot
+    @shot_delay.update
 
-  def update_rand_counter
-    @rand_counter = rand(100)
-  end
-
-  def execute_event(times, event_name)
-    $global_delay_manager.check_time(times, @event_list, event_name) do
-      if !@event_list[event_name]
-        yield
-      end
+    if @shot_delay.fire
+      @player.shoot
+      @shot_delay.reset_rand
     end
   end
 end

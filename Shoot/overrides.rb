@@ -20,7 +20,6 @@ module DataManager
     $game_troop         = Game_Troop.new
     $game_map           = Game_Map.new
     $game_player        = Game_Player.new
-    $global_delay_manager = Global_DelayManager.new
   end
 end
 
@@ -81,7 +80,7 @@ class Scene_Map < Scene_Base
   def enemies_events
     $game_map.events.values.each do |event|
       event.list.first.parameters.each do |param|
-        @players << event if param == "<enemie>"
+        @players << event if param == "<enemy>"
       end
     end
   end
@@ -91,7 +90,7 @@ class Scene_Map < Scene_Base
     $game_map.update(true)
     $game_player.update
     $game_timer.update
-    $global_delay_manager.update
+    #$global_delay_manager.update
     @spriteset.update
     update_scene if scene_change_ok?
   end

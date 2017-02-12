@@ -137,7 +137,7 @@ class Shoot
   end
 
   def set_animate(images, repeat = false, chain = false)
-    @animate = Animate.new(self, @current_sprite[:sprite], images, repeat, chain)
+    @animate = Animate.new(@current_sprite[:sprite], 'explosion', images, repeat, chain)
   end
 
   def execute_state(&block)

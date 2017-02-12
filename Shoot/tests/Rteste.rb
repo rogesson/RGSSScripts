@@ -18,6 +18,11 @@ module RTeste
       yield
     end
 
+    def self.descrever(method_name)
+      puts "executando #{method_name}\n\n"
+      yield
+    end
+
     def self.afirmar(valor)
       return true if valor == true
       mensagem_erro_padrao(true, valor)

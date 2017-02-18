@@ -27,6 +27,12 @@ class Scene_Map < Scene_Base
   attr_accessor :players
   attr_accessor :shoot_observer
   attr_reader   :hero
+  attr_accessor :battle
+
+  def self.start_battle
+    SceneManager.scene.initialize_players unless @battle
+    @battle = true
+  end
 
   def start
     super
@@ -42,7 +48,7 @@ class Scene_Map < Scene_Base
     @players = []
     @hero    = $game_player
     @shoot_observer = Shoot_Observer.new(SceneManager.scene)
-    initialize_players
+    @battle = false
   end
 
   def update_scene
@@ -56,11 +62,11 @@ class Scene_Map < Scene_Base
 
   def update_action
     if Input.trigger?(:C)
-      call_menu
+      $game_player.shoot if @battle
     end
 
     if Input.trigger?(:B)
-      $game_player.shoot
+      $game_player.shoot if @battle
     end
   end
 
@@ -90,7 +96,6 @@ class Scene_Map < Scene_Base
     $game_map.update(true)
     $game_player.update
     $game_timer.update
-    #$global_delay_manager.update
     @spriteset.update
     update_scene if scene_change_ok?
   end
@@ -151,9 +156,8 @@ class Game_Character
 
   def damage(shoot)
     @player_hp.damage(10)
-    if @player_hp.current_hp < 1
-      die
-    end
+
+    die if @player_hp.current_hp < 1
   end
 
   def die

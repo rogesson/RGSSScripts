@@ -1,5 +1,4 @@
 class Scene_CardBattle < Scene_Base
-
   PHASES = [:draw, :main, :battle]
 
   def start
@@ -13,7 +12,12 @@ class Scene_CardBattle < Scene_Base
 
   def update
     super
-    @window_hand.update if @window_hand.active
+    if @window_status.active
+      update_status_window
+      return
+    end
+
+    perform_draw
 
     update_input
   end
@@ -22,13 +26,23 @@ class Scene_CardBattle < Scene_Base
     super
   end
 
-  def init_battle
-    if @current_phase == :draw
-      perform_draw
+  def update_status_window
+    if @window_status.y <= 200
+      @window_status.y += 2
+      return
     end
+
+    @window_status.deactivate
+  end
+
+  def init_battle
+    @window_status.activate
+    @window_status.open
   end
 
   def perform_draw
+    return unless @current_phase == :draw
+    p '1'
     @window_hand.change_state(:draw)
   end
 
@@ -99,6 +113,7 @@ class Scene_CardBattle < Scene_Base
     create_window_hand_action
     create_window_card_action
     create_window_phase
+    create_window_info
   end
 
   def create_message_window
@@ -127,6 +142,10 @@ class Scene_CardBattle < Scene_Base
     @window_phase.window_battle_field = @window_battle_field
     @window_phase.set_handler(:end_turn, method(:command_end_turn))
     @window_phase.set_handler(:cancel, method(:command_cancel))
+  end
+
+  def create_window_info
+    @window_status = Window_Info.new
   end
 
   def command_end_turn

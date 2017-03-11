@@ -29,8 +29,8 @@ class Scene_Map < Scene_Base
   attr_reader   :hero
   attr_accessor :battle
 
-  def self.start_battle
-    SceneManager.scene.initialize_players unless @battle
+  def start_battle
+    initialize_players unless @battle
     @battle = true
   end
 
@@ -40,6 +40,7 @@ class Scene_Map < Scene_Base
     $game_player.straighten
     $game_map.refresh
     $game_message.visible = false
+    $image_cache          = Image_Cache.new
     create_spriteset
     create_all_windows
     @menu_calling = false
@@ -48,7 +49,8 @@ class Scene_Map < Scene_Base
     @players = []
     @hero    = $game_player
     @shoot_observer = Shoot_Observer.new(SceneManager.scene)
-    @battle = false
+    @battle = true
+    initialize_players
   end
 
   def update_scene

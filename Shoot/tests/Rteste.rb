@@ -9,6 +9,8 @@ module RTeste
 
     @@sujeito = nil
 
+    protected
+
     def self.sujeito
       @@sujeito = yield if block_given?
       @@sujeito
@@ -19,7 +21,7 @@ module RTeste
     end
 
     def self.descrever(method_name)
-      puts "executando #{method_name}\n\n"
+      #puts "executando #{method_name}\n\n"
       yield
     end
 
@@ -52,6 +54,27 @@ module RTeste
         puts "Erro no teste: #{nome_do_teste}"
         puts yield
       end
+    end
+
+    def self.allow(resource)
+      def resource.to_receive(*args)
+        method_name = args.first
+        original_args_size = self.method(method_name).arity
+
+        fake_arg_size = args.size - 1
+
+        if original_args_size != fake_arg_size && !self.singleton_methods.include?(method_name)
+          raise ArgumentError.new("Method [#{method_name}] wrong number of arguments (#{fake_arg_size} for #{original_args_size})")
+        end
+
+        self.define_singleton_method(method_name) do |*args|
+          yield
+        end
+
+        self
+      end
+
+      resource
     end
 
     private

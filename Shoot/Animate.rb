@@ -53,21 +53,8 @@ class Animate
   end
 
   def set_next_bitmap
-    @sprite.bitmap = Cache.system("#{@image_name}_#{@chain_count}")
-  #  set_angle
-  #  set_mirror
+    image_name = "#{@image_name}_#{@chain_count}"
+
+    @sprite.bitmap = $image_cache.find_bitmap(image_name)
   end
-
-  #def set_angle
-  #  @sprite.angle = @resource.current_sprite[:sprite].angle
-  #end
-
-  #def set_mirror
-  #  @sprite.mirror = @resource.current_sprite[:sprite].mirror
-  #end
-
-  #def update_position(x, y)
-  #  @sprite.x = x
-  #  @sprite.y = y
-  #end
 end

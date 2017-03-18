@@ -49,8 +49,8 @@ class Scene_Map < Scene_Base
     @players = []
     @hero    = $game_player
     @shoot_observer = Shoot_Observer.new(SceneManager.scene)
-    @battle = true
-    initialize_players
+    #@battle = true
+    #initialize_players
   end
 
   def update_scene

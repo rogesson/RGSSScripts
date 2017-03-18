@@ -3,61 +3,57 @@
 # Data: 28/01/2017
 # Engine: RPG Maker Ace VX
 
-module RTeste
-  class Teste
+module RTest
+  class Test
     extend Rmock
 
-    @@sujeito = nil
+    attr_accessor :current_test_name
+    @@subject = nil
 
     protected
 
-    def self.sujeito
-      @@sujeito = yield if block_given?
-      @@sujeito
+    def self.subject
+      @@subject = yield if block_given?
+      @@subject
     end
 
-    def self.antes(&block)
+    def self.before(&block)
       yield
     end
 
-    def self.descrever(method_name)
-      #puts "executando #{method_name}\n\n"
+    def self.describe(method_name)
       yield
     end
 
-    def self.afirmar(valor)
-      return true if valor == true
-      mensagem_erro_padrao(true, valor)
+    def self.assert(value)
+      return true if value == true
+      default_error_message(true, value)
     end
 
-    def self.nao_afirmar(valor)
-      return true if valor == false
-      mensagem_erro_padrao(false, valor)
+    def self.assert_equal(this, that)
+      return true if this == that
+
+      default_error_message(this, that)
     end
 
-    def self.afirmar_igualdade(isso, aquilo)
-      return true if isso == aquilo
+    def self.assert_not_equal(this, that)
+      return true if this != that
 
-      mensagem_erro_padrao(isso, aquilo)
+      default_error_message(this, that)
     end
 
-    def self.afirmar_desigualdade(isso, aquilo)
-      return true if isso != aquilo
-
-      mensagem_erro_padrao(isso, aquilo)
-    end
-
-    def self.isso(nome_do_teste, &block)
+    def self.it(test_name, &block)
+      @current_test_name = test_name
       if yield == true
         print '.'
       else
-        puts "Erro no teste: #{nome_do_teste}"
+        puts "Error Test: #{test_name}"
         puts yield
       end
     end
 
     def self.allow(resource)
-      def resource.to_receive(*args)
+      resource.define_singleton_method(:to_receive) do |*args|
         method_name = args.first
         original_args_size = self.method(method_name).arity
 
@@ -68,7 +64,7 @@ module RTeste
         end
 
         self.define_singleton_method(method_name) do |*args|
-          yield
+          yield if block_given?
         end
 
         self
@@ -79,10 +75,11 @@ module RTeste
 
     private
 
-    def self.mensagem_erro_padrao(aquilo, isso)
-       "    - O valor esperado era: #{aquilo}, mas foi encontrado: #{isso}"
+    def self.default_error_message(that, this)
+      puts "\nError Test: #{@current_test_name}\n"
+      puts "\n    - The expected value was <#{that}>, but <#{this}> was founded\n"
     end
 
-    @@sujeito = nil
+    @@subject = nil
   end
 end

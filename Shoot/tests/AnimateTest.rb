@@ -1,5 +1,5 @@
-class AnimateTest < RTeste::Teste
-  antes do
+class AnimateTest < RTest::Test
+  before do
     resource      = nil
     image_name    = 'explosion'
     sprite        = Sprite.new
@@ -10,30 +10,30 @@ class AnimateTest < RTeste::Teste
     repeat        = false
     chain         = false
 
-    sujeito { Animate.new(sprite, image_name, images_count, repeat, chain) }
+    subject { Animate.new(sprite, image_name, images_count, repeat, chain) }
   end
 
-  descrever '#execute' do
-    isso 'isso deve atualizar o frame' do
-      frames = sujeito.instance_variable_get('@frames')
+  describe '#execute' do
+    it 'deve atualizar o frame' do
+      frames = subject.instance_variable_get('@frames')
 
-      sujeito.execute
-      afirmar sujeito.instance_variable_get('@frames') > frames
+      subject.execute
+      assert subject.instance_variable_get('@frames') > frames
     end
   end
 
-  descrever '#update_frames' do
-    isso 'isso deve atualizar o frame' do
-      frames = sujeito.instance_variable_get('@frames')
+  describe '#update_frames' do
+    it 'deve atualizar o frame' do
+      frames = subject.instance_variable_get('@frames')
 
-      sujeito.send(:update_frames)
-      afirmar sujeito.instance_variable_get('@frames') > frames
+      subject.send(:update_frames)
+      assert subject.instance_variable_get('@frames') > frames
     end
   end
 
-  #descrever '#update' do
-  #  isso 'deve atualizar a imagem' do
-  #    sujeito.send(:update)
+  #describe '#update' do
+  #  it 'deve atualizar a imagem' do
+  #    subject.send(:update)
   #  end
   #end
 end
